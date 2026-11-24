@@ -1,0 +1,25 @@
+{
+  "name": "game-hub-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nonprofit serverless offline-first Flutter Game Hub platform powered by Firebase Spark and static hosting",
+  "packageManager": "pnpm@10.22.0",
+  "scripts": {
+    "dev:hub": "pnpm --filter @game-hub/hub dev",
+    "build:hub": "pnpm --filter @game-hub/hub build",
+    "build:contract": "pnpm --filter @game-hub/contract build",
+    "build:cli": "pnpm --filter @game-hub/cli build",
+    "build": "pnpm build:contract && pnpm build:cli && pnpm build:hub",
+    "test:contract": "pnpm --filter @game-hub/contract test",
+    "test:cli": "pnpm --filter @game-hub/cli test",
+    "test:hub": "pnpm --filter @game-hub/hub test",
+    "test:firebase": "pnpm --filter @game-hub/firebase-tests test",
+    "test:flutter": "cd packages/game_platform && flutter test",
+    "test": "pnpm test:contract && pnpm test:cli && pnpm test:hub && pnpm test:flutter",
+    "typecheck": "pnpm -r typecheck",
+    "game": "node packages/game_cli/dist/cli.js",
+    "emulators:start": "firebase emulators:start --config firebase/firebase.json --project demo-game-hub",
+    "emulators:seed": "node firebase/seed/seed-emulator.mjs",
+    "validate:all": "node scripts/validate/validate-workspace.mjs"
+  }
+}

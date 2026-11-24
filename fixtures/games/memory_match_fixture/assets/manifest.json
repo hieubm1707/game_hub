@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "memory-match-fixture",
+  "slug": "memory-match-fixture",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Memory Match (Test Fixture)",
+    "shortDescription": "Secondary Flutter test fixture validating manifest-only onboarding.",
+    "description": "Explicitly labeled second test fixture demonstrating that adding a new game requires zero Game Hub code changes or redeployments.",
+    "howToPlay": "Flip two cards at a time to find all matching pairs offline.",
+    "categories": ["brain", "casual"],
+    "tags": ["fixture", "memory", "offline", "cards"],
+    "developer": "Game Hub Reference Fixture",
+    "defaultLocale": "en",
+    "supportedLocales": ["en", "vi"]
+  },
+  "assets": {
+    "icon": "/fixtures/memory-match-icon.svg",
+    "thumbnail": "/fixtures/memory-match-thumb.svg",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": "http://127.0.0.1:8090/memory-match-fixture/releases/1.0.0/index.html",
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": { "width": 9, "height": 16 },
+    "fullscreen": true,
+    "supportsTouch": true,
+    "supportsKeyboard": false,
+    "supportsOffline": false,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": false,
+      "packageId": null,
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": false,
+      "bundleId": null,
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": false,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": false,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

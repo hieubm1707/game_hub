@@ -1,0 +1,4 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: frame-ancestors https://game-hub.pages.dev http://localhost:5173 http://127.0.0.1:5173;

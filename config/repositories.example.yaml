@@ -1,0 +1,14 @@
+# Copy this file to config/repositories.local.yaml (gitignored) and set local paths.
+# Never commit machine-specific absolute paths.
+workspace:
+  name: game-hub
+  defaultLocale: en
+  supportedLocales:
+    - en
+    - vi
+
+repositories:
+  - id: blindspot
+    path: "../games/blindspot"
+    type: blindspot
+    notes: "Explicitly labeled reference Flutter Web + offline-first test blindspot"

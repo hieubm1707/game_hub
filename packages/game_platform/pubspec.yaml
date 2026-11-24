@@ -1,0 +1,18 @@
+name: game_platform
+description: Reusable offline-first Flutter platform package for the nonprofit Game Hub (manifest, storage, content sync, native-only ads, Hub bridge).
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  web: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0

@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Environment & local secrets
+.env
+.env.local
+.env.*.local
+config/repositories.local.yaml
+*.key
+*.pem
+*serviceAccount*.json
+*firebase-adminsdk*.json
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+auth-debug.log
+emulator-data/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+**/build/
+**/.dart_tool/
+**/*.g.dart
+
+# Releases & exports (local build artifacts)
+registry/exports/*.local.json
+dist-releases/
+
+# OS & IDE
+.DS_Store
+.idea/
+.vscode/
+*.swp

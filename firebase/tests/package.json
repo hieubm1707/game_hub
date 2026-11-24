@@ -1,0 +1,14 @@
+{
+  "name": "@game-hub/firebase-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "firebase emulators:exec --config ../firebase.json --only firestore --project demo-game-hub \"vitest run\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.0",
+    "firebase": "^11.4.0",
+    "vitest": "^3.0.8"
+  }
+}

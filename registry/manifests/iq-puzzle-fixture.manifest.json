@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "iq-puzzle-fixture",
+  "slug": "iq-puzzle-fixture",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "IQ Puzzle (Test Fixture)",
+    "shortDescription": "Reference offline-first Flutter logic puzzle test fixture.",
+    "description": "Explicitly labeled reference test fixture demonstrating game_platform, bundled offline puzzles, local progress, native-only ad isolation, and Game Hub bridge events.",
+    "howToPlay": "Choose the right answer for each sequence or logic question. Progress is saved locally.",
+    "categories": ["puzzle", "brain"],
+    "tags": ["fixture", "iq", "offline", "logic"],
+    "developer": "Game Hub Reference Fixture",
+    "defaultLocale": "en",
+    "supportedLocales": ["en", "vi"]
+  },
+  "assets": {
+    "icon": "/fixtures/iq-puzzle-icon.svg",
+    "thumbnail": "/fixtures/iq-puzzle-thumb.svg",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": "http://127.0.0.1:8090/iq-puzzle-fixture/releases/1.0.0/index.html",
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": { "width": 9, "height": 16 },
+    "fullscreen": true,
+    "supportsTouch": true,
+    "supportsKeyboard": true,
+    "supportsOffline": false,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "org.gamehub.fixture.iqpuzzle",
+      "storeUrl": "https://play.google.com/store/apps/details?id=org.gamehub.fixture.iqpuzzle",
+      "appLink": null
+    },
+    "ios": {
+      "enabled": false,
+      "bundleId": null,
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "hybrid",
+    "provider": "firestore",
+    "projectRef": "demo-game-hub",
+    "remoteMetadataPath": "content_metadata/iq-puzzle-fixture",
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": true,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": true,
+    "nativeAds": true,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": true,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

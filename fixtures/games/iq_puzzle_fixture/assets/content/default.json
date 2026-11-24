@@ -1,0 +1,26 @@
+{
+  "id": "iq-puzzle-fixture-bundled-1.0.0",
+  "gameId": "iq-puzzle-fixture",
+  "contentVersion": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "items": [
+    {
+      "id": "q1",
+      "prompt": "What number completes the sequence: 2, 4, 8, 16, ?",
+      "options": ["24", "30", "32", "36"],
+      "answerIndex": 2
+    },
+    {
+      "id": "q2",
+      "prompt": "Which shape has 5 sides?",
+      "options": ["Hexagon", "Pentagon", "Octagon", "Heptagon"],
+      "answerIndex": 1
+    },
+    {
+      "id": "q3",
+      "prompt": "What comes next: 1, 1, 2, 3, 5, 8, ?",
+      "options": ["11", "12", "13", "15"],
+      "answerIndex": 2
+    }
+  ]
+}

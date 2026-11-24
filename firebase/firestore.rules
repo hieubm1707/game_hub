@@ -1,0 +1,254 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // Helper Functions
+    // =========================================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function adminDoc() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && adminDoc().data.enabled == true
+        && (adminDoc().data.role == 'owner' || adminDoc().data.role == 'editor');
+    }
+
+    function isOwner() {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && adminDoc().data.enabled == true
+        && adminDoc().data.role == 'owner';
+    }
+
+    function isValidSlug(slug) {
+      return slug is string
+        && slug.size() >= 2
+        && slug.size() <= 64
+        && slug.matches('^[a-z0-9]+(?:-[a-z0-9]+)*$');
+    }
+
+    function isValidId(id) {
+      return id is string
+        && id.size() >= 2
+        && id.size() <= 64
+        && id.matches('^[a-z0-9]+(?:-[a-z0-9]+)*$');
+    }
+
+    function isValidStatus(status) {
+      return status in ['draft', 'published', 'disabled', 'archived'];
+    }
+
+    function isValidGameDocument(data, gameId) {
+      return data.id == gameId
+        && isValidId(data.id)
+        && isValidSlug(data.slug)
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 120
+        && data.shortDescription is string && data.shortDescription.size() <= 300
+        && isValidStatus(data.status)
+        && data.revision is int && data.revision >= 1
+        && data.categories is list
+        && data.features is map
+        && data.features.webAds == false;
+    }
+
+    function isValidPublicGameDocument(data, slug) {
+      return data.slug == slug
+        && isValidSlug(data.slug)
+        && isValidId(data.id)
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 120
+        && data.status == 'published'
+        && data.revision is int && data.revision >= 1
+        && data.features is map
+        && data.features.webAds == false;
+    }
+
+    // =========================================================================
+    // 1. Admins (NEVER writable from client SDKs; prevents self-escalation)
+    // =========================================================================
+    match /admins/{uid} {
+      allow get: if isAuthenticated() && (request.auth.uid == uid || isOwner());
+      allow list: if isOwner();
+      allow create, update, delete: if false;
+    }
+
+    // =========================================================================
+    // 2. Canonical Game Records (Admin-only)
+    // =========================================================================
+    match /games/{gameId} {
+      allow read: if isAdmin();
+
+      allow create: if isAdmin()
+        && isValidGameDocument(request.resource.data, gameId)
+        && request.resource.data.revision == 1
+        && request.resource.data.createdAt != null
+        && request.resource.data.updatedAt != null;
+
+      allow update: if isAdmin()
+        && isValidGameDocument(request.resource.data, gameId)
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.revision == resource.data.revision + 1;
+
+      allow delete: if isOwner();
+    }
+
+    // =========================================================================
+    // 3. Slug Reservations (Uniqueness enforcement via transactions)
+    // =========================================================================
+    match /slug_reservations/{slug} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && isValidSlug(slug)
+        && request.resource.data.gameId is string
+        && isValidId(request.resource.data.gameId);
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 4. Compact Public Catalog Projection
+    // =========================================================================
+    match /public_catalog/{docId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.schemaVersion is string
+        && request.resource.data.catalogVersion is int
+        && request.resource.data.catalogVersion >= 1
+        && request.resource.data.games is list;
+      allow delete: if isOwner();
+    }
+
+    match /catalog_pages/{pageId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.pageIndex is int
+        && request.resource.data.games is list;
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 5. Public Game Details (Published-only projection, keyed by slug)
+    // =========================================================================
+    match /public_games/{slug} {
+      allow get: if isAdmin() || resource == null || resource.data.status == 'published';
+      allow list: if isAdmin() || resource.data.status == 'published';
+
+      allow create, update: if isAdmin()
+        && isValidPublicGameDocument(request.resource.data, slug);
+
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 6. Categories
+    // =========================================================================
+    match /categories/{categoryId} {
+      allow get: if isAdmin() || resource == null || resource.data.enabled == true;
+      allow list: if isAdmin() || resource.data.enabled == true;
+
+      allow create, update: if isAdmin()
+        && request.resource.data.id == categoryId
+        && isValidId(categoryId)
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1
+        && request.resource.data.name.size() <= 64
+        && request.resource.data.order is int
+        && request.resource.data.enabled is bool;
+
+      allow delete: if isOwner();
+    }
+
+    // =========================================================================
+    // 7. Game Releases (Versioned artifact metadata)
+    // =========================================================================
+    match /game_releases/{releaseId} {
+      allow get: if isAdmin() || resource == null || resource.data.published == true;
+      allow list: if isAdmin() || resource.data.published == true;
+
+      allow create: if isAdmin()
+        && request.resource.data.id == releaseId
+        && isValidId(request.resource.data.gameId)
+        && request.resource.data.version is string
+        && request.resource.data.artifactUrl is string
+        && request.resource.data.published is bool;
+
+      allow update: if isAdmin()
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.gameId == resource.data.gameId
+        && request.resource.data.version == resource.data.version
+        && request.resource.data.published is bool;
+
+      allow delete: if isOwner();
+    }
+
+    // =========================================================================
+    // 8. Hub Settings
+    // =========================================================================
+    match /hub_settings/{docId} {
+      allow read: if docId == 'public' || isAdmin();
+      allow create, update: if isOwner();
+      allow delete: if false;
+    }
+
+    // =========================================================================
+    // 9. Game Content Metadata & Immutable Content Packs
+    // =========================================================================
+    match /content_metadata/{gameId} {
+      allow get: if isAdmin() || resource == null || resource.data.published == true;
+      allow list: if isAdmin() || resource.data.published == true;
+
+      allow create, update: if isAdmin()
+        && request.resource.data.gameId == gameId
+        && request.resource.data.contentVersion is string
+        && request.resource.data.schemaVersion is string
+        && request.resource.data.packIds is list
+        && request.resource.data.published is bool;
+
+      allow delete: if isOwner();
+    }
+
+    match /game_content/{contentPackId} {
+      allow get: if isAdmin() || resource == null || resource.data.published == true;
+      allow list: if isAdmin() || resource.data.published == true;
+
+      // Content packs are immutable once published
+      allow create: if isAdmin()
+        && request.resource.data.id == contentPackId
+        && isValidId(request.resource.data.gameId)
+        && request.resource.data.contentVersion is string
+        && request.resource.data.published is bool;
+
+      allow update: if false;
+      allow delete: if isOwner();
+    }
+
+    // =========================================================================
+    // 10. Admin Audit Log (Append-only)
+    // =========================================================================
+    match /admin_audit/{operationId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.action is string
+        && request.resource.data.targetId is string
+        && request.resource.data.timestamp != null;
+      allow update, delete: if false;
+    }
+
+    // =========================================================================
+    // Default Deny Everything Else
+    // =========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "memory-match-fixture-bundled-1.0.0",
+  "gameId": "memory-match-fixture",
+  "contentVersion": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "items": [
+    { "pairId": "a", "label": "Star" },
+    { "pairId": "b", "label": "Moon" },
+    { "pairId": "c", "label": "Sun" },
+    { "pairId": "d", "label": "Bolt" }
+  ]
+}
