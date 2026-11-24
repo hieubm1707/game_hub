@@ -148,4 +148,16 @@ describe('game_contract manifest validation', () => {
     expect(isSafeHttpUrl('http://evil.com/index.html')).toBe(false);
     expect(isSafeHttpUrl('data:text/html,<h1>hi</h1>')).toBe(false);
   });
+
+  it('supports HTTPS wildcard origin patterns safely', () => {
+    const allowed = ['https://*.vercel.app', 'https://gamehub-*.pages.dev'];
+    expect(isSafeHttpUrl('https://blindspot.vercel.app/index.html', allowed)).toBe(true);
+    expect(isSafeHttpUrl('https://blindspot-preview-123.vercel.app/', allowed)).toBe(true);
+    expect(isSafeHttpUrl('https://gamehub-puzzle.pages.dev/releases/1.0.0/', allowed)).toBe(true);
+    expect(isSafeHttpUrl('https://other-puzzle.pages.dev/', allowed)).toBe(false);
+    expect(isSafeHttpUrl('https://vercel.app/', allowed)).toBe(false);
+    expect(isSafeHttpUrl('https://evil-vercel.app/', allowed)).toBe(false);
+    expect(isSafeHttpUrl('https://nested.sub.vercel.app/', allowed)).toBe(false);
+    expect(isSafeHttpUrl('http://blindspot.vercel.app/', allowed)).toBe(false);
+  });
 });

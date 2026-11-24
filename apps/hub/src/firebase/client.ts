@@ -30,7 +30,10 @@ export function isUsingEmulators(): boolean {
 
 export function getAllowedGameOrigins(): string[] {
   const raw = import.meta.env.VITE_ALLOWED_GAME_ORIGINS as string | undefined;
-  const list = (raw || 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:8090,http://127.0.0.1:8090')
+  const list = (
+    raw ||
+    'http://localhost:5173,http://127.0.0.1:5173,http://localhost:8090,http://127.0.0.1:8090,https://*.vercel.app'
+  )
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);

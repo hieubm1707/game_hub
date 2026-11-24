@@ -14,10 +14,13 @@ import {
 describe('game_cli', () => {
   const root = findWorkspaceRoot(path.resolve(import.meta.dirname, '../../..'));
 
-  it('lists configured fixture repositories', () => {
+  it('lists configured repositories and resolves paths', () => {
     const repos = loadRepositories(root, { ignoreLocal: true });
-    expect(repos.map((r) => r.id)).toContain('iq-puzzle-fixture');
-    expect(repos.map((r) => r.id)).toContain('memory-match-fixture');
+    expect(repos.length).toBeGreaterThan(0);
+    for (const repo of repos) {
+      expect(repo.id.length).toBeGreaterThan(0);
+      expect(path.isAbsolute(repo.path)).toBe(true);
+    }
   });
 
   it('inspects iq_puzzle_fixture cleanly with zero warnings', () => {

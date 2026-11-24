@@ -25,6 +25,33 @@ const FORBIDDEN_SECRET_PATTERNS = [
 
 const LOCAL_ABSOLUTE_PATH_PATTERN = /^(?:\/Users\/|\/home\/|[A-Za-z]:\\|file:\/\/)/;
 
+function matchesAllowedOrigin(parsed: URL, pattern: string): boolean {
+  const trimmed = pattern.trim();
+  if (!trimmed) return false;
+  if (!trimmed.includes('*')) {
+    return parsed.origin === trimmed;
+  }
+  // Only allow wildcard hostname patterns on HTTPS origins (e.g. https://*.vercel.app)
+  if (!trimmed.startsWith('https://') || parsed.protocol !== 'https:' || parsed.port !== '') {
+    return false;
+  }
+  const hostPattern = trimmed.slice('https://'.length);
+  if (
+    !hostPattern ||
+    hostPattern.includes('/') ||
+    hostPattern.includes('@') ||
+    hostPattern.includes(':') ||
+    !hostPattern.includes('.')
+  ) {
+    return false;
+  }
+  const escaped = hostPattern
+    .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+    .replace(/\*/g, '[a-z0-9-]+');
+  const regex = new RegExp(`^${escaped}$`, 'i');
+  return regex.test(parsed.hostname);
+}
+
 export function isSafeHttpUrl(url: string, allowedOrigins?: string[]): boolean {
   try {
     const parsed = new URL(url);
@@ -34,7 +61,7 @@ export function isSafeHttpUrl(url: string, allowedOrigins?: string[]): boolean {
       (parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1');
     if (!isHttps && !isLocalHttp) return false;
     if (allowedOrigins && allowedOrigins.length > 0) {
-      return allowedOrigins.includes(parsed.origin);
+      return allowedOrigins.some((origin) => matchesAllowedOrigin(parsed, origin));
     }
     return true;
   } catch {

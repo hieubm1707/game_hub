@@ -1,0 +1,100 @@
+{
+  "gameId": "blindspot",
+  "version": "1.0.0",
+  "checksum": "ff776c511adcb5d9f9121c9250ef51913bdefa0d0b5ffd002e544fa6437487c9",
+  "preparedAt": "2026-11-24T16:52:16.167Z",
+  "outputDir": "dist-releases/blindspot/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "blindspot",
+    "slug": "blindspot",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "BlindSpot",
+      "shortDescription": "An offline camera-occlusion puzzle in electric ink.",
+      "description": "BlindSpot is an offline-first spatial deduction puzzle where you place blockers and tokens to create blind spots out of security camera sightlines.",
+      "howToPlay": "Place tokens on the grid to block camera sightlines and keep every target hidden in a blind spot. Complete campaign levels and daily challenges offline.",
+      "categories": [
+        "puzzle",
+        "strategy"
+      ],
+      "tags": [
+        "offline",
+        "logic",
+        "puzzle",
+        "stealth"
+      ],
+      "developer": "Cecily",
+      "defaultLocale": "en",
+      "supportedLocales": [
+        "en",
+        "vi"
+      ]
+    },
+    "assets": {
+      "icon": "assets/store/icon-1024.png",
+      "thumbnail": "assets/store/feature-1024x500.png",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": "http://127.0.0.1:8090/blindspot/releases/1.0.0/index.html",
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "fullscreen": true,
+      "supportsTouch": true,
+      "supportsKeyboard": false,
+      "supportsOffline": false,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.blindspot",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.blindspot",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "1.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": true,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": false,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}
