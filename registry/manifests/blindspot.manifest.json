@@ -26,13 +26,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/store/icon-1024.png",
-    "thumbnail": "assets/store/feature-1024x500.png",
+    "icon": "https://blindspot-roan.vercel.app/assets/assets/store/icon-1024.png",
+    "thumbnail": "https://blindspot-roan.vercel.app/assets/assets/store/feature-1024x500.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": "http://127.0.0.1:8090/blindspot/releases/1.0.0/index.html",
+    "artifactUrl": "https://blindspot-roan.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
