@@ -30,7 +30,7 @@ export function createInMemoryRepositories(initial?: {
   let catalogVersion = 1;
   let settingsState: HubSettings = {
     hubName: 'Game Hub',
-    tagline: 'Free, ad-free offline-first Flutter games',
+    tagline: 'Free, offline-first Flutter games',
     defaultLocale: 'en',
     supportedLocales: ['en', 'vi'],
     catalogCacheTtlMinutes: 60,

@@ -82,13 +82,11 @@ export function createFirestoreRepositories(
 
   const categories: CategoryRepository = {
     async listEnabledCategories() {
-      const q = query(
-        collection(db, 'categories'),
-        where('enabled', '==', true),
-        orderBy('order', 'asc')
-      );
+      const q = query(collection(db, 'categories'), where('enabled', '==', true));
       const snap = await getDocs(q);
-      return snap.docs.map((d) => d.data() as CategoryRecord);
+      return snap.docs
+        .map((d) => d.data() as CategoryRecord)
+        .sort((a, b) => a.order - b.order);
     },
     async listAllCategories() {
       const snap = await getDocs(query(collection(db, 'categories'), orderBy('order', 'asc')));
@@ -105,7 +103,7 @@ export function createFirestoreRepositories(
       if (!snap.exists()) {
         return {
           hubName: 'Game Hub',
-          tagline: 'Free, ad-free offline-first Flutter games',
+          tagline: 'Free, offline-first Flutter games',
           defaultLocale: 'en',
           supportedLocales: ['en', 'vi'],
           catalogCacheTtlMinutes: 60,
@@ -317,13 +315,11 @@ export function createFirestoreRepositories(
 
   const releases: GameReleaseRepository = {
     async listReleasesForGame(gameId) {
-      const q = query(
-        collection(db, 'game_releases'),
-        where('gameId', '==', gameId),
-        orderBy('createdAt', 'desc')
-      );
+      const q = query(collection(db, 'game_releases'), where('gameId', '==', gameId));
       const snap = await getDocs(q);
-      return snap.docs.map((d) => d.data() as GameReleaseRecord);
+      return snap.docs
+        .map((d) => d.data() as GameReleaseRecord)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     },
     async registerRelease(release, actorUid) {
       const now = new Date().toISOString();
