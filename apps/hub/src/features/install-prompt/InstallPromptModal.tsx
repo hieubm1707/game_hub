@@ -2,23 +2,20 @@ import type { GameRecord } from '@game-hub/contract';
 import { Smartphone, Globe, X } from 'lucide-react';
 import {
   dismissInstallPrompt,
-  getStoreUrlForDevice,
-  type DetectedDevice,
+  getConfiguredStoreUrls,
 } from '../../services/installPromptPolicy';
 
 export function InstallPromptModal({
   game,
-  device,
   onContinueWeb,
   onClose,
 }: {
   game: GameRecord;
-  device: DetectedDevice;
   onContinueWeb: () => void;
   onClose: () => void;
 }) {
-  const store = getStoreUrlForDevice(game, device);
-  if (!store) return null;
+  const { android, ios } = getConfiguredStoreUrls(game);
+  if (!android && !ios) return null;
 
   const handleContinueWeb = () => {
     dismissInstallPrompt(game.id);
@@ -63,19 +60,32 @@ export function InstallPromptModal({
           </div>
 
           <p className="mt-4 text-sm font-medium leading-relaxed">
-            Enjoy offline gameplay and the native {store.platform === 'android' ? 'Android' : 'iOS'} experience.
+            Enjoy offline gameplay and the native mobile app experience.
           </p>
 
           <div className="mt-6 flex flex-col gap-3">
-            <a
-              href={store.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="arcade-btn arcade-btn-pink w-full px-4 py-3 text-xs"
-            >
-              <Smartphone className="h-4 w-4 stroke-[2.5]" />
-              Get the App ({store.platform === 'android' ? 'Google Play' : 'App Store'})
-            </a>
+            {android && (
+              <a
+                href={android}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="arcade-btn arcade-btn-lime w-full px-4 py-3 text-xs"
+              >
+                <Smartphone className="h-4 w-4 stroke-[2.5]" />
+                Get on Google Play
+              </a>
+            )}
+            {ios && (
+              <a
+                href={ios}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="arcade-btn arcade-btn-cyan w-full px-4 py-3 text-xs"
+              >
+                <Smartphone className="h-4 w-4 stroke-[2.5]" />
+                Get on App Store
+              </a>
+            )}
             <button
               type="button"
               onClick={handleContinueWeb}

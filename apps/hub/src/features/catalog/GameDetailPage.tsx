@@ -7,7 +7,7 @@ import { GameCategoryBadge, GameGrid } from '../../components/GameCard';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import {
-  detectDevicePlatform,
+  getConfiguredStoreUrls,
   shouldShowInstallPrompt,
 } from '../../services/installPromptPolicy';
 import { InstallPromptModal } from '../install-prompt/InstallPromptModal';
@@ -60,13 +60,13 @@ export function GameDetailPage() {
     );
   }
 
-  const device = detectDevicePlatform();
+  const storeUrls = getConfiguredStoreUrls(game);
   const related = catalogGames
     .filter((g) => g.id !== game.id && g.categories.some((c) => game.categories.includes(c)))
     .slice(0, 3);
 
   const handlePlayClick = () => {
-    if (shouldShowInstallPrompt(game, device)) {
+    if (shouldShowInstallPrompt(game)) {
       setShowInstallModal(true);
     } else {
       navigate(`/play/${game.slug}`);
@@ -137,12 +137,12 @@ export function GameDetailPage() {
                 className="arcade-btn arcade-btn-pink w-full px-4 py-3.5 text-sm"
               >
                 <Play className="h-4 w-4 fill-current" />
-                Play Now (Web)
+                Play Now
               </button>
 
-              {game.mobile.android.enabled && game.mobile.android.storeUrl && (
+              {storeUrls.android && (
                 <a
-                  href={game.mobile.android.storeUrl}
+                  href={storeUrls.android}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="arcade-btn arcade-btn-lime w-full px-4 py-2.5 text-xs"
@@ -152,9 +152,9 @@ export function GameDetailPage() {
                 </a>
               )}
 
-              {game.mobile.ios.enabled && game.mobile.ios.storeUrl && (
+              {storeUrls.ios && (
                 <a
-                  href={game.mobile.ios.storeUrl}
+                  href={storeUrls.ios}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="arcade-btn arcade-btn-cyan w-full px-4 py-2.5 text-xs"
@@ -187,7 +187,6 @@ export function GameDetailPage() {
       {showInstallModal && (
         <InstallPromptModal
           game={game}
-          device={device}
           onContinueWeb={() => {
             setShowInstallModal(false);
             navigate(`/play/${game.slug}`);
