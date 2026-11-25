@@ -105,10 +105,11 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(screen.queryByRole('link', { name: /admin/i })).not.toBeInTheDocument();
   });
 
-  it('supports client-side search and dynamic game detail routes', async () => {
+  it('supports client-side search and dynamic game detail routes with configured store links', async () => {
     renderApp(['/games/iq-puzzle-fixture'], [makeFixtureGame()], null);
-    expect(await screen.findByText('Play Now (Web)')).toBeInTheDocument();
+    expect(await screen.findByText('Play Now')).toBeInTheDocument();
     expect(screen.getByText('Get on Google Play')).toBeInTheDocument();
+    expect(screen.queryByText('Get on App Store')).not.toBeInTheDocument();
   });
 
   it('rejects untrusted iframe artifact origins in GamePlayer', async () => {
@@ -124,8 +125,14 @@ describe('Game Hub Public & Admin Flows', () => {
     ).toBeInTheDocument();
   });
 
-  it('toggles fullscreen minimize button and auto-hides control bar after 3 seconds in fullscreen', async () => {
-    renderApp(['/play/iq-puzzle-fixture'], [makeFixtureGame()], null);
+  it('toggles fullscreen minimize button, applies game backgroundColor, and auto-hides control bar after 3 seconds in fullscreen', async () => {
+    const themedGame = makeFixtureGame({
+      web: {
+        ...makeFixtureGame().web,
+        backgroundColor: '#1a2b3c',
+      },
+    });
+    renderApp(['/play/iq-puzzle-fixture'], [themedGame], null);
     const fsBtn = await screen.findByRole('button', { name: 'Fullscreen' });
     const controlBar = screen.getByTestId('game-control-bar');
     const container = controlBar.parentElement as HTMLElement;
@@ -151,8 +158,9 @@ describe('Game Hub Public & Admin Flows', () => {
       fireEvent.click(fsBtn);
       expect(requestFullscreen).toHaveBeenCalledTimes(1);
 
-      // Button switches to Exit fullscreen and control bar is initially visible
+      // Button switches to Exit fullscreen, backgroundColor is applied, and control bar is initially visible
       const exitFsBtn = screen.getByRole('button', { name: 'Exit fullscreen' });
+      expect(container).toHaveStyle({ backgroundColor: 'rgb(26, 43, 60)' });
       expect(controlBar).toHaveAttribute('data-controls-visible', 'true');
 
       // After 3 seconds, control bar auto-hides
@@ -161,9 +169,13 @@ describe('Game Hub Public & Admin Flows', () => {
       });
       expect(controlBar).toHaveAttribute('data-controls-visible', 'false');
 
-      // Hovering/clicking the top reveal zone shows control bar again
-      const revealZone = screen.getByTestId('fullscreen-controls-reveal');
-      fireEvent.mouseEnter(revealZone);
+      // Moving mouse on container does NOT auto-reveal the control bar
+      fireEvent.mouseMove(container);
+      expect(controlBar).toHaveAttribute('data-controls-visible', 'false');
+
+      // Clicking the top-right action button explicitly opens the control bar
+      const revealBtn = screen.getByRole('button', { name: 'Show controls' });
+      fireEvent.click(revealBtn);
       expect(controlBar).toHaveAttribute('data-controls-visible', 'true');
 
       // Clicking Exit fullscreen restores normal mode
@@ -176,17 +188,22 @@ describe('Game Hub Public & Admin Flows', () => {
     }
   });
 
-  it('enforces mobile install prompt cooldown locally and skips desktop', () => {
+  it('shows install prompt whenever store URLs are configured regardless of device and enforces local cooldown', () => {
     const game = makeFixtureGame();
-    expect(shouldShowInstallPrompt(game, 'desktop')).toBe(false);
-    expect(shouldShowInstallPrompt(game, 'android')).toBe(true);
-    expect(shouldShowInstallPrompt(game, 'ios')).toBe(false); // iOS storeUrl not configured
+    const noStoreGame = makeFixtureGame({
+      mobile: {
+        android: { enabled: false, packageId: null, storeUrl: null },
+        ios: { enabled: false, bundleId: null, storeUrl: null },
+      },
+    });
+    expect(shouldShowInstallPrompt(noStoreGame)).toBe(false);
+    expect(shouldShowInstallPrompt(game)).toBe(true);
 
     dismissInstallPrompt(game.id, 1_000_000);
-    expect(shouldShowInstallPrompt(game, 'android', 1_000_000 + 1000)).toBe(false);
+    expect(shouldShowInstallPrompt(game, 1_000_000 + 1000)).toBe(false);
     // Eligible again after 7 days
     expect(
-      shouldShowInstallPrompt(game, 'android', 1_000_000 + 8 * 24 * 60 * 60 * 1000)
+      shouldShowInstallPrompt(game, 1_000_000 + 8 * 24 * 60 * 60 * 1000)
     ).toBe(true);
   });
 
