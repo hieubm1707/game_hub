@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import type { GameRecord } from '@game-hub/contract';
-import { Play, Smartphone } from 'lucide-react';
+import { ArrowLeft, Play, Smartphone } from 'lucide-react';
 import { useRepositories } from '../../app/RepositoryContext';
 import { GameCategoryBadge, GameGrid } from '../../components/GameCard';
 import { useCatalog } from '../../hooks/useCatalog';
@@ -35,15 +35,25 @@ export function GameDetailPage() {
 
   useDocumentTitle(game?.title ?? 'Game Details', game?.shortDescription);
 
-  if (loading) return <div className="py-12 text-center text-slate-400">Loading game details...</div>;
+  if (loading) {
+    return (
+      <div className="brutal-panel p-10 text-center space-y-4">
+        <p className="font-numeric text-sm font-bold uppercase">Loading game details...</p>
+        <div className="arcade-progress-track mx-auto max-w-md">
+          <div className="arcade-loading-bar h-full w-full" />
+        </div>
+      </div>
+    );
+  }
+
   if (!game) {
     return (
-      <div className="rounded-xl border border-slate-800 p-10 text-center">
-        <h1 className="text-xl font-bold text-white">Game not found</h1>
-        <p className="mt-2 text-sm text-slate-400">
+      <div className="brutal-panel-lg p-10 text-center space-y-4">
+        <h1 className="text-2xl font-bold">Game not found</h1>
+        <p className="text-sm font-medium hub-text-muted">
           This game may be unpublished or archived.
         </p>
-        <Link to="/games" className="mt-4 inline-block text-sm text-indigo-400 hover:underline">
+        <Link to="/games" className="arcade-btn arcade-btn-pink px-5 py-2.5 text-xs">
           Back to Games
         </Link>
       </div>
@@ -65,32 +75,50 @@ export function GameDetailPage() {
 
   return (
     <div className="space-y-10">
+      <div>
+        <Link to="/games" className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-1.5 text-xs">
+          <ArrowLeft className="h-3.5 w-3.5 stroke-[2.5]" />
+          Back to Catalog
+        </Link>
+      </div>
+
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <img
-            src={game.thumbnail}
-            alt={game.title}
-            className="aspect-video w-full rounded-2xl border border-slate-800 object-cover"
-          />
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-4">
-            <h2 className="text-lg font-bold text-white">About</h2>
-            <p className="text-sm leading-relaxed text-slate-300">{game.description}</p>
+        <div className="lg:col-span-2 space-y-6">
+          <div className="brutal-panel-lg overflow-hidden bg-black p-0">
+            <img
+              src={game.thumbnail}
+              alt={game.title}
+              className="aspect-video w-full object-cover"
+            />
+          </div>
+
+          <div className="brutal-panel p-6 space-y-4">
+            <h2 className="border-b-[length:var(--border-w)] hub-divider pb-2 font-numeric text-base font-bold uppercase">
+              // About
+            </h2>
+            <p className="text-sm font-medium leading-relaxed">{game.description}</p>
             {game.howToPlay && (
-              <>
-                <h3 className="text-base font-semibold text-white">How to Play</h3>
-                <p className="text-sm leading-relaxed text-slate-300">{game.howToPlay}</p>
-              </>
+              <div className="border-t-[length:var(--border-w)] hub-divider pt-4 space-y-2">
+                <h3 className="font-numeric text-sm font-bold uppercase hub-text-highlight">
+                  // How to Play
+                </h3>
+                <p className="text-sm font-medium leading-relaxed">{game.howToPlay}</p>
+              </div>
             )}
           </div>
         </div>
 
         <aside className="space-y-4">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <img src={game.icon} alt={game.title} className="h-14 w-14 rounded-xl" />
+          <div className="brutal-panel-lg p-6 space-y-5">
+            <div className="flex items-center gap-3.5">
+              <img
+                src={game.icon}
+                alt={game.title}
+                className="h-16 w-16 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
+              />
               <div>
-                <h1 className="text-xl font-bold text-white">{game.title}</h1>
-                <p className="text-xs text-slate-400">
+                <h1 className="text-2xl font-bold leading-tight">{game.title}</h1>
+                <p className="mt-1 font-numeric text-xs font-bold uppercase hub-text-muted">
                   v{game.currentRelease} {game.developer ? `• ${game.developer}` : ''}
                 </p>
               </div>
@@ -102,45 +130,56 @@ export function GameDetailPage() {
               ))}
             </div>
 
-            <button
-              type="button"
-              onClick={handlePlayClick}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:bg-indigo-500"
-            >
-              <Play className="h-4 w-4" />
-              Play Now (Web — Ad-Free)
-            </button>
-
-            {game.mobile.android.enabled && game.mobile.android.storeUrl && (
-              <a
-                href={game.mobile.android.storeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-700 px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-800"
+            <div className="space-y-3 pt-1">
+              <button
+                type="button"
+                onClick={handlePlayClick}
+                className="arcade-btn arcade-btn-pink w-full px-4 py-3.5 text-sm"
               >
-                <Smartphone className="h-4 w-4" />
-                Get on Google Play
-              </a>
-            )}
+                <Play className="h-4 w-4 fill-current" />
+                Play Now (Web)
+              </button>
 
-            {game.mobile.ios.enabled && game.mobile.ios.storeUrl && (
-              <a
-                href={game.mobile.ios.storeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-700 px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-800"
-              >
-                <Smartphone className="h-4 w-4" />
-                Get on App Store
-              </a>
-            )}
+              {game.mobile.android.enabled && game.mobile.android.storeUrl && (
+                <a
+                  href={game.mobile.android.storeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="arcade-btn arcade-btn-lime w-full px-4 py-2.5 text-xs"
+                >
+                  <Smartphone className="h-4 w-4 stroke-[2.5]" />
+                  Get on Google Play
+                </a>
+              )}
+
+              {game.mobile.ios.enabled && game.mobile.ios.storeUrl && (
+                <a
+                  href={game.mobile.ios.storeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="arcade-btn arcade-btn-cyan w-full px-4 py-2.5 text-xs"
+                >
+                  <Smartphone className="h-4 w-4 stroke-[2.5]" />
+                  Get on App Store
+                </a>
+              )}
+            </div>
+
+            <div className="border-t-[length:var(--border-w)] hub-divider pt-4 font-numeric text-[11px] font-bold uppercase">
+              <div className="hub-alert-success p-2.5">
+                <div className="text-[10px] opacity-75">ORIENTATION</div>
+                <div>{game.web.orientation}</div>
+              </div>
+            </div>
           </div>
         </aside>
       </div>
 
       {related.length > 0 && (
         <section>
-          <h2 className="mb-4 text-xl font-bold text-white">Related Games</h2>
+          <h2 className="mb-4 border-b-[length:var(--border-w)] hub-divider pb-2 text-xl font-bold">
+            Related Games
+          </h2>
           <GameGrid games={related} />
         </section>
       )}

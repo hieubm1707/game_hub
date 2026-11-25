@@ -32,51 +32,59 @@ export function InstallPromptModal({
       aria-labelledby="install-prompt-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
     >
-      <div className="relative w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white"
-        >
-          <X className="h-5 w-5" />
-        </button>
-
-        <div className="flex items-center gap-3">
-          <img src={game.icon} alt={game.title} className="h-12 w-12 rounded-xl" />
-          <div>
-            <h2 id="install-prompt-title" className="text-lg font-bold text-white">
-              Play on the app
-            </h2>
-            <p className="text-xs text-slate-400">{game.title}</p>
-          </div>
-        </div>
-
-        <p className="mt-4 text-sm text-slate-300">
-          Enjoy offline gameplay and the native {store.platform === 'android' ? 'Android' : 'iOS'} experience.
-          {game.features.nativeAds
-            ? ' Note: the native mobile app may display advertisements, whereas Web gameplay is ad-free.'
-            : ''}
-        </p>
-
-        <div className="mt-6 flex flex-col gap-3">
-          <a
-            href={store.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:bg-indigo-500"
-          >
-            <Smartphone className="h-4 w-4" />
-            Get the App ({store.platform === 'android' ? 'Google Play' : 'App Store'})
-          </a>
+      <div className="relative w-full max-w-md brutal-panel-lg overflow-hidden">
+        <div className="hub-topbar flex items-center justify-between px-5 py-3">
+          <span className="text-xs font-bold uppercase tracking-wider">
+            // NATIVE APP AVAILABLE
+          </span>
           <button
             type="button"
-            onClick={handleContinueWeb}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/60 px-4 py-3 text-sm font-medium text-slate-200 hover:bg-slate-800"
+            onClick={onClose}
+            aria-label="Close"
+            className="arcade-btn arcade-btn-sm arcade-btn-yellow p-1"
           >
-            <Globe className="h-4 w-4" />
-            Continue Playing on Web
+            <X className="h-4 w-4 stroke-[3]" />
           </button>
+        </div>
+
+        <div className="p-6">
+          <div className="flex items-center gap-3.5">
+            <img
+              src={game.icon}
+              alt={game.title}
+              className="h-14 w-14 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
+            />
+            <div>
+              <h2 id="install-prompt-title" className="text-xl font-bold">
+                Play on the app
+              </h2>
+              <p className="font-numeric text-xs font-bold uppercase hub-text-muted">{game.title}</p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-sm font-medium leading-relaxed">
+            Enjoy offline gameplay and the native {store.platform === 'android' ? 'Android' : 'iOS'} experience.
+          </p>
+
+          <div className="mt-6 flex flex-col gap-3">
+            <a
+              href={store.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="arcade-btn arcade-btn-pink w-full px-4 py-3 text-xs"
+            >
+              <Smartphone className="h-4 w-4 stroke-[2.5]" />
+              Get the App ({store.platform === 'android' ? 'Google Play' : 'App Store'})
+            </a>
+            <button
+              type="button"
+              onClick={handleContinueWeb}
+              className="arcade-btn arcade-btn-yellow w-full px-4 py-3 text-xs"
+            >
+              <Globe className="h-4 w-4 stroke-[2.5]" />
+              Continue Playing on Web
+            </button>
+          </div>
         </div>
       </div>
     </div>
