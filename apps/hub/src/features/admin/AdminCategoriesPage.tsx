@@ -37,48 +37,54 @@ export function AdminCategoriesPage() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold text-white">Categories</h1>
+      <div className="brutal-panel p-5">
+        <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
+          // TAXONOMY
+        </p>
+        <h1 className="text-2xl font-bold">Categories</h1>
+      </div>
 
-      <form onSubmit={handleSave} className="grid gap-3 rounded-xl border border-slate-800 bg-slate-900 p-4 sm:grid-cols-4">
+      <form onSubmit={handleSave} className="brutal-panel grid gap-3 p-4 sm:grid-cols-4">
         <input
           required
           value={id}
           onChange={(e) => setId(e.target.value)}
           placeholder="slug-id"
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+          className="arcade-input"
         />
         <input
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Display Name"
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+          className="arcade-input"
         />
         <input
           type="number"
           value={order}
           onChange={(e) => setOrder(Number(e.target.value))}
-          className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+          className="arcade-input"
         />
-        <button
-          type="submit"
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-        >
+        <button type="submit" className="arcade-btn arcade-btn-sm arcade-btn-pink px-4 py-2 text-xs">
           Add / Update
         </button>
       </form>
 
-      <div className="divide-y divide-slate-800 rounded-xl border border-slate-800 bg-slate-900/50">
+      <div className="brutal-panel divide-y-2 hub-divider">
         {list.map((c) => (
           <div key={c.id} className="flex items-center justify-between px-4 py-3 text-sm">
             <div>
-              <span className="font-medium text-white">{c.name}</span>{' '}
-              <span className="text-xs text-slate-400">({c.id} • order {c.order})</span>
+              <span className="font-bold">{c.name}</span>{' '}
+              <span className="font-numeric text-xs font-bold hub-text-muted">
+                ({c.id} • order {c.order})
+              </span>
             </div>
             <button
               type="button"
               onClick={() => void toggleEnabled(c)}
-              className="rounded border border-slate-700 px-2.5 py-1 text-xs text-slate-200 hover:bg-slate-800"
+              className={`arcade-btn arcade-btn-sm px-3 py-1 text-xs ${
+                c.enabled ? 'arcade-btn-yellow' : 'arcade-btn-lime'
+              }`}
             >
               {c.enabled ? 'Disable' : 'Enable'}
             </button>
@@ -92,17 +98,23 @@ export function AdminCategoriesPage() {
 export function AdminContentPage() {
   useDocumentTitle('Game Content Packs');
   return (
-    <div className="max-w-2xl space-y-4">
-      <h1 className="text-2xl font-bold text-white">Offline Content Packs</h1>
-      <p className="text-sm text-slate-300">
+    <div className="brutal-panel-lg max-w-2xl p-6 space-y-4">
+      <div className="hub-badge px-2.5 py-0.5 text-xs uppercase">// IMMUTABLE PACKS</div>
+      <h1 className="text-2xl font-bold">Offline Content Packs</h1>
+      <p className="text-sm font-medium leading-relaxed">
         Games using hybrid/Firebase content sync read immutable packs from{' '}
-        <code className="text-indigo-300">content_metadata/{'{gameId}'}</code> and{' '}
-        <code className="text-indigo-300">game_content/{'{packId}'}</code>. Content packs are
-        immutable once published so cached clients never experience partial mid-level updates.
+        <code className="hub-badge-featured px-1.5 py-0.5 text-xs font-bold">
+          content_metadata/{'{gameId}'}
+        </code>{' '}
+        and{' '}
+        <code className="hub-badge-featured px-1.5 py-0.5 text-xs font-bold">
+          game_content/{'{packId}'}
+        </code>
+        . Content packs are immutable once published so cached clients never experience partial mid-level updates.
       </p>
-      <p className="text-xs text-slate-400">
-        Use <code className="text-slate-200">pnpm emulators:seed</code> in development or publish
-        versioned JSON packs via Firestore rules-validated admin tooling.
+      <p className="font-numeric text-xs font-bold hub-text-muted">
+        Use <code className="hub-topbar px-1.5 py-0.5">pnpm emulators:seed</code> in development or
+        publish versioned JSON packs via Firestore rules-validated admin tooling.
       </p>
     </div>
   );
@@ -136,44 +148,63 @@ export function AdminSettingsPage() {
 
   return (
     <div className="max-w-xl space-y-6">
-      <h1 className="text-2xl font-bold text-white">Hub Settings</h1>
+      <div className="brutal-panel p-5">
+        <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
+          // SYSTEM CONFIG
+        </p>
+        <h1 className="text-2xl font-bold">Hub Settings</h1>
+      </div>
+
       {saved && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-3 text-sm text-emerald-200">
+        <div className="hub-alert-success p-3 font-numeric text-xs font-bold">
           Public Hub settings saved.
         </div>
       )}
-      <form onSubmit={handleSave} className="space-y-4 rounded-xl border border-slate-800 bg-slate-900 p-5">
+
+      <form onSubmit={handleSave} className="brutal-panel p-6 space-y-5">
         <div>
-          <label className="block text-xs text-slate-300">Hub Name</label>
+          <label className="block font-numeric text-xs font-bold uppercase">Hub Name</label>
           <input
             value={hubName}
             onChange={(e) => setHubName(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input mt-1"
           />
         </div>
         <div>
-          <label className="block text-xs text-slate-300">Tagline</label>
+          <label className="block font-numeric text-xs font-bold uppercase">Tagline</label>
           <input
             value={tagline}
             onChange={(e) => setTagline(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input mt-1"
           />
         </div>
-        <div>
-          <label className="block text-xs text-slate-300">Catalog Cache TTL (minutes)</label>
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Catalog Cache TTL (minutes)
+            </label>
+            <span className="hub-badge-featured px-2 py-0.5 text-xs font-bold">{ttl} MIN</span>
+          </div>
+          <input
+            type="range"
+            min={5}
+            max={1440}
+            step={5}
+            value={ttl}
+            onChange={(e) => setTtl(Number(e.target.value))}
+            aria-label="Catalog Cache TTL slider"
+            className="arcade-slider"
+          />
           <input
             type="number"
             min={5}
             max={1440}
             value={ttl}
             onChange={(e) => setTtl(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input"
           />
         </div>
-        <button
-          type="submit"
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-        >
+        <button type="submit" className="arcade-btn arcade-btn-sm arcade-btn-pink px-5 py-2.5 text-xs">
           Save Settings
         </button>
       </form>

@@ -21,12 +21,16 @@ export function AdminReleasesPage() {
 
   const load = useCallback(async () => {
     if (!id) return;
-    const [g, rels] = await Promise.all([
-      adminGames.getGameById(id),
-      releases.listReleasesForGame(id),
-    ]);
-    setGame(g);
-    setList(rels);
+    try {
+      const [g, rels] = await Promise.all([
+        adminGames.getGameById(id),
+        releases.listReleasesForGame(id),
+      ]);
+      setGame(g);
+      setList(rels);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load releases.');
+    }
   }, [id, adminGames, releases]);
 
   useEffect(() => {
@@ -74,81 +78,76 @@ export function AdminReleasesPage() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold text-white">
-        Releases: {game?.title ?? id}
-      </h1>
-      <p className="text-xs text-slate-400">
-        Active version: <strong className="text-white">v{game?.currentRelease}</strong>. Register
-        static Web builds already deployed via CLI/Cloudflare Pages, then activate or roll back.
-      </p>
+      <div className="brutal-panel p-5 space-y-1.5">
+        <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
+          // RELEASE PIPELINE
+        </p>
+        <h1 className="text-2xl font-bold">Releases: {game?.title ?? id}</h1>
+        <p className="font-numeric text-xs font-bold hub-text-muted">
+          Active version:{' '}
+          <strong className="hub-alert-success px-1.5 py-0.5">v{game?.currentRelease}</strong>.
+          Register static Web builds already deployed via CLI/Cloudflare Pages, then activate or roll back.
+        </p>
+      </div>
 
-      {statusMsg && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-3 text-sm text-emerald-200">
-          {statusMsg}
-        </div>
-      )}
-      {error && (
-        <div className="rounded-lg border border-rose-500/30 bg-rose-950/40 p-3 text-sm text-rose-200">
-          {error}
-        </div>
-      )}
+      {statusMsg && <div className="hub-alert-success p-3 font-numeric text-xs font-bold">{statusMsg}</div>}
+      {error && <div className="hub-alert-error p-3 font-numeric text-xs font-bold">{error}</div>}
 
-      <form onSubmit={handleRegister} className="space-y-3 rounded-xl border border-slate-800 bg-slate-900 p-5">
-        <h2 className="text-sm font-semibold text-white">Register Deployed Build</h2>
+      <form onSubmit={handleRegister} className="brutal-panel p-5 space-y-4">
+        <h2 className="font-numeric text-xs font-bold uppercase">// Register Deployed Build</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <input
             required
             value={version}
             onChange={(e) => setVersion(e.target.value)}
             placeholder="1.1.0"
-            className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input"
           />
           <input
             required
             value={artifactUrl}
             onChange={(e) => setArtifactUrl(e.target.value)}
             placeholder="https://my-game.pages.dev/releases/1.1.0/index.html"
-            className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input"
           />
         </div>
         <input
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="Release notes (optional)"
-          className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+          className="arcade-input"
         />
-        <button
-          type="submit"
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-        >
+        <button type="submit" className="arcade-btn arcade-btn-sm arcade-btn-pink px-4 py-2 text-xs">
           Register Release
         </button>
       </form>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         {list.map((rel) => {
           const isActive = game?.currentRelease === rel.version;
           return (
             <div
               key={rel.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-sm"
+              className="brutal-panel flex flex-wrap items-center justify-between gap-3 p-4 text-sm"
             >
               <div>
-                <div className="font-semibold text-white">
+                <div className="font-numeric font-bold">
                   v{rel.version}{' '}
                   {isActive && (
-                    <span className="ml-2 rounded bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">
+                    <span className="hub-alert-success ml-2 px-2 py-0.5 text-xs uppercase">
                       Active
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-slate-400 break-all">{rel.artifactUrl}</p>
+                <p className="mt-1 font-numeric text-xs font-medium hub-text-muted break-all">
+                  {rel.artifactUrl}
+                </p>
               </div>
               {!isActive && (
                 <button
                   type="button"
                   onClick={() => void handleActivate(rel)}
-                  className="rounded-lg border border-indigo-500 px-3 py-1.5 text-xs text-indigo-300 hover:bg-indigo-950"
+                  className="arcade-btn arcade-btn-sm arcade-btn-cyan px-3 py-1.5 text-xs"
                 >
                   Activate / Rollback
                 </button>

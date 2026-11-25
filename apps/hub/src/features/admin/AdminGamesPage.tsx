@@ -5,6 +5,13 @@ import { useRepositories } from '../../app/RepositoryContext';
 import { useAuth } from '../authentication/AuthContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
+const STATUS_BADGE: Record<GameStatus, string> = {
+  published: 'hub-alert-success',
+  draft: 'hub-badge-featured',
+  disabled: 'hub-alert-info',
+  archived: 'hub-badge',
+};
+
 export function AdminGamesPage() {
   useDocumentTitle('Manage Games');
   const { adminGames } = useRepositories();
@@ -58,7 +65,11 @@ export function AdminGamesPage() {
 
   const handleDelete = async (game: GameRecord) => {
     if (!admin) return;
-    if (!window.confirm(`Permanently delete "${game.title}" from Firestore? Deployed static artifacts will not be deleted.`)) {
+    if (
+      !window.confirm(
+        `Permanently delete "${game.title}" from Firestore? Deployed static artifacts will not be deleted.`
+      )
+    ) {
       return;
     }
     setError(null);
@@ -83,12 +94,9 @@ export function AdminGamesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-white">Games Catalog</h1>
-        <Link
-          to="/admin/games/new"
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
-        >
+      <div className="brutal-panel p-5 flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold tracking-tight">Games Catalog</h1>
+        <Link to="/admin/games/new" className="arcade-btn arcade-btn-sm arcade-btn-pink px-4 py-2 text-xs">
           + Add / Import Game
         </Link>
       </div>
@@ -99,13 +107,13 @@ export function AdminGamesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by title, ID, or slug..."
-          className="w-full max-w-xs rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm text-white"
+          className="arcade-input max-w-xs"
         />
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           aria-label="Filter by status"
-          className="rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-sm text-white"
+          className="arcade-input w-auto min-w-[160px]"
         >
           <option value="all">All statuses</option>
           <option value="published">Published</option>
@@ -115,23 +123,17 @@ export function AdminGamesPage() {
         </select>
       </div>
 
-      {message && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-950/40 p-3 text-sm text-emerald-200">
-          {message}
-        </div>
-      )}
-      {error && (
-        <div className="rounded-lg border border-rose-500/30 bg-rose-950/40 p-3 text-sm text-rose-200">
-          {error}
-        </div>
-      )}
+      {message && <div className="hub-alert-success p-3 font-numeric text-xs font-bold">{message}</div>}
+      {error && <div className="hub-alert-error p-3 font-numeric text-xs font-bold">{error}</div>}
 
       {loading ? (
-        <p className="text-slate-400">Loading games...</p>
+        <div className="brutal-panel p-8 font-numeric text-sm font-bold uppercase">
+          Loading games...
+        </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-slate-800">
+        <div className="brutal-panel overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-900 text-xs uppercase text-slate-400">
+            <thead className="hub-table-head text-xs uppercase">
               <tr>
                 <th className="px-4 py-3">Game</th>
                 <th className="px-4 py-3">Status</th>
@@ -139,32 +141,36 @@ export function AdminGamesPage() {
                 <th className="px-4 py-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 bg-slate-950">
+            <tbody className="divide-y-2 hub-divider">
               {filtered.map((g) => (
                 <tr key={g.id}>
                   <td className="px-4 py-3">
-                    <div className="font-medium text-white">{g.title}</div>
-                    <div className="text-xs text-slate-400">
+                    <div className="font-bold">{g.title}</div>
+                    <div className="font-numeric text-xs font-bold hub-text-muted">
                       {g.id} • /{g.slug} • rev {g.revision}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs capitalize text-slate-200">
+                    <span
+                      className={`inline-block px-2.5 py-0.5 font-numeric text-xs font-bold uppercase ${
+                        STATUS_BADGE[g.status]
+                      }`}
+                    >
                       {g.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-300">v{g.currentRelease}</td>
+                  <td className="px-4 py-3 font-numeric text-xs font-bold">v{g.currentRelease}</td>
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2 text-xs">
                       <Link
                         to={`/admin/games/${g.id}/edit`}
-                        className="rounded border border-slate-700 px-2 py-1 text-slate-200 hover:bg-slate-800"
+                        className="arcade-btn arcade-btn-sm arcade-btn-white px-2.5 py-1 text-[11px]"
                       >
                         Edit
                       </Link>
                       <Link
                         to={`/admin/games/${g.id}/releases`}
-                        className="rounded border border-slate-700 px-2 py-1 text-slate-200 hover:bg-slate-800"
+                        className="arcade-btn arcade-btn-sm arcade-btn-cyan px-2.5 py-1 text-[11px]"
                       >
                         Releases
                       </Link>
@@ -172,7 +178,7 @@ export function AdminGamesPage() {
                         <button
                           type="button"
                           onClick={() => void changeStatus(g, 'published')}
-                          className="rounded bg-emerald-600/80 px-2 py-1 text-white hover:bg-emerald-500"
+                          className="arcade-btn arcade-btn-sm arcade-btn-lime px-2.5 py-1 text-[11px]"
                         >
                           Publish
                         </button>
@@ -180,7 +186,7 @@ export function AdminGamesPage() {
                         <button
                           type="button"
                           onClick={() => void changeStatus(g, 'draft')}
-                          className="rounded bg-amber-600/80 px-2 py-1 text-white hover:bg-amber-500"
+                          className="arcade-btn arcade-btn-sm arcade-btn-yellow px-2.5 py-1 text-[11px]"
                         >
                           Unpublish
                         </button>
@@ -189,7 +195,7 @@ export function AdminGamesPage() {
                         <button
                           type="button"
                           onClick={() => void changeStatus(g, 'archived')}
-                          className="rounded border border-slate-700 px-2 py-1 text-slate-300 hover:bg-slate-800"
+                          className="arcade-btn arcade-btn-sm arcade-btn-white px-2.5 py-1 text-[11px]"
                         >
                           Archive
                         </button>
@@ -197,7 +203,7 @@ export function AdminGamesPage() {
                         <button
                           type="button"
                           onClick={() => void changeStatus(g, 'draft')}
-                          className="rounded border border-indigo-600 px-2 py-1 text-indigo-300 hover:bg-indigo-950"
+                          className="arcade-btn arcade-btn-sm arcade-btn-cyan px-2.5 py-1 text-[11px]"
                         >
                           Restore
                         </button>
@@ -205,7 +211,7 @@ export function AdminGamesPage() {
                       <button
                         type="button"
                         onClick={() => exportGame(g)}
-                        className="rounded border border-slate-700 px-2 py-1 text-slate-300 hover:bg-slate-800"
+                        className="arcade-btn arcade-btn-sm arcade-btn-white px-2.5 py-1 text-[11px]"
                       >
                         Export
                       </button>
@@ -213,7 +219,7 @@ export function AdminGamesPage() {
                         <button
                           type="button"
                           onClick={() => void handleDelete(g)}
-                          className="rounded border border-rose-700 px-2 py-1 text-rose-300 hover:bg-rose-950"
+                          className="arcade-btn arcade-btn-sm arcade-btn-pink px-2.5 py-1 text-[11px]"
                         >
                           Delete
                         </button>
@@ -224,7 +230,7 @@ export function AdminGamesPage() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-slate-400">
+                  <td colSpan={4} className="px-4 py-8 text-center font-numeric text-sm font-bold hub-text-muted">
                     No games match the current filter.
                   </td>
                 </tr>

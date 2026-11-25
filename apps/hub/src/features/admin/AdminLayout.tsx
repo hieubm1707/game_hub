@@ -25,8 +25,15 @@ export function AdminLayout() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-400">
-        Verifying administrator session...
+      <div className="flex min-h-screen items-center justify-center arcade-bg p-4">
+        <div className="brutal-panel p-6 text-center space-y-3">
+          <p className="font-numeric text-sm font-bold uppercase">
+            Verifying administrator session...
+          </p>
+          <div className="arcade-progress-track w-56 mx-auto">
+            <div className="arcade-loading-bar h-full w-full" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -36,51 +43,52 @@ export function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
-      <aside className="w-60 shrink-0 border-r border-slate-800 bg-slate-900/60 p-4 flex flex-col">
-        <div className="mb-6 flex items-center justify-between">
-          <Link to="/" className="font-bold text-white">
+    <div className="flex min-h-screen arcade-bg">
+      <aside className="hub-sidebar w-64 shrink-0 p-4 flex flex-col">
+        <div className="mb-6 flex items-center justify-between border-b-[length:var(--border-w)] hub-divider pb-4">
+          <Link to="/" className="hub-brand inline-flex items-center gap-1.5 px-2.5 py-1 text-sm font-bold">
+            <Gamepad2 className="h-4 w-4" />
             Game Hub
           </Link>
-          <span className="rounded bg-indigo-500/20 px-2 py-0.5 text-[10px] font-semibold uppercase text-indigo-300">
+          <span className="hub-badge-featured px-2 py-0.5 text-[10px] font-bold uppercase">
             {admin.role}
           </span>
         </div>
 
-        <nav className="space-y-1 flex-1">
+        <nav className="space-y-2 flex-1">
           {NAV_ITEMS.map(({ to, label, icon: Icon, exact }) => {
             const active = exact ? location.pathname === to : location.pathname.startsWith(to);
             return (
               <Link
                 key={to}
                 to={to}
-                className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm ${
-                  active
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                className={`arcade-btn arcade-btn-sm w-full justify-start px-3 py-2 text-xs ${
+                  active ? 'arcade-btn-pink' : 'arcade-btn-white'
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 stroke-[2.5]" />
                 {label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="border-t border-slate-800 pt-4 space-y-2">
-          <p className="truncate text-xs text-slate-400">{admin.email}</p>
+        <div className="border-t-[length:var(--border-w)] hub-divider pt-4 space-y-2.5">
+          <p className="truncate hub-alert-info px-2.5 py-1 font-numeric text-[11px] font-bold">
+            {admin.email}
+          </p>
           <button
             type="button"
             onClick={() => void logout()}
-            className="flex w-full items-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-white"
+            className="arcade-btn arcade-btn-sm arcade-btn-black w-full px-3 py-2 text-xs"
           >
-            <LogOut className="h-3.5 w-3.5" />
+            <LogOut className="h-3.5 w-3.5 stroke-[2.5]" />
             Sign Out
           </button>
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto p-6 lg:p-8">
+      <main className="flex-1 overflow-auto p-6 pb-24 lg:p-8 lg:pb-24">
         <Outlet />
       </main>
     </div>

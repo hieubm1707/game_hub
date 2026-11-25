@@ -33,58 +33,67 @@ export function AdminLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8">
-        <div className="flex items-center gap-2 text-indigo-400">
-          <Shield className="h-6 w-6" />
-          <h1 className="text-xl font-bold text-white">Game Hub Admin</h1>
+    <div className="flex min-h-screen items-center justify-center arcade-bg px-4">
+      <div className="w-full max-w-md brutal-panel-lg overflow-hidden">
+        <div className="hub-topbar px-6 py-4 flex items-center gap-2.5">
+          <Shield className="h-6 w-6 hub-topbar-accent stroke-[2.5]" />
+          <h1 className="text-xl font-bold tracking-tight">Game Hub Admin</h1>
         </div>
-        <p className="mt-2 text-sm text-slate-400">
-          Authorized administrators only. Public registration is disabled.
-        </p>
 
-        {(error || submitError) && (
-          <div className="mt-4 rounded-lg border border-rose-500/30 bg-rose-950/50 p-3 text-sm text-rose-200">
-            {submitError || error}
-          </div>
-        )}
+        <div className="p-6 sm:p-8">
+          <p className="hub-alert-info px-3 py-2 font-numeric text-xs font-bold">
+            Authorized administrators only. Public registration is disabled.
+          </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="admin-email" className="block text-xs font-medium text-slate-300">
-              Email
-            </label>
-            <input
-              id="admin-email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@gamehub.local"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="admin-password" className="block text-xs font-medium text-slate-300">
-              Password
-            </label>
-            <input
-              id="admin-password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
-          >
-            {submitting ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+          {(error || submitError) && (
+            <div className="mt-4 hub-alert-error p-3 font-numeric text-xs font-bold">
+              {submitError || error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <div>
+              <label
+                htmlFor="admin-email"
+                className="block font-numeric text-xs font-bold uppercase"
+              >
+                Email
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@gamehub.local"
+                className="arcade-input mt-1.5"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="admin-password"
+                className="block font-numeric text-xs font-bold uppercase"
+              >
+                Password
+              </label>
+              <input
+                id="admin-password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="arcade-input mt-1.5"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="arcade-btn arcade-btn-pink w-full px-4 py-3 text-sm mt-2"
+            >
+              {submitting ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -154,12 +154,17 @@ export function AdminGameFormPage() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <h1 className="text-2xl font-bold text-white">
-        {isEdit ? `Edit Game: ${form.title || id}` : 'Add or Import Game'}
-      </h1>
+      <div className="brutal-panel p-5">
+        <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
+          // CARTRIDGE CONFIG
+        </p>
+        <h1 className="text-2xl font-bold tracking-tight">
+          {isEdit ? `Edit Game: ${form.title || id}` : 'Add or Import Game'}
+        </h1>
+      </div>
 
-      <section className="rounded-xl border border-indigo-500/30 bg-indigo-950/20 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-indigo-200">
+      <section className="hub-alert-info p-5 space-y-3">
+        <h2 className="font-numeric text-xs font-bold uppercase">
           Import manifest.json (validated locally in browser)
         </h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -167,7 +172,7 @@ export function AdminGameFormPage() {
             <select
               value={importMode}
               onChange={(e) => setImportMode(e.target.value as ImportMode)}
-              className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-white"
+              className="arcade-input w-auto text-xs"
             >
               <option value="build_only">Update build metadata only</option>
               <option value="replace_all">Replace all metadata</option>
@@ -178,12 +183,16 @@ export function AdminGameFormPage() {
             accept="application/json,.json"
             onChange={(e) => void handleManifestFile(e)}
             aria-label="Import manifest JSON"
-            className="text-xs text-slate-300"
+            className="arcade-input w-auto text-xs cursor-pointer"
           />
         </div>
-        {importSuccess && <p className="text-xs text-emerald-300">{importSuccess}</p>}
+        {importSuccess && (
+          <p className="hub-alert-success px-3 py-1.5 font-numeric text-xs font-bold">
+            {importSuccess}
+          </p>
+        )}
         {importErrors.length > 0 && (
-          <ul className="list-disc pl-5 text-xs text-rose-300">
+          <ul className="hub-alert-error p-3 pl-7 list-disc font-numeric text-xs font-bold">
             {importErrors.map((err, i) => (
               <li key={i}>{err}</li>
             ))}
@@ -191,53 +200,53 @@ export function AdminGameFormPage() {
         )}
       </section>
 
-      {error && (
-        <div className="rounded-lg border border-rose-500/30 bg-rose-950/40 p-3 text-sm text-rose-200">
-          {error}
-        </div>
-      )}
+      {error && <div className="hub-alert-error p-3 font-numeric text-sm font-bold">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+      <form onSubmit={handleSubmit} className="brutal-panel p-6 space-y-5">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Immutable Game ID</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Immutable Game ID
+            </label>
             <input
               required
               disabled={isEdit}
               value={form.id}
               onChange={(e) => setForm({ ...form, id: e.target.value })}
               placeholder="iq-puzzle"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white disabled:opacity-50"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">URL Slug</label>
+            <label className="block font-numeric text-xs font-bold uppercase">URL Slug</label>
             <input
               required
               value={form.slug}
               onChange={(e) => setForm({ ...form, slug: e.target.value })}
               placeholder="iq-puzzle"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Title</label>
+            <label className="block font-numeric text-xs font-bold uppercase">Title</label>
             <input
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">Publication Status</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Publication Status
+            </label>
             <select
               value={form.status}
               onChange={(e) => setForm({ ...form, status: e.target.value as GameStatus })}
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             >
               <option value="draft">Draft</option>
               <option value="published">Published</option>
@@ -248,28 +257,32 @@ export function AdminGameFormPage() {
         </div>
 
         <div>
-          <label className="block text-xs text-slate-300">Short Description</label>
+          <label className="block font-numeric text-xs font-bold uppercase">
+            Short Description
+          </label>
           <input
             required
             value={form.shortDescription}
             onChange={(e) => setForm({ ...form, shortDescription: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input mt-1"
           />
         </div>
 
         <div>
-          <label className="block text-xs text-slate-300">Full Description</label>
+          <label className="block font-numeric text-xs font-bold uppercase">Full Description</label>
           <textarea
             rows={3}
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+            className="arcade-input mt-1"
           />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Categories (comma-separated)</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Categories (comma-separated)
+            </label>
             <input
               value={form.categories.join(', ')}
               onChange={(e) =>
@@ -281,11 +294,11 @@ export function AdminGameFormPage() {
                     .filter(Boolean),
                 })
               }
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">Orientation</label>
+            <label className="block font-numeric text-xs font-bold uppercase">Orientation</label>
             <select
               value={form.web.orientation}
               onChange={(e) =>
@@ -294,7 +307,7 @@ export function AdminGameFormPage() {
                   web: { ...form.web, orientation: e.target.value as GameOrientation },
                 })
               }
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             >
               <option value="portrait">Portrait (9:16)</option>
               <option value="landscape">Landscape (16:9)</option>
@@ -305,41 +318,49 @@ export function AdminGameFormPage() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Icon URL (static hosting)</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Icon URL (static hosting)
+            </label>
             <input
               required
               value={form.icon}
               onChange={(e) => setForm({ ...form, icon: e.target.value })}
               placeholder="/fixtures/iq-puzzle-icon.svg"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">Thumbnail URL (static hosting)</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Thumbnail URL (static hosting)
+            </label>
             <input
               required
               value={form.thumbnail}
               onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
               placeholder="/fixtures/iq-puzzle-thumb.svg"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Web Artifact URL</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Web Artifact URL
+            </label>
             <input
               value={form.web.artifactUrl ?? ''}
               onChange={(e) =>
                 setForm({ ...form, web: { ...form.web, artifactUrl: e.target.value } })
               }
               placeholder="https://my-game.pages.dev/releases/1.0.0/index.html"
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">Web Build Version</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Web Build Version
+            </label>
             <input
               value={form.web.buildVersion}
               onChange={(e) =>
@@ -349,14 +370,16 @@ export function AdminGameFormPage() {
                   web: { ...form.web, buildVersion: e.target.value },
                 })
               }
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-xs text-slate-300">Google Play Store URL (optional)</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Google Play Store URL (optional)
+            </label>
             <input
               value={form.mobile.android.storeUrl ?? ''}
               onChange={(e) =>
@@ -372,11 +395,13 @@ export function AdminGameFormPage() {
                   },
                 })
               }
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
           <div>
-            <label className="block text-xs text-slate-300">App Store URL (optional)</label>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              App Store URL (optional)
+            </label>
             <input
               value={form.mobile.ios.storeUrl ?? ''}
               onChange={(e) =>
@@ -392,32 +417,46 @@ export function AdminGameFormPage() {
                   },
                 })
               }
-              className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white"
+              className="arcade-input mt-1"
             />
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-slate-300">
+        <label className="hub-badge-featured inline-flex items-center gap-3 cursor-pointer select-none px-4 py-2.5">
           <input
             type="checkbox"
             checked={form.featured}
             onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+            className="sr-only"
           />
-          Featured on homepage
+          <span
+            className={`relative inline-flex h-7 w-14 items-center border-2 hub-divider rounded-[var(--radius-badge)] transition-colors ${
+              form.featured ? 'hub-brand' : 'bg-white'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-5 border-2 hub-divider rounded-[var(--radius-badge)] bg-black transition-transform ${
+                form.featured ? 'translate-x-7' : 'translate-x-0.5'
+              }`}
+            />
+          </span>
+          <span className="font-numeric text-xs font-bold uppercase">
+            Featured on homepage ({form.featured ? 'ON' : 'OFF'})
+          </span>
         </label>
 
-        <div className="flex justify-end gap-3 pt-4">
+        <div className="flex justify-end gap-3 border-t-[length:var(--border-w)] hub-divider pt-5">
           <button
             type="button"
             onClick={() => navigate('/admin/games')}
-            className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800"
+            className="arcade-btn arcade-btn-sm arcade-btn-white px-4 py-2 text-xs"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-indigo-600 px-5 py-2 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50"
+            className="arcade-btn arcade-btn-sm arcade-btn-pink px-5 py-2 text-xs"
           >
             {saving ? 'Saving...' : isEdit ? 'Save Changes' : 'Create Game'}
           </button>
