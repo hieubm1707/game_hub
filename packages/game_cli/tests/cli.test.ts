@@ -7,6 +7,7 @@ import {
   findWorkspaceRoot,
   inspectFlutterRepo,
   loadRepositories,
+  resolveBaseHref,
   resolveFlutterCommand,
   validateRepoManifest,
 } from '../src/commands.js';
@@ -64,5 +65,16 @@ describe('game_cli', () => {
     const r2 = validateRepoManifest(path.join(root, 'fixtures/games/memory_match_fixture'));
     expect(r1.valid).toBe(true);
     expect(r2.valid).toBe(true);
+  });
+
+  it('resolves default versioned base-href and validates custom --base-href', () => {
+    const r1 = validateRepoManifest(path.join(root, 'fixtures/games/iq_puzzle_fixture'));
+    expect(r1.valid).toBe(true);
+    const manifest = r1.data!;
+
+    expect(resolveBaseHref(manifest)).toBe(`/${manifest.id}/releases/${manifest.web.buildVersion}/`);
+    expect(resolveBaseHref(manifest, '/')).toBe('/');
+    expect(() => resolveBaseHref(manifest, 'alibi/')).toThrow(/must start and end with "\/"/);
+    expect(() => resolveBaseHref(manifest, '/alibi')).toThrow(/must start and end with "\/"/);
   });
 });

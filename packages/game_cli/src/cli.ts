@@ -92,7 +92,8 @@ function main() {
         console.error('Manifest invalid:', validation.errors);
         process.exit(1);
       }
-      buildFlutterWeb(target, validation.data);
+      const baseHref = typeof flags['base-href'] === 'string' ? flags['base-href'] : undefined;
+      buildFlutterWeb(target, validation.data, baseHref);
       break;
     }
     case 'export-manifest': {
@@ -187,7 +188,7 @@ Usage:
   pnpm game init --path <repo> [--dry-run]
   pnpm game doctor --id <id>
   pnpm game validate --id <id>
-  pnpm game build --id <id>
+  pnpm game build --id <id> [--base-href /]
   pnpm game prepare-release --id <id>
   pnpm game export-manifest --id <id>
   pnpm game serve [--port 8090]

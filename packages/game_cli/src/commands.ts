@@ -310,8 +310,16 @@ export function prepareReleaseBundle(workspaceRoot: string, repoPath: string) {
   return releaseMeta;
 }
 
-export function buildFlutterWeb(repoPath: string, manifest: GameManifest) {
-  const baseHref = `/${manifest.id}/releases/${manifest.web.buildVersion}/`;
+export function resolveBaseHref(manifest: GameManifest, customBaseHref?: string): string {
+  const baseHref = customBaseHref ?? `/${manifest.id}/releases/${manifest.web.buildVersion}/`;
+  if (!baseHref.startsWith('/') || !baseHref.endsWith('/')) {
+    throw new Error(`Invalid --base-href "${baseHref}": must start and end with "/" (e.g. "/" or "/${manifest.id}/releases/${manifest.web.buildVersion}/")`);
+  }
+  return baseHref;
+}
+
+export function buildFlutterWeb(repoPath: string, manifest: GameManifest, customBaseHref?: string) {
+  const baseHref = resolveBaseHref(manifest, customBaseHref);
   const { command } = resolveFlutterCommand(repoPath);
   const cmd = `${command} build web --release --base-href ${baseHref}`;
   execSync(cmd, { cwd: path.resolve(repoPath), stdio: 'inherit' });
