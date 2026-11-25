@@ -1,5 +1,5 @@
-import { describe, expect, it, beforeEach } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { GameRecord } from '@game-hub/contract';
 import { RepositoryProvider } from '../src/app/RepositoryContext';
@@ -102,11 +102,12 @@ describe('Game Hub Public & Admin Flows', () => {
 
     expect(await screen.findAllByText('IQ Puzzle (Test Fixture)')).not.toHaveLength(0);
     expect(screen.queryByText('Secret Draft Game')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /admin/i })).not.toBeInTheDocument();
   });
 
   it('supports client-side search and dynamic game detail routes', async () => {
     renderApp(['/games/iq-puzzle-fixture'], [makeFixtureGame()], null);
-    expect(await screen.findByText('Play Now (Web — Ad-Free)')).toBeInTheDocument();
+    expect(await screen.findByText('Play Now (Web)')).toBeInTheDocument();
     expect(screen.getByText('Get on Google Play')).toBeInTheDocument();
   });
 
@@ -121,6 +122,58 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(
       await screen.findByText(/missing or not from a trusted origin/i)
     ).toBeInTheDocument();
+  });
+
+  it('toggles fullscreen minimize button and auto-hides control bar after 3 seconds in fullscreen', async () => {
+    renderApp(['/play/iq-puzzle-fixture'], [makeFixtureGame()], null);
+    const fsBtn = await screen.findByRole('button', { name: 'Fullscreen' });
+    const controlBar = screen.getByTestId('game-control-bar');
+    const container = controlBar.parentElement as HTMLElement;
+
+    let currentFsEl: Element | null = null;
+    Object.defineProperty(document, 'fullscreenElement', {
+      configurable: true,
+      get: () => currentFsEl,
+    });
+    const requestFullscreen = vi.fn().mockImplementation(async () => {
+      currentFsEl = container;
+      document.dispatchEvent(new Event('fullscreenchange'));
+    });
+    const exitFullscreen = vi.fn().mockImplementation(async () => {
+      currentFsEl = null;
+      document.dispatchEvent(new Event('fullscreenchange'));
+    });
+    container.requestFullscreen = requestFullscreen;
+    document.exitFullscreen = exitFullscreen;
+
+    vi.useFakeTimers();
+    try {
+      fireEvent.click(fsBtn);
+      expect(requestFullscreen).toHaveBeenCalledTimes(1);
+
+      // Button switches to Exit fullscreen and control bar is initially visible
+      const exitFsBtn = screen.getByRole('button', { name: 'Exit fullscreen' });
+      expect(controlBar).toHaveAttribute('data-controls-visible', 'true');
+
+      // After 3 seconds, control bar auto-hides
+      act(() => {
+        vi.advanceTimersByTime(3000);
+      });
+      expect(controlBar).toHaveAttribute('data-controls-visible', 'false');
+
+      // Hovering/clicking the top reveal zone shows control bar again
+      const revealZone = screen.getByTestId('fullscreen-controls-reveal');
+      fireEvent.mouseEnter(revealZone);
+      expect(controlBar).toHaveAttribute('data-controls-visible', 'true');
+
+      // Clicking Exit fullscreen restores normal mode
+      fireEvent.click(exitFsBtn);
+      expect(exitFullscreen).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('button', { name: 'Fullscreen' })).toBeInTheDocument();
+      expect(controlBar).toHaveAttribute('data-controls-visible', 'true');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('enforces mobile install prompt cooldown locally and skips desktop', () => {
