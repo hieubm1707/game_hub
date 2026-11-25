@@ -103,8 +103,12 @@ If `hasWebDir` is `false`, run inside `<repo-path>`:
    - `assets`: valid relative or public URL paths for `icon`, `thumbnail`,
      `screenshots`
    - `web`: `enabled: true`, `buildVersion`, `entrypoint: "index.html"`,
-     `orientation`, `aspectRatio`, `supportsTouch`, `supportsKeyboard`,
-     `hubBridgeEnabled: true`
+     `orientation`, `aspectRatio`, `backgroundColor` (extract the game's main
+     background hex color `#RRGGBB` from Flutter theme/UI such as
+     `scaffoldBackgroundColor`, root `Scaffold`/`Container` background,
+     `web/manifest.json` `background_color`, or `web/index.html` so Game Hub's
+     fullscreen backdrop matches the game seamlessly), `supportsTouch`,
+     `supportsKeyboard`, `hubBridgeEnabled: true`
    - `mobile`: populate `android.packageId` / `ios.bundleId` if present
    - `content`: `bundledContentAsset: "assets/content/default.json"`,
      `offlineFirst: true`

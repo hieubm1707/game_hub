@@ -208,6 +208,7 @@ export function initManifestTemplate(repoPath: string, dryRun = false): { manife
       orientation: 'portrait',
       aspectRatio: { width: 9, height: 16 },
       fullscreen: true,
+      backgroundColor: null,
       supportsTouch: true,
       supportsKeyboard: false,
       supportsOffline: false,
