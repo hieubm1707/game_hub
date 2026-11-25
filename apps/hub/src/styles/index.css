@@ -1304,33 +1304,35 @@
 }
 
 /* Form Inputs */
-.arcade-input {
-  width: 100%;
-  background: var(--bg-surface-alt);
-  color: var(--text-main);
-  border: var(--border-w) solid var(--border-color);
-  border-radius: var(--radius-input);
-  padding: 0.55rem 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 100ms ease, background-color 100ms ease;
-}
+@layer components {
+  .arcade-input {
+    width: 100%;
+    background: var(--bg-surface-alt);
+    color: var(--text-main);
+    border: var(--border-w) solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 100ms ease, background-color 100ms ease;
+  }
 
-.arcade-input::placeholder {
-  color: var(--text-muted);
-  font-weight: 500;
-}
+  .arcade-input::placeholder {
+    color: var(--text-muted);
+    font-weight: 500;
+  }
 
-.arcade-input:focus {
-  outline: none;
-  background: #ffffff;
-  box-shadow: var(--shadow-input-focus);
-}
+  .arcade-input:focus {
+    outline: none;
+    background: #ffffff;
+    box-shadow: var(--shadow-input-focus);
+  }
 
-.arcade-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  .arcade-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 /* Range Slider */
