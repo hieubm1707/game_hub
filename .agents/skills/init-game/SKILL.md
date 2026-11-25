@@ -48,18 +48,23 @@ Before editing anything, enforce these rules from `AGENTS.md`:
 
 ## Procedure
 
-### 1. Resolve Repo & Run Initial Inspection
+### 1. Resolve Repo, Create `features/web` Branch & Run Initial Inspection
 
 1. Resolve the target repository path (and ensure `packages/game_cli` is built
    with `pnpm build:cli` if `packages/game_cli/dist/cli.js` is missing).
-2. Run:
+2. Inside `<repo-path>`, create (or switch to) the `features/web` branch from
+   the repo's default branch (`main` or `master`) before editing code:
+   ```bash
+   git checkout -b features/web
+   ```
+3. Run:
    ```bash
    pnpm game inspect --path <repo-path>
    ```
-3. Review the JSON report: `usesFvm`, `fvmFlutterVersion`, `flutterCommand`,
+4. Review the JSON report: `usesFvm`, `fvmFlutterVersion`, `flutterCommand`,
    `hasWebDir`, `hasManifest`, `hasGamePlatformDep`, `usesAdMob`,
    `usesFirebase`, `dartIoFiles`, `bundledContentExists`, and `warnings`.
-4. Also inspect `<repo-path>/pubspec.yaml` and scan `<repo-path>/lib/` for
+5. Also inspect `<repo-path>/pubspec.yaml` and scan `<repo-path>/lib/` for
    Web-incompatible packages:
    - `google_mobile_ads`
    - `dart:io`
@@ -130,13 +135,23 @@ If `hasWebDir` is `false`, run inside `<repo-path>`:
    ```
    (Compute the exact relative path from `<repo-path>` to
    `<workspace-root>/packages/game_platform`.)
-2. Ensure `flutter.assets` in `<repo-path>/pubspec.yaml` includes:
+2. Ensure `flutter.assets` in `<repo-path>/pubspec.yaml` includes **all**
+   required manifest, offline content, and **public icon/thumbnail assets** so
+   Flutter Web bundles them into `build/web/assets/assets/...`:
    ```yaml
    flutter:
      assets:
        - assets/manifest.json
        - assets/content/default.json
+       - assets/<path-to-icon>
+       - assets/<path-to-thumbnail>
    ```
+   - Verify the icon and thumbnail files actually exist under `<repo-path>/assets/`.
+     If the repo does not yet have public icon/thumbnail images under `assets/`,
+     copy or convert them from the game's existing branding/launcher icon (e.g.
+     `ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png`)
+     into `assets/` and declare them in `pubspec.yaml` so they are publicly
+     served after Web build.
 3. Run `<flutterCommand> pub get` in `<repo-path>` to verify dependency
    resolution.
 
@@ -255,28 +270,84 @@ Unless `--skip-build` was specified, build the Web release and export artifacts
 for Game Hub:
 
 ```bash
-pnpm game build --id <game-id>
+pnpm game build --id <game-id> --base-href /
 pnpm game prepare-release --id <game-id>
 pnpm game export-manifest --id <game-id>
 ```
 
 Confirm the outputs exist:
+- `<repo-path>/build/web/index.html` and `<repo-path>/build/web/assets/assets/...` (including icon & thumbnail)
 - `dist-releases/<game-id>/releases/<buildVersion>/index.html`
 - `registry/manifests/<game-id>.manifest.json`
 - `registry/exports/<game-id>-<buildVersion>.release.json`
+
+### 9. Deploy to Vercel (`vercel --prod`) & Update Public URLs in `manifest.json`
+
+Unless `--skip-build` was specified:
+
+1. **`cd` directly into the game repo's `build/web` directory** before running
+   Vercel CLI (so Vercel uses the game repo context instead of `game_hub`):
+   ```bash
+   cd <repo-path>/build/web
+   vercel --prod
+   ```
+2. On first-time setup when prompted by Vercel CLI:
+   - Enter the project **Name** (e.g. `<game-id>`).
+   - **Connect Git** when asked (connect to the game's own repository).
+   - **Customize settings?** -> Choose **`no`** (static pre-built output).
+3. Copy the public production URL returned by Vercel (e.g.
+   `https://<game-name>.vercel.app`) and update `<repo-path>/assets/manifest.json`
+   using Flutter Web's **`/assets/assets/...`** path format for bundled assets:
+   ```json
+   "assets": {
+     "icon": "https://<game-name>.vercel.app/assets/assets/<path-to-icon>",
+     "thumbnail": "https://<game-name>.vercel.app/assets/assets/<path-to-thumbnail>",
+     "screenshots": []
+   },
+   "web": {
+     "artifactUrl": "https://<game-name>.vercel.app/index.html"
+   },
+   "content": {
+     "bundledContentAsset": "https://<game-name>.vercel.app/assets/assets/content/default.json"
+   }
+   ```
+4. Re-validate and re-export the manifest to Game Hub:
+   ```bash
+   pnpm game validate --id <game-id>
+   pnpm game export-manifest --id <game-id>
+   ```
+5. Verify that `https://<game-name>.vercel.app/index.html`, `assets.icon`, and
+   `assets.thumbnail` all return **HTTP 200**.
+
+### 10. Commit on `features/web` and Merge Back into `main`
+
+After all code changes, public assets, tests, `manifest.json` URL updates, and
+Vercel deployment checks are complete:
+
+1. Inside `<repo-path>`, commit all changes cleanly by scope on `features/web`
+   (never commit `build/`, `.vercel/`, or `.dart_tool/`) and push:
+   ```bash
+   git push -u origin features/web
+   ```
+2. Switch back to the repository's default branch (`main`, or `master` if the
+   repo uses `master`), merge `features/web`, and push:
+   ```bash
+   git checkout main
+   git merge --no-edit features/web
+   git push origin main
+   ```
 
 ## Final Report
 
 Summarize for the user:
 1. Changes made in the game repository (FVM/SDK, `manifest.json`, `default.json`,
-   `pubspec.yaml`, Web-safe ad/storage isolation, `WebMobileFrame` mobile
-   viewport wrapper on Web).
+   `pubspec.yaml` including public icon/thumbnail assets, Web-safe ad/storage
+   isolation, `WebMobileFrame` mobile viewport wrapper on Web).
 2. Results of `doctor`, `validate`, `<flutterCommand> test`, `build`,
    `prepare-release`, and `export-manifest`.
-3. How to preview the game inside Game Hub locally:
-   - Terminal 1: `pnpm game serve`
-   - Terminal 2: `pnpm dev:hub`
-   - Import `registry/manifests/<game-id>.manifest.json` in Hub Admin (or seed
-     the emulator) to play it in the Hub.
-4. Any remaining manual items (e.g., production `artifactUrl`, store links,
-   icons/screenshots).
+3. Vercel production URL (`https://<game-name>.vercel.app/index.html`), HTTP 200
+   verification of `/assets/assets/...` public icon/thumbnail URLs, and Git
+   branch merge status (`features/web` -> `main`/`master`).
+4. How to preview or register the game in Game Hub:
+   - Import `registry/manifests/<game-id>.manifest.json` in Hub Admin (`/admin/games/new`) and publish.
+5. Any remaining manual items (e.g., store links or screenshots).
