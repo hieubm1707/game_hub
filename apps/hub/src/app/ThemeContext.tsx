@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 export type ThemeId =
+  | 'liquid-glass'
+  | 'liquid-glass-light'
   | 'dark-gaming'
   | 'dark-bento-glass'
   | 'cinematic-editorial'
@@ -21,6 +23,20 @@ export interface ThemeMeta {
 }
 
 export const THEMES: ThemeMeta[] = [
+  {
+    id: 'liquid-glass',
+    name: 'Liquid Glass (Dark)',
+    shortName: 'Liquid Glass',
+    tagline: 'Floating optical glass nav & HUD, solid artwork cards, specular highlights',
+    swatches: ['#080B14', '#38BDF8', '#E2E8F0'],
+  },
+  {
+    id: 'liquid-glass-light',
+    name: 'Liquid Glass (Light)',
+    shortName: 'Liquid Light',
+    tagline: 'Bright frosted atmospheric canvas, floating crystal controls, dark ink',
+    swatches: ['#EEF3F9', '#FFFFFF', '#8B5CF6'],
+  },
   {
     id: 'dark-gaming',
     name: 'Dark Gaming / Cyberpunk',

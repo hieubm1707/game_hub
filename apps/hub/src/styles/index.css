@@ -119,8 +119,9 @@
   --telemetry-accent: #00e5ff;
 
   --text-main: #0f193d;
+  --text-on-canvas: #f0f7ff;
   --text-muted: #3c4c7a;
-  --text-highlight: #1e6bff;
+  --text-highlight: #00e5ff;
 
   --border-color: #6b88c9;
   --border-w: 2px;
@@ -216,8 +217,9 @@
   --telemetry-accent: #ffc82c;
 
   --text-main: #3b1f0b;
+  --text-on-canvas: #fff3d6;
   --text-muted: #6e4220;
-  --text-highlight: #d95d16;
+  --text-highlight: #ffc82c;
 
   --border-color: #3b1f0b;
   --border-w: 4px;
@@ -1019,13 +1021,470 @@
 }
 
 /* ==========================================================================
+   LIQUID GLASS MATERIAL UTILITIES (Regular / Clear / Prominent)
+   ========================================================================== */
+.glass-regular {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  backdrop-filter: blur(22px) saturate(190%);
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.58),
+    inset -1.5px -1.5px 3px rgba(255, 255, 255, 0.28),
+    inset 0 0 16px rgba(255, 255, 255, 0.08),
+    0 12px 36px rgba(0, 0, 0, 0.32);
+}
+
+.glass-clear {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.05) 55%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  backdrop-filter: blur(12px) saturate(210%) brightness(1.06);
+  -webkit-backdrop-filter: blur(12px) saturate(210%) brightness(1.06);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.35);
+}
+
+.glass-prominent {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.22) 100%
+  );
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  box-shadow:
+    inset 2px 2px 3px rgba(255, 255, 255, 0.72),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.34),
+    inset 0 0 20px rgba(255, 255, 255, 0.14),
+    0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+/* ==========================================================================
+   THEME 11: LIQUID GLASS GAMING — DARK (ref: liquid-glass-examples/image & image1)
+   ========================================================================== */
+[data-theme="liquid-glass"] {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-numeric: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Rich luminous atmospheric backdrop so glass refracts real color */
+  --bg-canvas: #12131c;
+  --bg-canvas-pattern:
+    radial-gradient(ellipse 70% 55% at 22% 12%, rgba(168, 122, 255, 0.34), transparent 62%),
+    radial-gradient(ellipse 60% 50% at 82% 18%, rgba(255, 126, 95, 0.24), transparent 58%),
+    radial-gradient(ellipse 65% 55% at 50% 85%, rgba(56, 189, 248, 0.24), transparent 62%),
+    radial-gradient(ellipse 50% 45% at 10% 80%, rgba(139, 92, 246, 0.22), transparent 60%);
+  --bg-canvas-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+
+  /* Smoked luminous liquid glass surfaces */
+  --bg-surface: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(180, 178, 215, 0.08) 52%,
+    rgba(255, 255, 255, 0.11) 100%
+  );
+  --bg-surface-alt: rgba(18, 20, 34, 0.42);
+
+  /* Floating optical glass header/topbar */
+  --bg-header: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.09) 55%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  --bg-footer: rgba(255, 255, 255, 0.07);
+  --bg-topbar: rgba(255, 255, 255, 0.08);
+  --text-topbar: rgba(255, 255, 255, 0.86);
+  --text-topbar-accent: #f9a8d4;
+
+  --bg-telemetry: rgba(255, 255, 255, 0.12);
+  --text-telemetry: #ffffff;
+  --telemetry-accent: #c4b5fd;
+
+  --text-main: #ffffff;
+  --text-muted: rgba(241, 245, 249, 0.78);
+  --text-highlight: #e9d5ff;
+
+  --border-color: rgba(255, 255, 255, 0.34);
+  --border-w: 1px;
+  --border-w-lg: 1.5px;
+
+  --radius-panel: 26px;
+  --radius-card: 22px;
+  --radius-btn: 999px;
+  --radius-badge: 999px;
+  --radius-input: 999px;
+
+  /* Signature Apple Liquid Glass specular rim-light bevels */
+  --shadow-sm:
+    inset 1px 1px 1.5px rgba(255, 255, 255, 0.58),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.26),
+    0 6px 20px rgba(0, 0, 0, 0.24);
+  --shadow-md:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.52),
+    inset -1.5px -1.5px 3px rgba(255, 255, 255, 0.22),
+    inset 0 0 18px rgba(255, 255, 255, 0.07),
+    0 14px 36px rgba(0, 0, 0, 0.32),
+    0 0 28px rgba(196, 181, 253, 0.1);
+  --shadow-lg:
+    inset 2px 2px 3px rgba(255, 255, 255, 0.62),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.28),
+    inset 0 0 24px rgba(255, 255, 255, 0.09),
+    0 22px 54px rgba(0, 0, 0, 0.42),
+    0 0 42px rgba(196, 181, 253, 0.16);
+  --shadow-btn:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.72),
+    inset -1.5px -1.5px 2.5px rgba(255, 255, 255, 0.34),
+    inset 0 0 12px rgba(255, 255, 255, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.28);
+  --shadow-btn-hover:
+    inset 2px 2px 3px rgba(255, 255, 255, 0.88),
+    inset -2px -2px 3px rgba(255, 255, 255, 0.48),
+    inset 0 0 18px rgba(255, 255, 255, 0.2),
+    0 12px 30px rgba(0, 0, 0, 0.34);
+  --shadow-btn-active:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.55),
+    0 3px 10px rgba(0, 0, 0, 0.24);
+  --shadow-input-focus:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.75),
+    0 0 0 2px rgba(255, 255, 255, 0.38);
+
+  /* Translucent Liquid Glass tinted capsules (never flat opaque fills) */
+  --btn-pink-bg: linear-gradient(
+    135deg,
+    rgba(196, 165, 255, 0.42) 0%,
+    rgba(139, 92, 246, 0.36) 55%,
+    rgba(244, 114, 182, 0.34) 100%
+  );
+  --btn-pink-hover: linear-gradient(
+    135deg,
+    rgba(216, 190, 255, 0.54) 0%,
+    rgba(155, 112, 255, 0.48) 55%,
+    rgba(249, 148, 200, 0.44) 100%
+  );
+  --btn-pink-text: #ffffff;
+
+  --btn-white-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.08) 55%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  --btn-white-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.14) 55%,
+    rgba(255, 255, 255, 0.24) 100%
+  );
+  --btn-white-text: #ffffff;
+
+  --btn-yellow-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 215, 170, 0.12) 100%
+  );
+  --btn-yellow-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 215, 170, 0.2) 100%
+  );
+  --btn-yellow-text: #ffffff;
+
+  --btn-cyan-bg: linear-gradient(
+    135deg,
+    rgba(125, 211, 252, 0.3) 0%,
+    rgba(56, 189, 248, 0.16) 100%
+  );
+  --btn-cyan-hover: linear-gradient(
+    135deg,
+    rgba(186, 230, 253, 0.42) 0%,
+    rgba(56, 189, 248, 0.28) 100%
+  );
+  --btn-cyan-text: #ffffff;
+
+  --btn-lime-bg: linear-gradient(
+    135deg,
+    rgba(110, 231, 183, 0.3) 0%,
+    rgba(52, 211, 153, 0.16) 100%
+  );
+  --btn-lime-hover: linear-gradient(
+    135deg,
+    rgba(167, 243, 208, 0.42) 0%,
+    rgba(52, 211, 153, 0.28) 100%
+  );
+  --btn-lime-text: #ffffff;
+
+  --btn-black-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.24) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  --btn-black-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  --btn-black-text: #ffffff;
+
+  --badge-bg: rgba(255, 255, 255, 0.15);
+  --badge-text: #ffffff;
+  --badge-featured-bg: linear-gradient(135deg, rgba(255, 138, 128, 0.72), rgba(244, 114, 182, 0.65));
+  --badge-featured-text: #ffffff;
+
+  --status-published-bg: rgba(52, 211, 153, 0.26);
+  --status-draft-bg: rgba(251, 191, 36, 0.26);
+  --status-disabled-bg: rgba(125, 211, 252, 0.22);
+  --status-archived-bg: rgba(255, 255, 255, 0.14);
+  --status-danger-bg: rgba(244, 63, 94, 0.68);
+  --status-danger-text: #ffffff;
+
+  --progress-fill: linear-gradient(90deg, rgba(255, 255, 255, 0.75) 0%, #c4b5fd 55%, #f9a8d4 100%);
+  --loading-bar: linear-gradient(90deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.78) 50%, rgba(196, 181, 253, 0.7) 100%);
+  --heading-transform: none;
+  --heading-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --monitor-border: rgba(255, 255, 255, 0.38);
+}
+
+/* ==========================================================================
+   THEME 12: LIQUID GLASS GAMING — LIGHT (ref: liquid-glass-examples/image2)
+   ========================================================================== */
+[data-theme="liquid-glass-light"] {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-numeric: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Luminous pastel-sky / coral / lavender backdrop for crystal glass refraction */
+  --bg-canvas: #eef2f8;
+  --bg-canvas-pattern:
+    radial-gradient(ellipse 65% 50% at 15% 8%, rgba(255, 130, 150, 0.28), transparent 58%),
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(96, 165, 250, 0.28), transparent 58%),
+    radial-gradient(ellipse 60% 50% at 50% 90%, rgba(192, 132, 252, 0.22), transparent 60%);
+  --bg-canvas-size: 100% 100%, 100% 100%, 100% 100%;
+
+  /* Crystal clear high-saturation glass surfaces (image2 left style) */
+  --bg-surface: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.56) 0%,
+    rgba(255, 255, 255, 0.28) 52%,
+    rgba(255, 255, 255, 0.46) 100%
+  );
+  --bg-surface-alt: rgba(255, 255, 255, 0.42);
+
+  --bg-header: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(255, 255, 255, 0.24) 52%,
+    rgba(255, 255, 255, 0.44) 100%
+  );
+  --bg-footer: rgba(255, 255, 255, 0.36);
+  --bg-topbar: rgba(255, 255, 255, 0.34);
+  --text-topbar: #1e293b;
+  --text-topbar-accent: #e11d48;
+
+  --bg-telemetry: rgba(255, 255, 255, 0.42);
+  --text-telemetry: #0f172a;
+  --telemetry-accent: #e11d48;
+
+  --text-main: #0f172a;
+  --text-muted: #334155;
+  --text-highlight: #e11d48;
+
+  --border-color: rgba(255, 255, 255, 0.85);
+  --border-w: 1.5px;
+  --border-w-lg: 1.5px;
+
+  --radius-panel: 28px;
+  --radius-card: 22px;
+  --radius-btn: 999px;
+  --radius-badge: 999px;
+  --radius-input: 999px;
+
+  /* Bright double-rim crystal bevels (image2 left) */
+  --shadow-sm:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.96),
+    inset -1.5px -1.5px 2px rgba(255, 255, 255, 0.65),
+    0 4px 16px rgba(15, 23, 42, 0.08);
+  --shadow-md:
+    inset 2px 2px 3px rgba(255, 255, 255, 0.96),
+    inset -2px -2px 3px rgba(255, 255, 255, 0.65),
+    inset 0 0 16px rgba(255, 255, 255, 0.35),
+    0 12px 32px rgba(15, 23, 42, 0.1);
+  --shadow-lg:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.98),
+    inset -2px -2px 4px rgba(255, 255, 255, 0.72),
+    inset 0 0 22px rgba(255, 255, 255, 0.42),
+    0 18px 44px rgba(15, 23, 42, 0.13);
+  --shadow-btn:
+    inset 1.5px 1.5px 2.5px rgba(255, 255, 255, 0.95),
+    inset -1.5px -1.5px 2.5px rgba(255, 255, 255, 0.62),
+    0 6px 18px rgba(15, 23, 42, 0.1);
+  --shadow-btn-hover:
+    inset 2px 2px 3px rgba(255, 255, 255, 1),
+    inset -2px -2px 3px rgba(255, 255, 255, 0.78),
+    0 10px 26px rgba(15, 23, 42, 0.14);
+  --shadow-btn-active:
+    inset 1px 1px 2px rgba(15, 23, 42, 0.1),
+    0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-input-focus:
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.95),
+    0 0 0 3px rgba(225, 29, 72, 0.22);
+
+  --btn-pink-bg: linear-gradient(135deg, rgba(244, 63, 94, 0.82) 0%, rgba(225, 29, 72, 0.78) 100%);
+  --btn-pink-hover: linear-gradient(135deg, rgba(251, 113, 133, 0.9) 0%, rgba(225, 29, 72, 0.88) 100%);
+  --btn-pink-text: #ffffff;
+
+  --btn-white-bg: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(255, 255, 255, 0.3) 55%,
+    rgba(255, 255, 255, 0.52) 100%
+  );
+  --btn-white-hover: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.5) 55%,
+    rgba(255, 255, 255, 0.72) 100%
+  );
+  --btn-white-text: #0f172a;
+
+  --btn-yellow-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.34));
+  --btn-yellow-hover: rgba(255, 255, 255, 0.86);
+  --btn-yellow-text: #0f172a;
+
+  --btn-cyan-bg: linear-gradient(135deg, rgba(186, 230, 253, 0.65), rgba(125, 211, 252, 0.35));
+  --btn-cyan-hover: linear-gradient(135deg, rgba(186, 230, 253, 0.85), rgba(125, 211, 252, 0.55));
+  --btn-cyan-text: #0c4a6e;
+
+  --btn-lime-bg: linear-gradient(135deg, rgba(167, 243, 208, 0.65), rgba(110, 231, 183, 0.35));
+  --btn-lime-hover: linear-gradient(135deg, rgba(167, 243, 208, 0.85), rgba(110, 231, 183, 0.55));
+  --btn-lime-text: #065f46;
+
+  --btn-black-bg: rgba(15, 23, 42, 0.82);
+  --btn-black-hover: rgba(15, 23, 42, 0.94);
+  --btn-black-text: #ffffff;
+
+  --badge-bg: rgba(255, 255, 255, 0.52);
+  --badge-text: #0f172a;
+  --badge-featured-bg: rgba(255, 255, 255, 0.65);
+  --badge-featured-text: #0f172a;
+
+  --status-published-bg: rgba(167, 243, 208, 0.65);
+  --status-draft-bg: rgba(254, 240, 138, 0.65);
+  --status-disabled-bg: rgba(186, 230, 253, 0.65);
+  --status-archived-bg: rgba(226, 232, 240, 0.65);
+  --status-danger-bg: rgba(225, 29, 72, 0.85);
+  --status-danger-text: #ffffff;
+
+  --progress-fill: linear-gradient(90deg, #fb7185 0%, #8b5cf6 100%);
+  --loading-bar: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, #fb7185 50%, #38bdf8 100%);
+  --heading-transform: none;
+  --heading-shadow: none;
+  --monitor-border: rgba(255, 255, 255, 0.85);
+}
+
+/* Liquid Glass Optical Blur + Saturation + Floating Pill Geometry */
+[data-theme="liquid-glass"] .hub-header,
+[data-theme="liquid-glass-light"] .hub-header {
+  max-width: 72rem;
+  margin: 0.75rem auto 0;
+  width: calc(100% - 1.5rem);
+  border: var(--border-w-lg) solid var(--border-color);
+  border-radius: 999px;
+  top: 0.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="liquid-glass"] .hub-header,
+[data-theme="liquid-glass"] .brutal-panel,
+[data-theme="liquid-glass"] .brutal-panel-lg,
+[data-theme="liquid-glass"] .hub-card,
+[data-theme="liquid-glass"] .hub-topbar,
+[data-theme="liquid-glass"] .arcade-btn,
+[data-theme="liquid-glass"] .arcade-input,
+[data-theme="liquid-glass"] .hub-badge-featured {
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+}
+
+[data-theme="liquid-glass-light"] .hub-header,
+[data-theme="liquid-glass-light"] .brutal-panel,
+[data-theme="liquid-glass-light"] .brutal-panel-lg,
+[data-theme="liquid-glass-light"] .hub-card,
+[data-theme="liquid-glass-light"] .hub-topbar,
+[data-theme="liquid-glass-light"] .arcade-btn,
+[data-theme="liquid-glass-light"] .arcade-input,
+[data-theme="liquid-glass-light"] .hub-badge-featured {
+  backdrop-filter: blur(14px) saturate(215%) brightness(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(215%) brightness(1.06);
+}
+
+[data-theme="liquid-glass"] .arcade-btn,
+[data-theme="liquid-glass-light"] .arcade-btn,
+[data-theme="liquid-glass"] .hub-card,
+[data-theme="liquid-glass-light"] .hub-card {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 220ms ease,
+    border-color 220ms ease;
+}
+
+[data-theme="liquid-glass"] .arcade-btn:active:not(:disabled),
+[data-theme="liquid-glass-light"] .arcade-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+[data-theme="liquid-glass"] .arcade-input:focus {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+[data-theme="liquid-glass-light"] .arcade-input:focus {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+/* Accessibility: Reduced Transparency Fallback */
+@media (prefers-reduced-transparency: reduce) {
+  [data-theme="liquid-glass"] .hub-header,
+  [data-theme="liquid-glass"] .brutal-panel,
+  [data-theme="liquid-glass"] .brutal-panel-lg,
+  [data-theme="liquid-glass"] .hub-card,
+  [data-theme="liquid-glass"] .arcade-btn-white {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #1c1e2e;
+  }
+
+  [data-theme="liquid-glass-light"] .hub-header,
+  [data-theme="liquid-glass-light"] .brutal-panel,
+  [data-theme="liquid-glass-light"] .brutal-panel-lg,
+  [data-theme="liquid-glass-light"] .hub-card,
+  [data-theme="liquid-glass-light"] .arcade-btn-white {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #ffffff;
+  }
+}
+
+/* ==========================================================================
    BASE & SEMANTIC COMPONENT CLASSES
    ========================================================================== */
 @layer base {
   body {
     font-family: var(--font-body);
     background-color: var(--bg-canvas);
-    color: var(--text-main);
+    color: var(--text-on-canvas, var(--text-main));
     min-height: 100vh;
     transition: background-color 200ms ease, color 200ms ease;
   }
@@ -1035,6 +1494,18 @@
     text-transform: var(--heading-transform);
     text-shadow: var(--heading-shadow);
   }
+}
+
+[data-theme="y2k-retro"] main > div > section > div > h2,
+[data-theme="y2k-retro"] main > div > section > h2 {
+  color: #f0f7ff;
+  text-shadow: 0 2px 12px rgba(0, 229, 255, 0.35);
+}
+
+[data-theme="cartoon-rpg"] main > div > section > div > h2,
+[data-theme="cartoon-rpg"] main > div > section > h2 {
+  color: #fff3d6;
+  text-shadow: 0 2px 0 #3b1f0b;
 }
 
 .font-numeric {
