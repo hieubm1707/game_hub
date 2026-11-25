@@ -38,6 +38,7 @@ function emptyForm(): Omit<GameRecord, 'revision' | 'createdAt' | 'updatedAt'> {
       orientation: 'portrait',
       aspectRatio: { width: 9, height: 16 },
       fullscreen: true,
+      backgroundColor: null,
       supportsTouch: true,
       supportsKeyboard: false,
       hubBridgeEnabled: true,
@@ -115,6 +116,7 @@ export function AdminGameFormPage() {
             artifactUrl: draft.web.artifactUrl || prev.web.artifactUrl,
             orientation: draft.web.orientation,
             aspectRatio: draft.web.aspectRatio,
+            backgroundColor: draft.web.backgroundColor ?? prev.web.backgroundColor ?? null,
             hubBridgeEnabled: draft.web.hubBridgeEnabled,
           },
         }));
@@ -372,6 +374,57 @@ export function AdminGameFormPage() {
               }
               className="arcade-input mt-1"
             />
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="block font-numeric text-xs font-bold uppercase">
+              Player Background Color (optional)
+            </label>
+            <div className="mt-1 flex items-center gap-2">
+              <input
+                type="color"
+                aria-label="Pick player background color"
+                value={
+                  form.web.backgroundColor && /^#[0-9a-fA-F]{6}$/.test(form.web.backgroundColor)
+                    ? form.web.backgroundColor
+                    : '#000000'
+                }
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    web: { ...form.web, backgroundColor: e.target.value },
+                  })
+                }
+                className="h-10 w-12 shrink-0 cursor-pointer border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-transparent p-0.5"
+              />
+              <input
+                value={form.web.backgroundColor ?? ''}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    web: { ...form.web, backgroundColor: e.target.value.trim() || null },
+                  })
+                }
+                placeholder="#000000"
+                className="arcade-input"
+              />
+              {form.web.backgroundColor && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm({
+                      ...form,
+                      web: { ...form.web, backgroundColor: null },
+                    })
+                  }
+                  className="arcade-btn arcade-btn-sm arcade-btn-white shrink-0 px-3 py-2 text-xs"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

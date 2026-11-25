@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isSafeHttpUrl, type BridgeMessage, type GameRecord } from '@game-hub/contract';
-import { ArrowLeft, Maximize2, Minimize2, Pause, Play, RefreshCw, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, Maximize2, Minimize2, Pause, Play, RefreshCw, SlidersHorizontal, Volume2, VolumeX } from 'lucide-react';
 import { getAllowedGameOrigins } from '../../firebase/client';
 import { GameHubBridgeClient } from '../../services/bridgeClient';
 
 const FULLSCREEN_CONTROLS_HIDE_MS = 3000;
+const HEX_COLOR_PATTERN = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+function resolvePlayerBackground(color?: string | null): string {
+  const trimmed = color?.trim();
+  if (trimmed && HEX_COLOR_PATTERN.test(trimmed)) {
+    return trimmed;
+  }
+  return '#000000';
+}
 
 interface WebkitFullscreenElement extends HTMLElement {
   webkitRequestFullscreen?: () => Promise<void> | void;
@@ -189,29 +198,30 @@ export function GamePlayer({
   const aspectRatioStyle = {
     aspectRatio: `${game.web.aspectRatio.width} / ${game.web.aspectRatio.height}`,
   };
+  const playerBgColor = resolvePlayerBackground(game.web.backgroundColor);
 
   return (
     <div
       ref={containerRef}
-      onMouseMove={isFullscreen ? scheduleControlsHide : undefined}
-      onTouchStart={isFullscreen ? scheduleControlsHide : undefined}
+      style={isFullscreen ? { backgroundColor: playerBgColor } : undefined}
       className={
         isFullscreen
-          ? 'relative flex h-screen w-screen flex-col items-center justify-center bg-black overflow-hidden'
+          ? 'relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden'
           : 'flex flex-col gap-4'
       }
     >
-      {/* Top-edge reveal zone when control bar is auto-hidden in fullscreen */}
+      {/* Top-right action button to manually open the control bar when hidden in fullscreen */}
       {isFullscreen && !controlsVisible && (
-        <div
+        <button
+          type="button"
           data-testid="fullscreen-controls-reveal"
-          onMouseEnter={scheduleControlsHide}
-          onTouchStart={scheduleControlsHide}
           onClick={scheduleControlsHide}
-          className="absolute inset-x-0 top-0 z-20 flex h-6 cursor-pointer items-start justify-center"
+          title="Show controls"
+          aria-label="Show controls"
+          className="arcade-btn arcade-btn-sm arcade-btn-black absolute right-3 top-3 z-20 p-2 opacity-80 hover:opacity-100"
         >
-          <span className="mt-1 h-1.5 w-12 rounded-full bg-white/40 transition-colors hover:bg-white/80" />
-        </div>
+          <SlidersHorizontal className="h-4 w-4 stroke-[2.5]" />
+        </button>
       )}
 
       {/* Control Bezel */}
@@ -307,10 +317,11 @@ export function GamePlayer({
 
       {/* Monitor Frame */}
       <div
+        style={{ backgroundColor: playerBgColor }}
         className={
           isFullscreen
-            ? 'relative flex h-full w-full items-center justify-center bg-black p-0'
-            : 'brutal-panel-lg relative mx-auto flex w-full max-w-4xl items-center justify-center bg-black p-3'
+            ? 'relative flex h-full w-full items-center justify-center p-0'
+            : 'brutal-panel-lg relative mx-auto flex w-full max-w-4xl items-center justify-center p-3'
         }
       >
         {status === 'error' ? (
@@ -331,16 +342,20 @@ export function GamePlayer({
           <div
             style={{
               ...aspectRatioStyle,
+              backgroundColor: playerBgColor,
               borderColor: isFullscreen ? 'transparent' : 'var(--monitor-border)',
             }}
             className={
               isFullscreen
-                ? 'relative max-h-screen max-w-full h-full overflow-hidden bg-black'
-                : 'relative max-h-[78vh] w-full overflow-hidden border-[3px] rounded-[var(--radius-input)] bg-black'
+                ? 'relative max-h-screen max-w-full h-full overflow-hidden'
+                : 'relative max-h-[78vh] w-full overflow-hidden border-[3px] rounded-[var(--radius-input)]'
             }
           >
             {status === 'loading' && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-black p-6 text-center">
+              <div
+                style={{ backgroundColor: playerBgColor }}
+                className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-6 text-center"
+              >
                 <p className="font-numeric text-sm font-bold uppercase tracking-wider text-white">
                   Loading {game.title}...
                 </p>
