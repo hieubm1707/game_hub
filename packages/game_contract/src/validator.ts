@@ -177,6 +177,7 @@ export function manifestToGameRecordDraft(manifest: GameManifest, nowIso = new D
       orientation: manifest.web.orientation,
       aspectRatio: manifest.web.aspectRatio,
       fullscreen: manifest.web.fullscreen ?? true,
+      backgroundColor: manifest.web.backgroundColor ?? null,
       supportsTouch: manifest.web.supportsTouch ?? true,
       supportsKeyboard: manifest.web.supportsKeyboard ?? false,
       hubBridgeEnabled: manifest.web.hubBridgeEnabled ?? true,

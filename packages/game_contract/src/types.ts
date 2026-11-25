@@ -35,6 +35,7 @@ export interface GameManifest {
       height: number;
     };
     fullscreen?: boolean;
+    backgroundColor?: string | null;
     supportsTouch?: boolean;
     supportsKeyboard?: boolean;
     supportsOffline?: boolean;
@@ -131,6 +132,7 @@ export interface GameRecord {
     orientation: GameOrientation;
     aspectRatio: { width: number; height: number };
     fullscreen: boolean;
+    backgroundColor?: string | null;
     supportsTouch: boolean;
     supportsKeyboard: boolean;
     hubBridgeEnabled: boolean;

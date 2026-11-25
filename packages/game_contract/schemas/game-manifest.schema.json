@@ -96,6 +96,10 @@
           }
         },
         "fullscreen": { "type": "boolean" },
+        "backgroundColor": {
+          "type": ["string", "null"],
+          "pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+        },
         "supportsTouch": { "type": "boolean" },
         "supportsKeyboard": { "type": "boolean" },
         "supportsOffline": { "type": "boolean" },
