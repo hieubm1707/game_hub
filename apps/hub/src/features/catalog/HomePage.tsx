@@ -420,6 +420,27 @@ export function HomePage() {
           </div>
         </section>
       )}
+
+      {/* 5. Editorial Platform Overview (helpful for visitors & search crawlers) */}
+      <section className="brutal-panel p-6 sm:p-8 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl font-bold tracking-tight">
+            Play Handcrafted Offline-First Games in Your Browser
+          </h2>
+          <Link
+            to="/about"
+            className="arcade-btn arcade-btn-sm arcade-btn-white px-3.5 py-1.5 text-xs"
+          >
+            Learn More →
+          </Link>
+        </div>
+        <p className="text-sm leading-relaxed hub-text-muted">
+          Game Hub brings together original puzzle, deduction, and strategy games designed for
+          instant play on desktop and mobile browsers—no downloads or accounts required. Each title
+          saves your progress locally in your browser so you can pick up right where you left off,
+          or install the companion Android and iOS apps when available for full offline play.
+        </p>
+      </section>
     </div>
   );
 }

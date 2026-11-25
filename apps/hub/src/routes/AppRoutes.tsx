@@ -5,7 +5,13 @@ import { PublicLayout } from '../components/PublicLayout';
 import { HomePage } from '../features/catalog/HomePage';
 import { GamesListPage } from '../features/catalog/GamesListPage';
 import { GameDetailPage } from '../features/catalog/GameDetailPage';
-import { PrivacyPage, TermsPage } from '../features/catalog/LegalPages';
+import {
+  AboutPage,
+  ContactPage,
+  NotFoundPage,
+  PrivacyPage,
+  TermsPage,
+} from '../features/catalog/LegalPages';
 import { PlayPage } from '../features/player/PlayPage';
 import { AdminLoginPage } from '../features/admin/AdminLoginPage';
 import { AdminLayout } from '../features/admin/AdminLayout';
@@ -30,8 +36,11 @@ export function AppRoutes() {
           <Route path="/play/:slug" element={<PlayPage />} />
           <Route path="/categories/:category" element={<GamesListPage />} />
           <Route path="/search" element={<GamesListPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage />} />

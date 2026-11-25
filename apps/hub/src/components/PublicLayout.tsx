@@ -84,7 +84,13 @@ export function PublicLayout() {
               © {new Date().getFullYear()} Game Hub. All rights reserved.
             </p>
           </div>
-          <div className="flex gap-2.5 text-xs">
+          <div className="flex flex-wrap gap-2.5 text-xs">
+            <Link to="/about" className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-1 text-[11px]">
+              About
+            </Link>
+            <Link to="/contact" className="arcade-btn arcade-btn-sm arcade-btn-lime px-3 py-1 text-[11px]">
+              Contact
+            </Link>
             <Link to="/privacy" className="arcade-btn arcade-btn-sm arcade-btn-yellow px-3 py-1 text-[11px]">
               Privacy
             </Link>

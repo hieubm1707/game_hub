@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, FileText, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Compass, FileText, Gamepad2, Info, Mail, ShieldCheck } from 'lucide-react';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
+const SITE_DOMAIN = 'hieutien.life';
+const CONTACT_EMAIL = 'contact@hieutien.life';
 const LAST_UPDATED = 'November 2026';
 
 function LegalSection({
@@ -99,17 +101,58 @@ export function PrivacyPage() {
           </ul>
         </LegalSection>
 
-        <LegalSection number="03" title="Cookies, Analytics & Advertising">
+        <LegalSection number="03" title="Cookies, Analytics & Google AdSense">
           <p>
             We use essential browser storage to remember your interface preferences and keep the
-            platform responsive. As the platform evolves, Game Hub or participating games may
-            integrate privacy-respecting analytics or third-party advertising networks to support
-            hosting and ongoing development.
+            platform responsive. To support hosting and ongoing development, Game Hub ({SITE_DOMAIN})
+            displays third-party advertisements served by <strong>Google AdSense</strong>.
           </p>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>
+              Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s
+              prior visits to {SITE_DOMAIN} or other websites on the Internet.
+            </li>
+            <li>
+              Google&apos;s use of advertising cookies enables Google and its partners to serve ads
+              to you based on your visit to this site and/or other sites on the Internet.
+            </li>
+            <li>
+              You may opt out of personalized advertising at any time by visiting{' '}
+              <a
+                href="https://adssettings.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold"
+              >
+                Google Ads Settings
+              </a>
+              , or opt out of third-party vendor cookies for personalized advertising at{' '}
+              <a
+                href="https://www.aboutads.info/choices/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold"
+              >
+                www.aboutads.info
+              </a>
+              .
+            </li>
+            <li>
+              Learn more about how Google uses data from partner sites in{' '}
+              <a
+                href="https://policies.google.com/technologies/ads"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline font-semibold"
+              >
+                Google Advertising Privacy &amp; Terms
+              </a>
+              .
+            </li>
+          </ul>
           <p>
-            Where advertising or analytics partners are active, those third parties may use cookies,
-            local storage, or device identifiers in accordance with their own privacy policies and
-            applicable regional consent requirements.
+            Where required by regional privacy regulations (such as in the EEA, UK, or Switzerland),
+            consent choices are presented before personalized ad cookies are used.
           </p>
         </LegalSection>
 
@@ -279,6 +322,182 @@ export function TermsPage() {
           </p>
         </LegalSection>
       </article>
+    </div>
+  );
+}
+
+export function AboutPage() {
+  useDocumentTitle(
+    'About Game Hub',
+    'About Game Hub (hieutien.life) — handcrafted offline-first puzzle and strategy games playable directly in your browser.'
+  );
+
+  return (
+    <div className="mx-auto max-w-4xl space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link to="/" className="arcade-btn arcade-btn-sm arcade-btn-white px-3.5 py-1.5 text-xs">
+          <ArrowLeft className="h-3.5 w-3.5 stroke-[2.5]" />
+          Back to Home
+        </Link>
+        <Link to="/contact" className="arcade-btn arcade-btn-sm arcade-btn-cyan px-3.5 py-1.5 text-xs">
+          <Mail className="h-3.5 w-3.5 stroke-[2.5]" />
+          Contact Us
+        </Link>
+      </div>
+
+      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+        <header className="space-y-3">
+          <span className="hub-badge inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs uppercase">
+            <Info className="h-3.5 w-3.5" />
+            About
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">About Game Hub</h1>
+          <p className="text-sm leading-relaxed hub-text-muted">
+            Game Hub (<strong>{SITE_DOMAIN}</strong>) is an independent browser gaming portal
+            dedicated to original, thoughtfully designed puzzle, logic, and strategy games built
+            with Flutter for the web and mobile devices.
+          </p>
+        </header>
+
+        <LegalSection number="01" title="Our Mission">
+          <p>
+            We focus on clean, focused gameplay sessions that start immediately in any modern
+            desktop or mobile browser. Every game in our catalog is crafted to be easy to learn,
+            challenging to master, and playable without mandatory registration or login walls.
+          </p>
+        </LegalSection>
+
+        <LegalSection number="02" title="Offline-First & Local Progress">
+          <p>
+            Our titles are engineered with an offline-first architecture: levels and core puzzle
+            packs are bundled directly with each game, and your progress, scores, and visual
+            preferences are saved locally on your device. Many games also offer companion native
+            apps on Google Play and the Apple App Store for full offline mobile play.
+          </p>
+        </LegalSection>
+
+        <LegalSection number="03" title="How We Keep Game Hub Free">
+          <p>
+            All browser games on {SITE_DOMAIN} are free to play. To cover static hosting, domain
+            maintenance, and ongoing game development, the portal may display clearly separated
+            advertising through Google AdSense in accordance with our{' '}
+            <Link to="/privacy" className="underline font-semibold">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </LegalSection>
+
+        <div className="pt-2 flex flex-wrap gap-3">
+          <Link to="/games" className="arcade-btn arcade-btn-pink px-5 py-2.5 text-xs">
+            <Gamepad2 className="h-4 w-4 stroke-[2.5]" />
+            Explore All Games
+          </Link>
+          <Link to="/contact" className="arcade-btn arcade-btn-yellow px-5 py-2.5 text-xs">
+            <Mail className="h-4 w-4 stroke-[2.5]" />
+            Get in Touch
+          </Link>
+        </div>
+      </article>
+    </div>
+  );
+}
+
+export function ContactPage() {
+  useDocumentTitle(
+    'Contact Us',
+    'Contact the Game Hub team at hieutien.life for player support, bug reports, privacy questions, or copyright inquiries.'
+  );
+
+  return (
+    <div className="mx-auto max-w-4xl space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link to="/" className="arcade-btn arcade-btn-sm arcade-btn-white px-3.5 py-1.5 text-xs">
+          <ArrowLeft className="h-3.5 w-3.5 stroke-[2.5]" />
+          Back to Home
+        </Link>
+        <Link to="/about" className="arcade-btn arcade-btn-sm arcade-btn-yellow px-3.5 py-1.5 text-xs">
+          <Info className="h-3.5 w-3.5 stroke-[2.5]" />
+          About Game Hub
+        </Link>
+      </div>
+
+      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+        <header className="space-y-3">
+          <span className="hub-badge-featured inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-bold uppercase">
+            <Mail className="h-3.5 w-3.5" />
+            Support &amp; Inquiries
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Contact Us</h1>
+          <p className="text-sm leading-relaxed hub-text-muted">
+            Have feedback on a game, found a bug, or need to reach us regarding privacy,
+            advertising, or intellectual property on <strong>{SITE_DOMAIN}</strong>? We welcome
+            your message.
+          </p>
+        </header>
+
+        <LegalSection number="01" title="Direct Email">
+          <p>
+            You can reach the Game Hub team directly by email at:{' '}
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="font-numeric font-bold underline hub-text-highlight"
+            >
+              {CONTACT_EMAIL}
+            </a>
+          </p>
+          <p>
+            We typically respond to player support and policy inquiries within 2–3 business days.
+          </p>
+        </LegalSection>
+
+        <LegalSection number="02" title="What to Include in Your Message">
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>
+              <strong>Bug Reports:</strong> The game title, your browser/device type, and a short
+              description of what happened.
+            </li>
+            <li>
+              <strong>Privacy &amp; Ad Preferences:</strong> Questions regarding our{' '}
+              <Link to="/privacy" className="underline font-semibold">
+                Privacy Policy
+              </Link>{' '}
+              or cookie/advertising disclosures.
+            </li>
+            <li>
+              <strong>Copyright / DMCA Notices:</strong> The exact page URL on {SITE_DOMAIN},
+              details of the content in question, and your contact information.
+            </li>
+          </ul>
+        </LegalSection>
+      </article>
+    </div>
+  );
+}
+
+export function NotFoundPage() {
+  useDocumentTitle('Page Not Found');
+  return (
+    <div className="mx-auto max-w-2xl">
+      <div className="brutal-panel-lg p-8 sm:p-12 text-center space-y-5">
+        <span className="hub-badge inline-flex items-center gap-1.5 px-3 py-1 font-numeric text-xs font-bold uppercase">
+          <Compass className="h-3.5 w-3.5" />
+          404 • Not Found
+        </span>
+        <h1 className="text-3xl font-bold tracking-tight">Page Not Found</h1>
+        <p className="text-sm leading-relaxed hub-text-muted">
+          The page or game you are looking for may have been moved, renamed, or is no longer
+          available.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3 pt-2">
+          <Link to="/" className="arcade-btn arcade-btn-pink px-5 py-2.5 text-xs">
+            Back to Home
+          </Link>
+          <Link to="/games" className="arcade-btn arcade-btn-yellow px-5 py-2.5 text-xs">
+            Browse Games
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
