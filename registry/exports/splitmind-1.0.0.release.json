@@ -1,0 +1,103 @@
+{
+  "gameId": "splitmind",
+  "version": "1.0.0",
+  "checksum": "1c0a5f040498896b228c30f2448545e443df675eba7c057520c0951ff0e449dd",
+  "preparedAt": "2026-11-25T03:59:38.271Z",
+  "outputDir": "dist-releases/splitmind/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "splitmind",
+    "slug": "splitmind",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "SplitMind",
+      "shortDescription": "Offline neon geometry puzzles. One line changes everything.",
+      "description": "Connect physically legal perimeter anchors within a limited cut budget to satisfy all region objectives. Includes two interactive tutorials, a solver-certified 200-level Campaign Atlas, Daily Standard and Personal challenges, Free Play, hints from the current cut state, undo/retry, VI/EN UI, original audio, and accessibility settings.",
+      "howToPlay": "Drag between two perimeter anchors to slice the shape. Stay within your cut budget and satisfy every region objective. Use Undo, Retry, or Hints anytime.",
+      "categories": [
+        "puzzle",
+        "logic",
+        "brain"
+      ],
+      "tags": [
+        "geometry",
+        "spatial",
+        "offline",
+        "neon",
+        "splitmind"
+      ],
+      "developer": "Cecily",
+      "defaultLocale": "vi",
+      "supportedLocales": [
+        "en",
+        "vi"
+      ]
+    },
+    "assets": {
+      "icon": "assets/images/app_icon.png",
+      "thumbnail": "assets/images/app_icon.png",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": "http://127.0.0.1:8090/splitmind/releases/1.0.0/index.html",
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "backgroundColor": "#151935",
+      "fullscreen": true,
+      "supportsTouch": true,
+      "supportsKeyboard": true,
+      "supportsOffline": true,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.splitmind",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.splitmind",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "4.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": true,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": true,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "halfturn",
+  "slug": "halfturn",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "HALFTURN",
+    "shortDescription": "Rotate a half of a 4×4 board by 180° to match the target pattern.",
+    "description": "A compact visual IQ puzzle where you rotate halves of a 4×4 board by 180° to match the target pattern. Starting at level 6, a 2×2 center rotation unlocks rich spatial combinations with color-and-shape accessible tiles.",
+    "howToPlay": "Tap Left, Right, Top, or Bottom controls to rotate that half of the 4×4 board by 180°. From level 6 onward, use the Center button to rotate the inner 2×2 square. Match the target pattern in as few moves as possible.",
+    "categories": [
+      "puzzle",
+      "brain",
+      "logic"
+    ],
+    "tags": [
+      "spatial",
+      "iq",
+      "rotation",
+      "offline",
+      "pattern"
+    ],
+    "developer": "Cecily Games",
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "vi"
+    ]
+  },
+  "assets": {
+    "icon": "assets/branding/app_icon.png",
+    "thumbnail": "assets/branding/splash_preview.png",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": "http://127.0.0.1:8090/halfturn/releases/1.0.0/index.html",
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
+    "backgroundColor": "#14213C",
+    "fullscreen": true,
+    "supportsTouch": true,
+    "supportsKeyboard": false,
+    "supportsOffline": true,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "com.cecily.halfturn",
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": true,
+      "bundleId": "com.cecily.halfturn",
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": true,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": true,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "gameId": "onelie",
+  "version": "1.0.0",
+  "checksum": "817bc7470bd10dfcd112befeea2444d9239b789f8931aca9d7d2b8ed941c83cf",
+  "preparedAt": "2026-11-25T03:59:36.711Z",
+  "outputDir": "dist-releases/onelie/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "onelie",
+    "slug": "onelie",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "ONE LIE",
+      "shortDescription": "Candy Noir visual constraint-deduction IQ puzzle. Arrange the witnesses and expose the single false clue.",
+      "description": "ONE LIE is an offline-first Candy Noir constraint-deduction puzzle game. Examine witness clues, deduce the unique valid ordering, and identify the single false statement across guided tutorials, six campaign chapters, a Challenge Vault, Daily Standard/Personal/Bonus challenges, and Free Play.",
+      "howToPlay": "Place each witness into the lineup slots so every true clue holds, mark the single false clue, and tap Reveal the lie to close the case. Earn hint coins by solving cases; all progress is saved locally.",
+      "categories": [
+        "puzzle",
+        "logic",
+        "brain"
+      ],
+      "tags": [
+        "deduction",
+        "offline",
+        "logic",
+        "mystery",
+        "candy-noir",
+        "daily"
+      ],
+      "developer": "Cecily",
+      "defaultLocale": "en",
+      "supportedLocales": [
+        "en"
+      ]
+    },
+    "assets": {
+      "icon": "assets/branding/v2/app-icon-1024.png",
+      "thumbnail": "assets/branding/v2/brand-preview.png",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": null,
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "fullscreen": true,
+      "backgroundColor": "#201529",
+      "supportsTouch": true,
+      "supportsKeyboard": true,
+      "supportsOffline": false,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.onelie",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.onelie",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "1.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": true,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": false,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}

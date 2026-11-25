@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "prismind",
+  "slug": "prismind",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "PRISMIND — Chromatic Alchemy",
+    "shortDescription": "Offline-first visual rule inference puzzle on colored grids.",
+    "description": "Read 2–4 visual transformation examples, infer the hidden chromatic rule, and build the target grid. Features a 352-level campaign, Daily Challenge, Free Play, color-blind symbol accessibility, and English/Vietnamese support.",
+    "howToPlay": "Study the input-to-output transformation examples, infer the rule, then paint the answer grid to match. Progress is saved locally.",
+    "categories": [
+      "puzzle",
+      "logic",
+      "brain"
+    ],
+    "tags": [
+      "offline",
+      "puzzle",
+      "logic",
+      "grid",
+      "chromatic",
+      "daily"
+    ],
+    "developer": "Cecily",
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "vi"
+    ]
+  },
+  "assets": {
+    "icon": "assets/branding/prismind-icon-1024.png",
+    "thumbnail": "assets/branding/prismind-mark-648.png",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": null,
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
+    "fullscreen": true,
+    "backgroundColor": "#190F2D",
+    "supportsTouch": true,
+    "supportsKeyboard": true,
+    "supportsOffline": true,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "com.cecily.prismind",
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": true,
+      "bundleId": "com.cecily.prismind",
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": true,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": false,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

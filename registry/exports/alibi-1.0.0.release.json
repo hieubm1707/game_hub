@@ -1,0 +1,104 @@
+{
+  "gameId": "alibi",
+  "version": "1.0.0",
+  "checksum": "f4d31388291fcd724d9b9adafaa0029f934766fd77e579b4203121114339e73a",
+  "preparedAt": "2026-11-25T03:47:52.133Z",
+  "outputDir": "dist-releases/alibi/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "alibi",
+    "slug": "alibi",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "Alibi",
+      "shortDescription": "Everyone has a story. An illustrated detective logic puzzle game.",
+      "description": "An illustrated detective logic puzzle game with 200 offline cases across Campaign, Daily, and Free Investigation modes. Cross-examine witness testimonies, deduce truth from lies, and deliver your verdict.",
+      "howToPlay": "Examine witness statements under the case rule (One Liar or Half Truth), track hypotheses in your notebook, and deliver your verdict to close each dossier.",
+      "categories": [
+        "puzzle",
+        "logic",
+        "mystery"
+      ],
+      "tags": [
+        "detective",
+        "logic",
+        "deduction",
+        "offline",
+        "mystery",
+        "illustrated"
+      ],
+      "developer": "Cecily Studio",
+      "defaultLocale": "en",
+      "supportedLocales": [
+        "en",
+        "vi"
+      ]
+    },
+    "assets": {
+      "icon": "assets/brand/app_icon_1024.png",
+      "thumbnail": "assets/brand/app_icon_1024.png",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": null,
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "fullscreen": true,
+      "backgroundColor": "#192824",
+      "supportsTouch": true,
+      "supportsKeyboard": true,
+      "supportsOffline": true,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.alibi",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.alibi",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "1.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": false,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": false,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}

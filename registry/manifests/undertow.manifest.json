@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "undertow",
+  "slug": "undertow",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Undertow",
+    "shortDescription": "Move one. Move them all. Scandinavian magnetic gravity puzzle.",
+    "description": "Undertow is an offline-first magnetic gravity puzzle game. Tilt the board to slide linked marbles and blocks together across Scandinavian-inspired boards through Campaign, Daily Challenge, and Free Play modes.",
+    "howToPlay": "Swipe or press the arrow keys to tilt the board in four directions. Every movable piece slides together with gravity until blocked. Guide each marble onto its matching goal cell in as few moves as possible.",
+    "categories": [
+      "puzzle",
+      "logic"
+    ],
+    "tags": [
+      "gravity",
+      "magnetic",
+      "offline",
+      "puzzle",
+      "minimalist"
+    ],
+    "developer": "Cecily Studio",
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "vi"
+    ]
+  },
+  "assets": {
+    "icon": "assets/brand/icon_1024.png",
+    "thumbnail": "assets/brand/icon_1024.png",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": null,
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
+    "fullscreen": true,
+    "backgroundColor": "#20374A",
+    "supportsTouch": true,
+    "supportsKeyboard": true,
+    "supportsOffline": true,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "com.cecily.undertow",
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": true,
+      "bundleId": "com.cecily.undertow",
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": true,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": false,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

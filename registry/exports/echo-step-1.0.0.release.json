@@ -1,0 +1,102 @@
+{
+  "gameId": "echo-step",
+  "version": "1.0.0",
+  "checksum": "a2a56d132ab2a1ae165619c86f2dea2bf63c7ae8b9b15dfbb7fbf83d315ae86c",
+  "preparedAt": "2026-11-25T03:52:18.262Z",
+  "outputDir": "dist-releases/echo-step/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "echo-step",
+    "slug": "echo-step",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "Echo Step",
+      "shortDescription": "A spatial logic puzzle about coordinating your three-turn afterglow.",
+      "description": "One swipe moves the hero one grid cell while a shadow echo replays your successful moves exactly three turns later. Coordinate Sun and Moon across gates, switches, and time-sensitive circuits in Campaign, Daily Challenge, and Free Play — completely offline-first.",
+      "howToPlay": "Swipe, tap direction buttons, or use arrow keys to move the Sun one cell. Your Moon echo replays your successful moves three turns later. Coordinate both onto their goals simultaneously. Blocked moves do not advance time.",
+      "categories": [
+        "puzzle",
+        "logic"
+      ],
+      "tags": [
+        "offline",
+        "spatial",
+        "time-loop",
+        "grid",
+        "echo"
+      ],
+      "developer": "Cecily",
+      "defaultLocale": "en",
+      "supportedLocales": [
+        "en",
+        "vi"
+      ]
+    },
+    "assets": {
+      "icon": "assets/branding/echostep-icon-v2.png",
+      "thumbnail": "assets/branding/brand-preview.png",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": null,
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "fullscreen": true,
+      "backgroundColor": "#170D2D",
+      "supportsTouch": true,
+      "supportsKeyboard": true,
+      "supportsOffline": false,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.echostep",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.echostep",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "2.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": true,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": false,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "ghosttrace",
+  "slug": "ghosttrace",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "GhostTrace — Phantom Current",
+    "shortDescription": "Reconstruct a vanished signal through luminous spatial-temporal logic puzzles.",
+    "description": "A mysterious moving spark vanished from a luminous maze. Security scans captured fragments of its journey. Reconstruct its exact path from partial observations across 9 handcrafted chapters, daily challenges, and offline free-play.",
+    "howToPlay": "Trace the spark's exact path through the grid to satisfy every camera scan, direction marker, switch, and temporal constraint. Drag or tap cells to build your route, use Undo or Retry anytime, and trigger a Clue Pulse when you need a nudge.",
+    "categories": [
+      "puzzle",
+      "logic",
+      "brain"
+    ],
+    "tags": [
+      "puzzle",
+      "logic",
+      "spatial",
+      "deduction",
+      "offline",
+      "maze"
+    ],
+    "developer": "Phantom Current",
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "vi"
+    ]
+  },
+  "assets": {
+    "icon": "assets/icons/app_icon_1024.png",
+    "thumbnail": "assets/icons/feature_graphic_1024x500.png",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": null,
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
+    "fullscreen": true,
+    "backgroundColor": "#08152E",
+    "supportsTouch": true,
+    "supportsKeyboard": true,
+    "supportsOffline": true,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "com.phantomcurrent.ghosttrace",
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": true,
+      "bundleId": "com.phantomcurrent.ghosttrace",
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": true,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": false,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}

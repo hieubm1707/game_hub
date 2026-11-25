@@ -1,0 +1,101 @@
+{
+  "gameId": "centerpoint",
+  "version": "1.0.0",
+  "checksum": "2a3203b1572594043f8056b2adaf3ea19f2630ba507e16de8494c3dc3bd71cc4",
+  "preparedAt": "2026-11-25T03:48:16.659Z",
+  "outputDir": "dist-releases/centerpoint/releases/1.0.0",
+  "manifest": {
+    "schemaVersion": "2.0.0",
+    "id": "centerpoint",
+    "slug": "centerpoint",
+    "version": "1.0.0",
+    "metadata": {
+      "title": "CENTERPOINT",
+      "shortDescription": "Two-axis torque balancing logic puzzle on a 5x5 board.",
+      "description": "CENTERPOINT is an offline-first spatial deduction puzzle where you place weighted pieces onto legal pads to balance both horizontal and vertical moments around the center pivot.",
+      "howToPlay": "Drag or tap weights onto the blue pads. Place every weight from the tray so both horizontal and vertical moments balance to zero around the center pivot. Locked weights cannot be moved.",
+      "categories": [
+        "puzzle",
+        "brain"
+      ],
+      "tags": [
+        "offline",
+        "logic",
+        "puzzle",
+        "balance"
+      ],
+      "developer": "Cecily",
+      "defaultLocale": "en",
+      "supportedLocales": [
+        "en",
+        "vi"
+      ]
+    },
+    "assets": {
+      "icon": "assets/icon.webp",
+      "thumbnail": "assets/thumbnail.webp",
+      "screenshots": []
+    },
+    "web": {
+      "enabled": true,
+      "artifactUrl": null,
+      "buildVersion": "1.0.0",
+      "entrypoint": "index.html",
+      "buildStrategy": "javascript",
+      "orientation": "portrait",
+      "aspectRatio": {
+        "width": 9,
+        "height": 16
+      },
+      "fullscreen": true,
+      "backgroundColor": "#0F172A",
+      "supportsTouch": true,
+      "supportsKeyboard": false,
+      "supportsOffline": false,
+      "hubBridgeEnabled": true
+    },
+    "mobile": {
+      "android": {
+        "enabled": true,
+        "packageId": "com.cecily.centerpoint",
+        "storeUrl": null,
+        "appLink": null
+      },
+      "ios": {
+        "enabled": true,
+        "bundleId": "com.cecily.centerpoint",
+        "appStoreId": null,
+        "storeUrl": null,
+        "universalLink": null
+      }
+    },
+    "content": {
+      "source": "bundled",
+      "provider": "none",
+      "projectRef": null,
+      "remoteMetadataPath": null,
+      "bundledContentAsset": "assets/content/default.json",
+      "bundledContentVersion": "1.0.0",
+      "offlineFirst": true,
+      "syncEnabled": false,
+      "syncIntervalHours": 24
+    },
+    "features": {
+      "localStorage": true,
+      "firebaseContentSync": false,
+      "nativeAds": true,
+      "webAds": false,
+      "playerAuthentication": false,
+      "hubBridge": true
+    },
+    "distribution": {
+      "installPromptEnabled": false,
+      "installPromptCooldownDays": 7,
+      "allowWebPlay": true
+    },
+    "integration": {
+      "platformPackageVersion": "1.0.0",
+      "bridgeProtocolVersion": "1.0.0"
+    }
+  }
+}

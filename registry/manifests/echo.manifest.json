@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "2.0.0",
+  "id": "echo",
+  "slug": "echo",
+  "version": "1.0.0",
+  "metadata": {
+    "title": "Echo",
+    "shortDescription": "A scientific deduction puzzle about choosing experiments to find the unseen.",
+    "description": "Echo — Find the unseen. An offline-first deduction puzzle about choosing acoustic and density probes to uniquely prove a hidden specimen rather than guessing. Features 100 Campaign, 60 Daily, and 40 Free Exploration verified puzzles in English and Vietnamese.",
+    "howToPlay": "Select a probe (Density Scan or Distance Echo) and tap a row, column, or ray on the scan chamber to gather evidence within your scan budget. Compare readings against the candidate specimens, eliminate mismatches, and tap Prove & Identify once your evidence uniquely identifies the hidden shape.",
+    "categories": [
+      "puzzle",
+      "logic",
+      "brain"
+    ],
+    "tags": [
+      "offline",
+      "deduction",
+      "sonar",
+      "scientific",
+      "logic",
+      "daily"
+    ],
+    "developer": "Cecily",
+    "defaultLocale": "en",
+    "supportedLocales": [
+      "en",
+      "vi"
+    ]
+  },
+  "assets": {
+    "icon": "assets/branding/echo_icon_1024.png",
+    "thumbnail": "assets/branding/splash_logo.png",
+    "screenshots": []
+  },
+  "web": {
+    "enabled": true,
+    "artifactUrl": null,
+    "buildVersion": "1.0.0",
+    "entrypoint": "index.html",
+    "buildStrategy": "javascript",
+    "orientation": "portrait",
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
+    "fullscreen": true,
+    "backgroundColor": "#121F29",
+    "supportsTouch": true,
+    "supportsKeyboard": false,
+    "supportsOffline": false,
+    "hubBridgeEnabled": true
+  },
+  "mobile": {
+    "android": {
+      "enabled": true,
+      "packageId": "com.cecily.echo",
+      "storeUrl": null,
+      "appLink": null
+    },
+    "ios": {
+      "enabled": true,
+      "bundleId": "com.cecily.echo",
+      "appStoreId": null,
+      "storeUrl": null,
+      "universalLink": null
+    }
+  },
+  "content": {
+    "source": "bundled",
+    "provider": "none",
+    "projectRef": null,
+    "remoteMetadataPath": null,
+    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentVersion": "1.0.0",
+    "offlineFirst": true,
+    "syncEnabled": false,
+    "syncIntervalHours": 24
+  },
+  "features": {
+    "localStorage": true,
+    "firebaseContentSync": false,
+    "nativeAds": false,
+    "webAds": false,
+    "playerAuthentication": false,
+    "hubBridge": true
+  },
+  "distribution": {
+    "installPromptEnabled": false,
+    "installPromptCooldownDays": 7,
+    "allowWebPlay": true
+  },
+  "integration": {
+    "platformPackageVersion": "1.0.0",
+    "bridgeProtocolVersion": "1.0.0"
+  }
+}
