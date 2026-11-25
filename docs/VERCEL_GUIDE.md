@@ -36,6 +36,35 @@ vercel login
 
 ## 3. Deploy game lên Vercel (chạy trực tiếp tại `/index.html`)
 
+> [!IMPORTANT]
+> Mặc định `pnpm game build --id <game-id>` build Flutter Web với `--base-href /<game-id>/releases/<version>/` (dành cho `pnpm game serve` cục bộ hoặc host chung nhiều game).
+> Khi deploy riêng từng game lên **root `/`** của một project Vercel (`https://<game-project>.vercel.app/index.html`), bạn **bắt buộc** phải đảm bảo `<base href="/">` trong `index.html`, nếu không mọi tài nguyên (`manifest.json`, `flutter_bootstrap.js`, `main.dart.js`, `assets/...`) sẽ bị lỗi **404**.
+
+### Bước 3.1: Build với `--base-href /` (hoặc sửa `<base href="/">` nếu đã build sẵn)
+
+**Cách 1 (Khuyến nghị — build chuẩn cho Vercel root):**
+
+```bash
+pnpm game build --id <game-id> --base-href /
+pnpm game prepare-release --id <game-id>
+```
+
+**Cách 2 (Nhanh — nếu đã có sẵn bản build trong `dist-releases/<game-id>/releases/<version>/`):**
+
+Mở `dist-releases/<game-id>/releases/<version>/index.html` và đổi dòng:
+
+```html
+<base href="/<game-id>/releases/<version>/">
+```
+
+thành:
+
+```html
+<base href="/">
+```
+
+### Bước 3.2: Deploy lên Vercel
+
 Để đường dẫn game chính thức là `https://<game-project>.vercel.app/index.html` (không kèm `/releases/<version>/`), bạn deploy trực tiếp thư mục chứa `index.html`:
 
 ```bash
@@ -43,16 +72,19 @@ cd dist-releases/<game-id>/releases/<version>
 vercel --prod
 ```
 
-*(Hoặc deploy trực tiếp từ thư mục `<game-repo>/build/web` sau khi chạy `pnpm game build --id <game-id>`.)*
+*(Hoặc deploy trực tiếp từ thư mục `<game-repo>/build/web` sau khi chạy `pnpm game build --id <game-id> --base-href /`.)*
 
 ### Lần đầu tạo project trên Vercel
 
 Vercel CLI sẽ hỏi một vài thông tin:
 - **Set up and deploy?** -> `Y`
 - **Which scope?** -> Chọn account/team của bạn
-- **Link to existing project?** -> `N` (tạo project mới, ví dụ `alibi-game` hoặc `<game-id>`)
+- **Link to existing project?** (hoặc **Which project?**) -> `N` / `Create a new project` (tạo project mới, ví dụ `alibi-game` hoặc `<game-id>`)
+- **Connect this Git repository to automatically deploy changes on every push?** -> **`N` (Bắt buộc chọn No!)**
+  > [!WARNING]
+  > Vì `dist-releases/` nằm trong workspace `game_hub`, Vercel CLI sẽ tự nhận diện `.git` của repo `game_hub` và hỏi kết nối Git. **Tuyệt đối chọn `No`** — nếu chọn `Yes`, mỗi lần bạn push lên `game_hub`, Vercel sẽ tự build lại project game từ repo `game_hub` (nơi không chứa `dist-releases/` vì đã bị `.gitignore`) và làm hỏng bản deploy của game. Nếu lỡ chọn `Yes`, vào **Vercel Dashboard -> Project game -> Settings -> Git -> Disconnect**.
 - **In which directory is your code located?** -> `./`
-- **Want to modify these settings?** -> `N` (vì đây là static output đã build sẵn, không cần build command trên Vercel)
+- **Want to modify these settings?** / **Customize settings?** -> `N` (vì đây là static output đã build sẵn, không cần build command trên Vercel)
 
 ### (Khuyến nghị) Thêm `vercel.json` vào thư mục deploy nếu cần chỉnh header
 
@@ -118,10 +150,10 @@ Hãy mở thử `https://<game-project>.vercel.app/index.html` trực tiếp tr�
 
 Khi sửa code game và muốn cập nhật lên production:
 
-1. Build lại từ root `game_hub`:
+1. Build lại từ root `game_hub` (nhớ truyền `--base-href /` cho Vercel root):
    ```bash
    pnpm game validate --id <game-id>
-   pnpm game build --id <game-id>
+   pnpm game build --id <game-id> --base-href /
    pnpm game prepare-release --id <game-id>
    ```
 2. Deploy đè lên đúng Vercel project cũ:
@@ -150,6 +182,7 @@ Nếu bạn gắn **Custom Domain** riêng cho game (ví dụ `https://play.myga
 
 | Triệu chứng | Nguyên nhân | Cách khắc phục |
 | --- | --- | --- |
+| Nhiều lỗi `404` (`Manifest fetch from https://<game>.vercel.app/<game-id>/releases/<version>/manifest.json failed, code 404`) | Bản build được tạo với `--base-href /<game-id>/releases/<version>/` nhưng lại deploy ở root `/` của Vercel | Build lại với `pnpm game build --id <game-id> --base-href /` + `pnpm game prepare-release --id <game-id>` (hoặc đổi `<base href="/">` trong `index.html`) rồi `vercel --prod` lại |
 | Hub báo `artifact URL is missing or not from a trusted origin` | URL không dùng `https://` hoặc domain chưa nằm trong `VITE_ALLOWED_GAME_ORIGINS` | Dùng URL `https://*.vercel.app/index.html` hoặc bổ sung domain vào `VITE_ALLOWED_GAME_ORIGINS` |
 | Khung chơi game bị trắng / lỗi CSP trên console | `frame-src` trên Hub chưa cho phép domain game, hoặc game trả về header `X-Frame-Options: DENY` | Kiểm tra `apps/hub/vercel.json` (`frame-src`) và không đặt `X-Frame-Options` ở project game |
 | Icon / Thumbnail không hiển thị trên Hub | Đang để đường dẫn cục bộ (`assets/...`) thay vì URL công khai | Đổi sang URL `https://<game-project>.vercel.app/assets/assets/...` hoặc `/icons/...` |
