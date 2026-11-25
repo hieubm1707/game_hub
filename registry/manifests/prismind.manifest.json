@@ -29,13 +29,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/branding/prismind-icon-1024.png",
-    "thumbnail": "assets/branding/prismind-mark-648.png",
+    "icon": " https://prismind-bice.vercel.app/assets/assets/branding/prismind-icon-1024.png",
+    "thumbnail": "https://prismind-bice.vercel.app/assets/assets/branding/prismind-mark-648.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": " https://prismind-bice.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -71,7 +71,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://prismind-bice.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

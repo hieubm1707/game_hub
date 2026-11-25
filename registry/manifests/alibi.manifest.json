@@ -29,13 +29,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/brand/app_icon_1024.png",
-    "thumbnail": "assets/brand/app_icon_1024.png",
+    "icon": "https://alibi-umber.vercel.app/assets/assets/brand/app_icon_1024.png",
+    "thumbnail": "https://alibi-umber.vercel.app/assets/assets/brand/app_icon_1024.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://alibi-umber.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -71,7 +71,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://alibi-umber.vercel.app/assetsassets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

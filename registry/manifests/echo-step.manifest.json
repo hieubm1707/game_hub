@@ -27,13 +27,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/branding/echostep-icon-v2.png",
-    "thumbnail": "assets/branding/brand-preview.png",
+    "icon": "https://echostep-psi.vercel.app/assets/assets/branding/echostep-icon-v2.png",
+    "thumbnail": "https://echostep-psi.vercel.app/assets/assets/branding/brand-preview.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://echo-step.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -69,7 +69,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://echostep-psi.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "2.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

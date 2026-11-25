@@ -27,13 +27,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/brand/icon_1024.png",
-    "thumbnail": "assets/brand/icon_1024.png",
+    "icon": "https://undertow-ashen.vercel.app/assets/assets/brand/icon_1024.png",
+    "thumbnail": "https://undertow-ashen.vercel.app/assets/assets/brand/icon_1024.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://undertow-ashen.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -69,7 +69,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://undertow-ashen.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

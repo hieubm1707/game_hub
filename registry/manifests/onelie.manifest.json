@@ -28,13 +28,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/branding/v2/app-icon-1024.png",
-    "thumbnail": "assets/branding/v2/brand-preview.png",
-    "screenshots": []
+    "icon": "https://onelie-dusky.vercel.app/assets/assets/branding/v2/app-icon-1024.png",
+    "thumbnail": "https://onelie-dusky.vercel.app/assets/assets/branding/v2/brand-preview.png",
+    "screenshots": ["https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_01.png", "https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_02.png"]
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://onelie-dusky.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -70,7 +70,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://onelie-dusky.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

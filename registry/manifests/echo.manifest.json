@@ -29,13 +29,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/branding/echo_icon_1024.png",
-    "thumbnail": "assets/branding/splash_logo.png",
+    "icon": "https://echo-psi-rouge-74.vercel.app/assets/assets/branding/echo_icon_1024.png",
+    "thumbnail": "https://echo-psi-rouge-74.vercel.app/assets/assets/branding/splash_logo.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://echo-psi-rouge-74.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -71,7 +71,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://echo-psi-rouge-74.vercel.app/assets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

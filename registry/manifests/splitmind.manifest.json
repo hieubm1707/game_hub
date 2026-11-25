@@ -28,13 +28,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/images/app_icon.png",
-    "thumbnail": "assets/images/app_icon.png",
+    "icon": "https://splitmind-psi.vercel.app/assets/assets/images/app_icon.png",
+    "thumbnail": "https://splitmind-psi.vercel.app/assets/assets/images/app_icon.png",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": "http://127.0.0.1:8090/splitmind/releases/1.0.0/index.html",
+    "artifactUrl": "https://splitmind-psi.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -70,7 +70,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://splitmind-psi.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "4.0.0",
     "offlineFirst": true,
     "syncEnabled": false,

@@ -26,13 +26,13 @@
     ]
   },
   "assets": {
-    "icon": "assets/icon.webp",
-    "thumbnail": "assets/thumbnail.webp",
+    "icon": "https://centerpoint-seven.vercel.app/assets/assets/icon.webp",
+    "thumbnail": "https://centerpoint-seven.vercel.app/assets/assets/thumbnail.webp",
     "screenshots": []
   },
   "web": {
     "enabled": true,
-    "artifactUrl": null,
+    "artifactUrl": "https://centerpoint-seven.vercel.app/index.html",
     "buildVersion": "1.0.0",
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
@@ -68,7 +68,7 @@
     "provider": "none",
     "projectRef": null,
     "remoteMetadataPath": null,
-    "bundledContentAsset": "assets/content/default.json",
+    "bundledContentAsset": "https://centerpoint-seven.vercel.app/assets/assets/content/default.json",
     "bundledContentVersion": "1.0.0",
     "offlineFirst": true,
     "syncEnabled": false,
