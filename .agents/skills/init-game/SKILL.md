@@ -159,6 +159,70 @@ Do not break Android/iOS behavior; isolate native-only code cleanly:
 3. **Hub Bridge (recommended)**:
    - Wire `GameHubBridge` from `game_platform` to emit ready/lifecycle events
      when hosted inside Game Hub's iframe.
+4. **Mobile-Viewport Frame on Web (`WebMobileFrame`)**:
+   - On Flutter Web, portrait/mobile-first games MUST always render their mobile
+     UI layout (max width `430.0`, centered horizontally) with the extra
+     horizontal letterbox area on both sides filled with the game's main
+     background color (matching `web.backgroundColor` in `manifest.json` /
+     `scaffoldBackgroundColor`), while staying a no-op pass-through on native
+     Android/iOS.
+   - Add a `WebMobileFrame` widget (following the `blindspot` reference pattern)
+     and wrap the app's `MaterialApp` / `MaterialApp.router` `builder` output
+     with it:
+     ```dart
+     class WebMobileFrame extends StatelessWidget {
+       static const double maxMobileWidth = 430.0;
+
+       final Widget child;
+       final bool enabled;
+       final Color backgroundColor;
+
+       const WebMobileFrame({
+         super.key,
+         required this.child,
+         this.enabled = kIsWeb,
+         required this.backgroundColor,
+       });
+
+       @override
+       Widget build(BuildContext context) {
+         if (!enabled) return child;
+
+         return ColoredBox(
+           color: backgroundColor,
+           child: LayoutBuilder(
+             builder: (context, constraints) {
+               final frameWidth = constraints.maxWidth > maxMobileWidth
+                   ? maxMobileWidth
+                   : constraints.maxWidth;
+               final frameHeight = constraints.maxHeight;
+               final media = MediaQuery.of(context);
+
+               return Center(
+                 child: ClipRect(
+                   child: SizedBox(
+                     width: frameWidth,
+                     height: frameHeight,
+                     child: MediaQuery(
+                       data: media.copyWith(size: Size(frameWidth, frameHeight)),
+                       child: child,
+                     ),
+                   ),
+                 ),
+               );
+             },
+           ),
+         );
+       }
+     }
+     ```
+   - Override `MediaQuery` `size` to `Size(frameWidth, frameHeight)` inside the
+     frame so all screens, dialogs, and responsive breakpoints see mobile
+     dimensions on desktop browsers.
+   - Add a widget test verifying that on Web (`enabled: true`) a wide viewport
+     (e.g. `1280x800`) constrains the child to `<= 430.0` width and fills the
+     outer `ColoredBox` with the game's background color, while `enabled: false`
+     renders the child unchanged.
 
 ### 7. Register Locally in `config/repositories.local.yaml`
 
@@ -205,7 +269,8 @@ Confirm the outputs exist:
 
 Summarize for the user:
 1. Changes made in the game repository (FVM/SDK, `manifest.json`, `default.json`,
-   `pubspec.yaml`, Web-safe ad/storage isolation).
+   `pubspec.yaml`, Web-safe ad/storage isolation, `WebMobileFrame` mobile
+   viewport wrapper on Web).
 2. Results of `doctor`, `validate`, `<flutterCommand> test`, `build`,
    `prepare-release`, and `export-manifest`.
 3. How to preview the game inside Game Hub locally:
