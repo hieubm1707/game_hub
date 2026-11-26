@@ -194,7 +194,6 @@ export function createFirestoreRepositories(
         });
       });
 
-      await cache.invalidateCatalog();
       return record;
     },
 
@@ -278,7 +277,6 @@ export function createFirestoreRepositories(
         });
       });
 
-      await cache.invalidateCatalog();
       return updatedRecord;
     },
 
@@ -319,7 +317,6 @@ export function createFirestoreRepositories(
           timestamp: now,
         });
       });
-      await cache.invalidateCatalog();
     },
   };
 
