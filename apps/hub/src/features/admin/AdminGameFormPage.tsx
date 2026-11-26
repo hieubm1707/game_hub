@@ -10,6 +10,7 @@ import {
   type GameOrientation,
   type GameRecord,
   type GameStatus,
+  type GameTranslations,
   type LocalizedGameText,
   type SupportedLocale,
 } from '@game-hub/contract';
@@ -19,6 +20,49 @@ import { useAuth } from '../authentication/AuthContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 type ImportMode = 'create' | 'build_only' | 'replace_all';
+
+/** Fills missing non-EN localized fields from an imported manifest without overwriting existing copy. */
+function mergeMissingTranslations(
+  existing: GameTranslations | undefined,
+  incoming: GameTranslations | undefined
+): { merged: GameTranslations | undefined; filledMissing: boolean } {
+  const cleanExisting = sanitizeTranslations(existing, { excludeLocales: ['en'] });
+  const cleanIncoming = sanitizeTranslations(incoming, { excludeLocales: ['en'] });
+  if (!cleanIncoming) {
+    return { merged: cleanExisting, filledMissing: false };
+  }
+
+  const result: GameTranslations = { ...(cleanExisting ?? {}) };
+  let filledMissing = false;
+  const fields: readonly (keyof LocalizedGameText)[] = [
+    'title',
+    'shortDescription',
+    'description',
+    'howToPlay',
+  ];
+
+  for (const locale of SUPPORTED_LOCALE_CODES) {
+    if (locale === 'en') continue;
+    const incomingEntry = cleanIncoming[locale];
+    if (!incomingEntry) continue;
+    const prevEntry = result[locale] ?? {};
+    const nextEntry: LocalizedGameText = { ...prevEntry };
+    for (const field of fields) {
+      if (!nextEntry[field] && incomingEntry[field]) {
+        nextEntry[field] = incomingEntry[field];
+        filledMissing = true;
+      }
+    }
+    if (Object.keys(nextEntry).length > 0) {
+      result[locale] = nextEntry;
+    }
+  }
+
+  return {
+    merged: Object.keys(result).length > 0 ? result : undefined,
+    filledMissing,
+  };
+}
 
 function emptyForm(): Omit<GameRecord, 'revision' | 'createdAt' | 'updatedAt'> {
   return {
@@ -121,21 +165,36 @@ export function AdminGameFormPage() {
       }
       const draft = manifestToGameRecordDraft(check.data);
       if (isEdit && importMode === 'build_only') {
-        setForm((prev) => ({
-          ...prev,
-          manifestVersion: draft.manifestVersion,
-          currentRelease: draft.currentRelease,
-          web: {
-            ...prev.web,
-            buildVersion: draft.web.buildVersion,
-            artifactUrl: draft.web.artifactUrl || prev.web.artifactUrl,
-            orientation: draft.web.orientation,
-            aspectRatio: draft.web.aspectRatio,
-            backgroundColor: draft.web.backgroundColor ?? prev.web.backgroundColor ?? null,
-            hubBridgeEnabled: draft.web.hubBridgeEnabled,
-          },
-        }));
-        setImportSuccess('Imported build metadata only (admin-edited copy preserved).');
+        let filledTranslations = false;
+        setForm((prev) => {
+          const { merged, filledMissing } = mergeMissingTranslations(
+            prev.translations,
+            draft.translations
+          );
+          filledTranslations = filledMissing;
+          const { translations: _prevTr, ...prevWithoutTranslations } = prev;
+          return {
+            ...prevWithoutTranslations,
+            howToPlay: prev.howToPlay || draft.howToPlay || draft.translations?.en?.howToPlay || '',
+            ...(merged ? { translations: merged } : {}),
+            manifestVersion: draft.manifestVersion,
+            currentRelease: draft.currentRelease,
+            web: {
+              ...prev.web,
+              buildVersion: draft.web.buildVersion,
+              artifactUrl: draft.web.artifactUrl || prev.web.artifactUrl,
+              orientation: draft.web.orientation,
+              aspectRatio: draft.web.aspectRatio,
+              backgroundColor: draft.web.backgroundColor ?? prev.web.backgroundColor ?? null,
+              hubBridgeEnabled: draft.web.hubBridgeEnabled,
+            },
+          };
+        });
+        setImportSuccess(
+          filledTranslations
+            ? 'Imported build metadata and filled missing localized copy (existing admin copy preserved).'
+            : 'Imported build metadata only (admin-edited copy preserved).'
+        );
       } else {
         const { revision: _r, createdAt: _c, updatedAt: _u, translations, ...rest } = draft;
         const normalizedTranslations = sanitizeTranslations(translations, {
@@ -152,6 +211,9 @@ export function AdminGameFormPage() {
       }
     } catch (err) {
       setImportErrors([err instanceof Error ? err.message : 'Invalid JSON file.']);
+    } finally {
+      // Allow re-selecting the same manifest file after changing importMode.
+      e.target.value = '';
     }
   };
 
@@ -236,7 +298,7 @@ export function AdminGameFormPage() {
               onChange={(e) => setImportMode(e.target.value as ImportMode)}
               className="arcade-input w-auto text-xs"
             >
-              <option value="build_only">Update build metadata only</option>
+              <option value="build_only">Update build + missing translations</option>
               <option value="replace_all">Replace all metadata</option>
             </select>
           )}

@@ -147,13 +147,13 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(viOption.querySelector('[data-flag="vi"]')).not.toBeNull();
     expect(screen.getByRole('option', { name: /日本語/i }).querySelector('[data-flag="ja"]')).not.toBeNull();
     fireEvent.click(viOption);
-    expect(screen.getByText('Chơi ngay')).toBeInTheDocument();
+    expect(await screen.findByText('Chơi ngay')).toBeInTheDocument();
     expect(screen.getByText('Mô tả chi tiết trò chơi giải đố logic offline.')).toBeInTheDocument();
     expect(screen.getByText('Chạm vào các ô để giải câu đố logic.')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /chọn ngôn ngữ/i }));
     fireEvent.click(screen.getByRole('option', { name: /日本語/i }));
-    expect(screen.getByText('今すぐプレイ')).toBeInTheDocument();
+    expect(await screen.findByText('今すぐプレイ')).toBeInTheDocument();
     expect(screen.getByText('オフライン対応ロジックパズルの詳細説明。')).toBeInTheDocument();
     expect(screen.getByText('タイルをタップしてパズルを解きます。')).toBeInTheDocument();
   });
@@ -491,5 +491,135 @@ describe('Game Hub Public & Admin Flows', () => {
         debugToken: 'true',
       })
     ).toEqual({ mode: 'recaptcha', provider: 'enterprise', siteKey: 'site-key-123' });
+  });
+
+  it('fills missing translations from manifest import in edit mode while preserving existing admin copy', async () => {
+    const owner: AdminProfile = {
+      uid: 'owner-1',
+      email: 'admin@gamehub.local',
+      role: 'owner',
+      enabled: true,
+    };
+    const existingGame = makeFixtureGame({
+      shortDescription: 'Admin customized EN summary.',
+      translations: {
+        vi: {
+          shortDescription: 'Mô tả VI đã sửa bởi admin.',
+        },
+      },
+    });
+    const { repos } = renderApp(['/admin/games/iq-puzzle-fixture/edit'], [existingGame], owner);
+    await screen.findByDisplayValue('Admin customized EN summary.');
+
+    const manifestPayload = {
+      schemaVersion: '2.0.0',
+      id: 'iq-puzzle-fixture',
+      slug: 'iq-puzzle-fixture',
+      version: '1.0.0',
+      metadata: {
+        title: 'IQ Puzzle (From Manifest)',
+        shortDescription: 'Manifest EN summary.',
+        description: 'Manifest EN description.',
+        howToPlay: 'Manifest EN how to play.',
+        categories: ['puzzle'],
+        tags: ['offline'],
+        developer: 'Fixture',
+        defaultLocale: 'en',
+        supportedLocales: ['en', 'vi', 'ja'],
+        translations: {
+          en: {
+            shortDescription: 'Manifest EN summary.',
+            description: 'Manifest EN description.',
+            howToPlay: 'Manifest EN how to play.',
+          },
+          vi: {
+            shortDescription: 'Mô tả ngắn VI từ manifest.',
+            description: 'Mô tả đầy đủ VI từ manifest.',
+            howToPlay: 'Cách chơi VI từ manifest.',
+          },
+          ja: {
+            shortDescription: 'マニフェストからのJA概要。',
+            description: 'マニフェストからのJA詳細。',
+            howToPlay: 'マニフェストからのJA遊び方。',
+          },
+        },
+      },
+      assets: {
+        icon: '/fixtures/iq-puzzle-icon.svg',
+        thumbnail: '/fixtures/iq-puzzle-thumb.svg',
+        screenshots: [],
+      },
+      web: {
+        enabled: true,
+        artifactUrl: 'https://blindspot-roan.vercel.app/index.html',
+        buildVersion: '1.0.0',
+        entrypoint: 'index.html',
+        buildStrategy: 'javascript',
+        orientation: 'portrait',
+        aspectRatio: { width: 9, height: 16 },
+        fullscreen: true,
+        backgroundColor: '#130A21',
+        supportsTouch: true,
+        supportsKeyboard: false,
+        supportsOffline: false,
+        hubBridgeEnabled: true,
+      },
+      mobile: {
+        android: { enabled: false, packageId: null, storeUrl: null, appLink: null },
+        ios: { enabled: false, bundleId: null, appStoreId: null, storeUrl: null, universalLink: null },
+      },
+      content: {
+        source: 'bundled',
+        provider: 'none',
+        projectRef: null,
+        remoteMetadataPath: null,
+        bundledContentAsset: 'assets/content/default.json',
+        bundledContentVersion: '1.0.0',
+        offlineFirst: true,
+        syncEnabled: false,
+        syncIntervalHours: 24,
+      },
+      features: {
+        localStorage: true,
+        firebaseContentSync: false,
+        nativeAds: false,
+        webAds: false,
+        playerAuthentication: false,
+        hubBridge: true,
+      },
+      distribution: {
+        installPromptEnabled: false,
+        installPromptCooldownDays: 7,
+        allowWebPlay: true,
+      },
+      integration: {
+        platformPackageVersion: '1.0.0',
+        bridgeProtocolVersion: '1.0.0',
+      },
+    };
+
+    const fileInput = screen.getByLabelText('Import manifest JSON') as HTMLInputElement;
+    const file = new File([JSON.stringify(manifestPayload)], 'blindspot.manifest.json', {
+      type: 'application/json',
+    });
+    Object.defineProperty(file, 'text', {
+      value: async () => JSON.stringify(manifestPayload),
+    });
+
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    expect(await screen.findByDisplayValue('マニフェストからのJA概要。')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Admin customized EN summary.')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Mô tả VI đã sửa bởi admin.')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Mô tả đầy đủ VI từ manifest.')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Cách chơi VI từ manifest.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save Changes' }));
+    await waitFor(async () => {
+      const saved = await repos.adminGames.getGameById('iq-puzzle-fixture');
+      expect(saved?.translations?.ja?.shortDescription).toBe('マニフェストからのJA概要。');
+      expect(saved?.translations?.vi?.shortDescription).toBe('Mô tả VI đã sửa bởi admin.');
+      expect(saved?.translations?.vi?.description).toBe('Mô tả đầy đủ VI từ manifest.');
+    });
   });
 });
