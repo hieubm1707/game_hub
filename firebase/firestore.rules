@@ -47,6 +47,31 @@ service cloud.firestore {
       return status in ['draft', 'published', 'disabled', 'archived'];
     }
 
+    function isSafeHttpsOrLocalUrl(url) {
+      return url is string && (
+        url.matches('^https://.+')
+        || url.matches('^http://(localhost|127\\.0\\.0\\.1)(:[0-9]+)?/.*')
+      );
+    }
+
+    function hasValidGameUrls(data) {
+      return (
+        !('web' in data)
+        || !(data.web is map)
+        || !('artifactUrl' in data.web)
+        || data.web.artifactUrl == null
+        || data.web.artifactUrl == ''
+        || isSafeHttpsOrLocalUrl(data.web.artifactUrl)
+      ) && (
+        !('mobile' in data)
+        || !(data.mobile is map)
+        || (
+          (!('android' in data.mobile) || !(data.mobile.android is map) || !('storeUrl' in data.mobile.android) || data.mobile.android.storeUrl == null || data.mobile.android.storeUrl == '' || data.mobile.android.storeUrl.matches('^https://.+'))
+          && (!('ios' in data.mobile) || !(data.mobile.ios is map) || !('storeUrl' in data.mobile.ios) || data.mobile.ios.storeUrl == null || data.mobile.ios.storeUrl == '' || data.mobile.ios.storeUrl.matches('^https://.+'))
+        )
+      );
+    }
+
     function isValidGameDocument(data, gameId) {
       return data.id == gameId
         && isValidId(data.id)
@@ -57,7 +82,8 @@ service cloud.firestore {
         && data.revision is int && data.revision >= 1
         && data.categories is list
         && data.features is map
-        && data.features.webAds == false;
+        && data.features.webAds == false
+        && hasValidGameUrls(data);
     }
 
     function isValidPublicGameDocument(data, slug) {
@@ -68,7 +94,8 @@ service cloud.firestore {
         && data.status == 'published'
         && data.revision is int && data.revision >= 1
         && data.features is map
-        && data.features.webAds == false;
+        && data.features.webAds == false
+        && hasValidGameUrls(data);
     }
 
     // =========================================================================
@@ -178,7 +205,7 @@ service cloud.firestore {
         && request.resource.data.id == releaseId
         && isValidId(request.resource.data.gameId)
         && request.resource.data.version is string
-        && request.resource.data.artifactUrl is string
+        && isSafeHttpsOrLocalUrl(request.resource.data.artifactUrl)
         && request.resource.data.published is bool;
 
       allow update: if isAdmin()

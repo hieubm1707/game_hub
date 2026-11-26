@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import type { GameRecord, GameReleaseRecord } from '@game-hub/contract';
+import { isSafeHttpUrl, type GameRecord, type GameReleaseRecord } from '@game-hub/contract';
 import { useRepositories } from '../../app/RepositoryContext';
+import { getAllowedGameOrigins } from '../../firebase/client';
 import { useAuth } from '../authentication/AuthContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
@@ -42,13 +43,18 @@ export function AdminReleasesPage() {
     if (!id || !admin) return;
     setError(null);
     setStatusMsg(null);
+    const trimmedUrl = artifactUrl.trim();
+    if (!isSafeHttpUrl(trimmedUrl, getAllowedGameOrigins())) {
+      setError('Artifact URL is not from an allowed safe origin.');
+      return;
+    }
     try {
       await releases.registerRelease(
         {
           id: `${id}-${version.trim()}`,
           gameId: id,
           version: version.trim(),
-          artifactUrl: artifactUrl.trim(),
+          artifactUrl: trimmedUrl,
           published: true,
           notes: notes.trim(),
         },

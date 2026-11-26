@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   SUPPORTED_LOCALE_CODES,
+  isSafeHttpUrl,
+  isSafePublicAssetPath,
   manifestToGameRecordDraft,
   sanitizeTranslations,
   validateManifest,
@@ -11,6 +13,7 @@ import {
   type LocalizedGameText,
   type SupportedLocale,
 } from '@game-hub/contract';
+import { getAllowedGameOrigins } from '../../firebase/client';
 import { useRepositories } from '../../app/RepositoryContext';
 import { useAuth } from '../authentication/AuthContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -155,8 +158,33 @@ export function AdminGameFormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!admin) return;
-    setSaving(true);
     setError(null);
+
+    if (!isSafePublicAssetPath(form.icon)) {
+      setError('Icon URL must be a relative asset path or a safe https:// URL.');
+      return;
+    }
+    if (!isSafePublicAssetPath(form.thumbnail)) {
+      setError('Thumbnail URL must be a relative asset path or a safe https:// URL.');
+      return;
+    }
+    const artifactUrl = form.web.artifactUrl?.trim() ?? '';
+    if (artifactUrl && !isSafeHttpUrl(artifactUrl, getAllowedGameOrigins())) {
+      setError('Web Artifact URL is not from an allowed safe origin.');
+      return;
+    }
+    const androidUrl = form.mobile.android.storeUrl?.trim() ?? '';
+    if (androidUrl && !isSafeHttpUrl(androidUrl)) {
+      setError('Google Play Store URL must be a valid https:// URL.');
+      return;
+    }
+    const iosUrl = form.mobile.ios.storeUrl?.trim() ?? '';
+    if (iosUrl && !isSafeHttpUrl(iosUrl)) {
+      setError('App Store URL must be a valid https:// URL.');
+      return;
+    }
+
+    setSaving(true);
     try {
       const cleanedTranslations = sanitizeTranslations(form.translations, {
         excludeLocales: ['en'],

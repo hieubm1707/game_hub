@@ -1,4 +1,4 @@
-import type { GameRecord } from '@game-hub/contract';
+import { isSafeHttpUrl, type GameRecord } from '@game-hub/contract';
 
 export interface ConfiguredStoreUrls {
   android: string | null;
@@ -7,10 +7,17 @@ export interface ConfiguredStoreUrls {
 
 const DISMISS_PREFIX = 'game_hub:install_prompt_dismissed:';
 
+function toSafeStoreUrl(url?: string | null): string | null {
+  const trimmed = url?.trim();
+  if (!trimmed) return null;
+  return isSafeHttpUrl(trimmed) ? trimmed : null;
+}
+
 export function getConfiguredStoreUrls(game: GameRecord): ConfiguredStoreUrls {
-  const android = game.mobile.android.storeUrl?.trim() || null;
-  const ios = game.mobile.ios.storeUrl?.trim() || null;
-  return { android, ios };
+  return {
+    android: toSafeStoreUrl(game.mobile.android.storeUrl),
+    ios: toSafeStoreUrl(game.mobile.ios.storeUrl),
+  };
 }
 
 export function hasConfiguredStoreUrls(game: GameRecord): boolean {

@@ -8,6 +8,7 @@ import { AppRoutes } from '../src/routes/AppRoutes';
 import { createInMemoryRepositories } from '../src/repositories/inMemoryRepositories';
 import {
   dismissInstallPrompt,
+  getConfiguredStoreUrls,
   shouldShowInstallPrompt,
 } from '../src/services/installPromptPolicy';
 
@@ -376,5 +377,45 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(screen.getAllByText('Alpha Puzzle')).toHaveLength(3);
     // ShowcaseCard + 1x Recently Updated
     expect(screen.getAllByText('Beta Puzzle')).toHaveLength(2);
+  });
+
+  it('rejects unsafe storeUrl schemes and invalid admin form URLs', async () => {
+    const unsafeStoreGame = makeFixtureGame({
+      mobile: {
+        android: {
+          enabled: true,
+          packageId: 'org.evil',
+          storeUrl: 'javascript:alert(1)',
+        },
+        ios: {
+          enabled: true,
+          bundleId: 'org.evil',
+          storeUrl: 'https://apps.apple.com/app/id123',
+        },
+      },
+    });
+    expect(getConfiguredStoreUrls(unsafeStoreGame)).toEqual({
+      android: null,
+      ios: 'https://apps.apple.com/app/id123',
+    });
+
+    const owner: AdminProfile = {
+      uid: 'owner-1',
+      email: 'admin@gamehub.local',
+      role: 'owner',
+      enabled: true,
+    };
+    const { repos } = renderApp(['/admin/games/iq-puzzle-fixture/edit'], [makeFixtureGame()], owner);
+    const artifactInput = await screen.findByPlaceholderText(
+      'https://my-game.pages.dev/releases/1.0.0/index.html'
+    );
+    fireEvent.change(artifactInput, { target: { value: 'https://untrusted-evil.example/index.html' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Changes' }));
+
+    expect(
+      await screen.findByText('Web Artifact URL is not from an allowed safe origin.')
+    ).toBeInTheDocument();
+    const unchanged = await repos.adminGames.getGameById('iq-puzzle-fixture');
+    expect(unchanged?.revision).toBe(1);
   });
 });

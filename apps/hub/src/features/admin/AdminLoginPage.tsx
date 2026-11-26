@@ -1,8 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Shield } from 'lucide-react';
 import { useAuth } from '../authentication/AuthContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+
+const COOLDOWN_THRESHOLD = 3;
+const MAX_COOLDOWN_SECONDS = 60;
+
+function toSafeLoginError(err: unknown): string {
+  const code = (err as { code?: string } | null)?.code ?? '';
+  if (code === 'auth/too-many-requests') {
+    return 'Too many failed sign-in attempts. Please wait a few minutes and try again.';
+  }
+  if (code === 'auth/network-request-failed') {
+    return 'Network error while signing in. Check your connection and try again.';
+  }
+  return 'Invalid email or password.';
+}
 
 export function AdminLoginPage() {
   useDocumentTitle('Admin Login');
@@ -13,6 +27,16 @@ export function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+    const timer = window.setTimeout(() => {
+      setCooldownSeconds((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [cooldownSeconds]);
 
   if (!loading && admin) {
     return <Navigate to="/admin" replace />;
@@ -20,13 +44,24 @@ export function AdminLoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (cooldownSeconds > 0) return;
     setSubmitting(true);
     setSubmitError(null);
     try {
       await loginWithEmail(email.trim(), password);
+      setFailedAttempts(0);
       navigate('/admin', { replace: true });
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Login failed.');
+      const nextFailures = failedAttempts + 1;
+      setFailedAttempts(nextFailures);
+      if (nextFailures >= COOLDOWN_THRESHOLD) {
+        const waitSec = Math.min(
+          MAX_COOLDOWN_SECONDS,
+          5 * 2 ** (nextFailures - COOLDOWN_THRESHOLD)
+        );
+        setCooldownSeconds(waitSec);
+      }
+      setSubmitError(toSafeLoginError(err));
     } finally {
       setSubmitting(false);
     }
@@ -62,6 +97,7 @@ export function AdminLoginPage() {
               <input
                 id="admin-email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -79,6 +115,7 @@ export function AdminLoginPage() {
               <input
                 id="admin-password"
                 type="password"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -87,10 +124,14 @@ export function AdminLoginPage() {
             </div>
             <button
               type="submit"
-              disabled={submitting}
-              className="arcade-btn arcade-btn-pink w-full px-4 py-3 text-sm mt-2"
+              disabled={submitting || cooldownSeconds > 0}
+              className="arcade-btn arcade-btn-pink w-full px-4 py-3 text-sm mt-2 disabled:opacity-50"
             >
-              {submitting ? 'Signing in...' : 'Sign In'}
+              {cooldownSeconds > 0
+                ? `Wait ${cooldownSeconds}s...`
+                : submitting
+                  ? 'Signing in...'
+                  : 'Sign In'}
             </button>
           </form>
         </div>

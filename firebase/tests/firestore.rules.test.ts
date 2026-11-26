@@ -239,4 +239,43 @@ describe('Firestore Security Rules', () => {
     expect(publishedSnap.exists()).toBe(true);
     expect(publishedSnap.data()?.title).toBe('Word Craft');
   });
+
+  it('rejects unsafe javascript: or non-https artifactUrl and storeUrl even for admins', async () => {
+    const editorDb = testEnv.authenticatedContext('editor-1').firestore();
+
+    await assertFails(
+      setDoc(
+        doc(editorDb, 'games', 'evil-artifact'),
+        makeGameDoc({
+          id: 'evil-artifact',
+          slug: 'evil-artifact',
+          web: { artifactUrl: 'javascript:alert(1)' },
+        })
+      )
+    );
+
+    await assertFails(
+      setDoc(
+        doc(editorDb, 'games', 'evil-store'),
+        makeGameDoc({
+          id: 'evil-store',
+          slug: 'evil-store',
+          mobile: {
+            android: { storeUrl: 'javascript:alert(1)' },
+            ios: { storeUrl: null },
+          },
+        })
+      )
+    );
+
+    await assertFails(
+      setDoc(doc(editorDb, 'game_releases', 'iq-puzzle-1.0.1'), {
+        id: 'iq-puzzle-1.0.1',
+        gameId: 'iq-puzzle',
+        version: '1.0.1',
+        artifactUrl: 'http://evil.example.com/index.html',
+        published: true,
+      })
+    );
+  });
 });

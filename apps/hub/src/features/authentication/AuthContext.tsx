@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -33,15 +33,20 @@ export function AuthProvider({
   mockAdmin?: AdminProfile | null;
   children: React.ReactNode;
 }) {
+  const resolvedMockAdmin =
+    import.meta.env.MODE === 'test' || import.meta.env.DEV ? mockAdmin : undefined;
+
   const [user, setUser] = useState<User | null>(null);
-  const [admin, setAdmin] = useState<AdminProfile | null>(mockAdmin ?? null);
-  const [loading, setLoading] = useState(mockAdmin === undefined);
+  const [admin, setAdmin] = useState<AdminProfile | null>(resolvedMockAdmin ?? null);
+  const [loading, setLoading] = useState(resolvedMockAdmin === undefined);
   const [error, setError] = useState<string | null>(null);
+  const authCheckSeqRef = useRef(0);
 
   useEffect(() => {
-    if (mockAdmin !== undefined) return;
+    if (resolvedMockAdmin !== undefined) return;
     const auth = getHubAuth();
     const unsub = onAuthStateChanged(auth, async (nextUser) => {
+      const seq = ++authCheckSeqRef.current;
       setUser(nextUser);
       setError(null);
       if (!nextUser) {
@@ -51,32 +56,35 @@ export function AuthProvider({
       }
       try {
         const snap = await getDoc(doc(getHubFirestore(), 'admins', nextUser.uid));
-        if (snap.exists()) {
-          const data = snap.data() as { role?: 'owner' | 'editor'; enabled?: boolean };
-          if (data.enabled === true && (data.role === 'owner' || data.role === 'editor')) {
-            setAdmin({
-              uid: nextUser.uid,
-              email: nextUser.email,
-              role: data.role,
-              enabled: true,
-            });
-          } else {
-            setAdmin(null);
-            setError('Your administrator account is disabled.');
-          }
+        if (seq !== authCheckSeqRef.current) return;
+        const data = snap.exists()
+          ? (snap.data() as { role?: 'owner' | 'editor'; enabled?: boolean })
+          : null;
+        if (data && data.enabled === true && (data.role === 'owner' || data.role === 'editor')) {
+          setAdmin({
+            uid: nextUser.uid,
+            email: nextUser.email,
+            role: data.role,
+            enabled: true,
+          });
         } else {
           setAdmin(null);
-          setError('Authenticated user is not an authorized administrator.');
+          setUser(null);
+          setError('Access denied. This account is not authorized for admin access.');
+          await signOut(auth).catch(() => {});
         }
-      } catch (e) {
+      } catch {
+        if (seq !== authCheckSeqRef.current) return;
         setAdmin(null);
-        setError(e instanceof Error ? e.message : 'Failed to verify administrator privileges.');
+        setError('Failed to verify administrator privileges.');
       } finally {
-        setLoading(false);
+        if (seq === authCheckSeqRef.current) {
+          setLoading(false);
+        }
       }
     });
     return unsub;
-  }, [mockAdmin]);
+  }, [resolvedMockAdmin]);
 
   const loginWithEmail = async (email: string, password: string) => {
     setError(null);
@@ -85,7 +93,7 @@ export function AuthProvider({
   };
 
   const logout = async () => {
-    if (mockAdmin !== undefined) {
+    if (resolvedMockAdmin !== undefined) {
       setAdmin(null);
       return;
     }

@@ -1,4 +1,5 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import {
   getFirestore,
   connectFirestoreEmulator,
@@ -14,6 +15,7 @@ let appInstance: FirebaseApp | null = null;
 let dbInstance: Firestore | null = null;
 let authInstance: Auth | null = null;
 let emulatorsConnected = false;
+let appCheckInitialized = false;
 
 export function getFirebaseConfig() {
   return {
@@ -37,7 +39,14 @@ export function getAllowedGameOrigins(): string[] {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
-  if (typeof window !== 'undefined' && window.location?.origin && !list.includes(window.location.origin)) {
+  // Only allow same-origin game iframes in local dev/test; production games must be hosted on isolated origins
+  // because GamePlayer uses `sandbox="allow-scripts allow-same-origin"`.
+  if (
+    (import.meta.env.DEV || import.meta.env.MODE === 'test') &&
+    typeof window !== 'undefined' &&
+    window.location?.origin &&
+    !list.includes(window.location.origin)
+  ) {
     list.push(window.location.origin);
   }
   return list;
@@ -47,6 +56,21 @@ export function getFirebaseApp(): FirebaseApp {
   if (!appInstance) {
     const existing = getApps();
     appInstance = existing.length > 0 ? existing[0] : initializeApp(getFirebaseConfig());
+  }
+  if (
+    !appCheckInitialized &&
+    typeof window !== 'undefined' &&
+    !isUsingEmulators() &&
+    import.meta.env.MODE !== 'test'
+  ) {
+    const siteKey = (import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY as string | undefined)?.trim();
+    if (siteKey) {
+      initializeAppCheck(appInstance, {
+        provider: new ReCaptchaV3Provider(siteKey),
+        isTokenAutoRefreshEnabled: true,
+      });
+      appCheckInitialized = true;
+    }
   }
   return appInstance;
 }

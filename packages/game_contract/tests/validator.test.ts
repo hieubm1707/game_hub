@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   isSafeHttpUrl,
+  isSafePublicAssetPath,
   sanitizeTranslations,
   toCompactTranslations,
   validateBridgeMessage,
@@ -201,5 +202,14 @@ describe('game_contract manifest validation', () => {
       en: { title: 'IQ Puzzle', shortDescription: 'Short EN' },
       ja: { shortDescription: '短い説明' },
     });
+  });
+
+  it('validates public asset paths safely', () => {
+    expect(isSafePublicAssetPath('/fixtures/icon.svg')).toBe(true);
+    expect(isSafePublicAssetPath('assets/icon.webp')).toBe(true);
+    expect(isSafePublicAssetPath('https://cdn.example.com/icon.webp')).toBe(true);
+    expect(isSafePublicAssetPath('javascript:alert(1)')).toBe(false);
+    expect(isSafePublicAssetPath('data:text/html,<script>alert(1)</script>')).toBe(false);
+    expect(isSafePublicAssetPath('/Users/admin/icon.png')).toBe(false);
   });
 });

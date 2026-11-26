@@ -59,6 +59,17 @@ function matchesAllowedOrigin(parsed: URL, pattern: string): boolean {
   return regex.test(parsed.hostname);
 }
 
+/** Validate a public asset path or URL (allows relative paths and safe HTTPS/localhost URLs). */
+export function isSafePublicAssetPath(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  if (LOCAL_ABSOLUTE_PATH_PATTERN.test(trimmed)) return false;
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+    return isSafeHttpUrl(trimmed);
+  }
+  return true;
+}
+
 export function isSafeHttpUrl(url: string, allowedOrigins?: string[]): boolean {
   try {
     const parsed = new URL(url);
