@@ -104,7 +104,31 @@ If `hasWebDir` is `false`, run inside `<repo-path>`:
    - `schemaVersion`: `"2.0.0"`
    - `id` and `slug`: lowercase kebab-case identifier
    - `metadata`: accurate `title`, `shortDescription`, `description`,
-     `howToPlay`, `categories`, `tags`, `developer`, `supportedLocales`
+     `howToPlay`, `categories`, `tags`, `developer`, `defaultLocale: "en"`,
+     `supportedLocales: ["en", "vi", "ja"]`, and `translations` containing
+     natural, accurate localized copy for all 3 languages (`en`, `vi`, `ja`)
+     with `shortDescription`, `description`, and `howToPlay` in each locale so
+     Game Hub can import and display the game in English, Vietnamese, and
+     Japanese:
+     ```json
+     "translations": {
+       "en": {
+         "shortDescription": "...",
+         "description": "...",
+         "howToPlay": "..."
+       },
+       "vi": {
+         "shortDescription": "...",
+         "description": "...",
+         "howToPlay": "..."
+       },
+       "ja": {
+         "shortDescription": "...",
+         "description": "...",
+         "howToPlay": "..."
+       }
+     }
+     ```
    - `assets`: valid relative or public URL paths for `icon`, `thumbnail`,
      `screenshots`
    - `web`: `enabled: true`, `buildVersion`, `entrypoint: "index.html"`,
