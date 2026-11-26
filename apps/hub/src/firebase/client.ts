@@ -1,5 +1,6 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import {
+  CustomProvider,
   ReCaptchaEnterpriseProvider,
   ReCaptchaV3Provider,
   initializeAppCheck,
@@ -56,28 +57,89 @@ export function getAllowedGameOrigins(): string[] {
   return list;
 }
 
+const LOCAL_DEV_HOSTNAMES = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+
+export type AppCheckInitPlan =
+  | { mode: 'skip' }
+  | { mode: 'debug'; debugToken: string | boolean }
+  | { mode: 'recaptcha'; provider: 'enterprise' | 'v3'; siteKey: string };
+
+/** Returns true when running on a local loopback hostname. */
+export function isLocalDevHostname(hostname: string): boolean {
+  return LOCAL_DEV_HOSTNAMES.has(hostname.toLowerCase());
+}
+
+/**
+ * Resolves how App Check should be initialized for the current runtime.
+ * Never activates debug tokens outside local dev mode, and skips reCAPTCHA on
+ * localhost dev unless a debug token is configured so invalid dummy App Check
+ * headers are not attached to Auth/Firestore requests.
+ */
+export function resolveAppCheckInitPlan(params: {
+  isBrowser: boolean;
+  usingEmulators: boolean;
+  mode: string;
+  isDev: boolean;
+  hostname: string;
+  siteKey?: string;
+  providerMode?: string;
+  debugToken?: string;
+}): AppCheckInitPlan {
+  if (!params.isBrowser || params.usingEmulators || params.mode === 'test') {
+    return { mode: 'skip' };
+  }
+
+  if (params.isDev && isLocalDevHostname(params.hostname)) {
+    const rawDebug = params.debugToken?.trim();
+    if (!rawDebug || rawDebug.toLowerCase() === 'false') {
+      return { mode: 'skip' };
+    }
+    return {
+      mode: 'debug',
+      debugToken: rawDebug.toLowerCase() === 'true' ? true : rawDebug,
+    };
+  }
+
+  const siteKey = params.siteKey?.trim();
+  if (!siteKey) {
+    return { mode: 'skip' };
+  }
+  const provider = params.providerMode?.trim().toLowerCase() === 'v3' ? 'v3' : 'enterprise';
+  return { mode: 'recaptcha', provider, siteKey };
+}
+
 export function getFirebaseApp(): FirebaseApp {
   if (!appInstance) {
     const existing = getApps();
     appInstance = existing.length > 0 ? existing[0] : initializeApp(getFirebaseConfig());
   }
-  if (
-    !appCheckInitialized &&
-    typeof window !== 'undefined' &&
-    !isUsingEmulators() &&
-    import.meta.env.MODE !== 'test'
-  ) {
-    const siteKey = (import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY as string | undefined)?.trim();
-    if (siteKey) {
-      const providerMode = (
-        (import.meta.env.VITE_FIREBASE_APP_CHECK_PROVIDER as string | undefined) ?? 'enterprise'
-      )
-        .trim()
-        .toLowerCase();
+  if (!appCheckInitialized) {
+    const plan = resolveAppCheckInitPlan({
+      isBrowser: typeof window !== 'undefined',
+      usingEmulators: isUsingEmulators(),
+      mode: import.meta.env.MODE,
+      isDev: import.meta.env.DEV,
+      hostname: typeof window !== 'undefined' ? window.location.hostname : '',
+      siteKey: import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY as string | undefined,
+      providerMode: import.meta.env.VITE_FIREBASE_APP_CHECK_PROVIDER as string | undefined,
+      debugToken: import.meta.env.VITE_FIREBASE_APP_CHECK_DEBUG_TOKEN as string | undefined,
+    });
+    if (plan.mode === 'debug') {
+      (
+        globalThis as typeof globalThis & { FIREBASE_APPCHECK_DEBUG_TOKEN?: string | boolean }
+      ).FIREBASE_APPCHECK_DEBUG_TOKEN = plan.debugToken;
+      initializeAppCheck(appInstance, {
+        provider: new CustomProvider({
+          getToken: async () => ({ token: '', expireTimeMillis: Date.now() }),
+        }),
+        isTokenAutoRefreshEnabled: true,
+      });
+      appCheckInitialized = true;
+    } else if (plan.mode === 'recaptcha') {
       const provider =
-        providerMode === 'v3'
-          ? new ReCaptchaV3Provider(siteKey)
-          : new ReCaptchaEnterpriseProvider(siteKey);
+        plan.provider === 'v3'
+          ? new ReCaptchaV3Provider(plan.siteKey)
+          : new ReCaptchaEnterpriseProvider(plan.siteKey);
       initializeAppCheck(appInstance, {
         provider,
         isTokenAutoRefreshEnabled: true,

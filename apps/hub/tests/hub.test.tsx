@@ -11,6 +11,7 @@ import {
   getConfiguredStoreUrls,
   shouldShowInstallPrompt,
 } from '../src/services/installPromptPolicy';
+import { isLocalDevHostname, resolveAppCheckInitPlan } from '../src/firebase/client';
 
 function makeFixtureGame(overrides: Partial<GameRecord> = {}): GameRecord {
   const now = '2026-01-01T00:00:00.000Z';
@@ -449,5 +450,46 @@ describe('Game Hub Public & Admin Flows', () => {
     fireEvent.click(screen.getByRole('button', { name: /chọn ngôn ngữ/i }));
     fireEvent.click(screen.getByRole('option', { name: /日本語/i }));
     expect(await screen.findByRole('heading', { name: '利用規約' })).toBeInTheDocument();
+  });
+
+  it('skips reCAPTCHA App Check on localhost dev unless a debug token is provided, and enforces reCAPTCHA in production', () => {
+    expect(isLocalDevHostname('localhost')).toBe(true);
+    expect(isLocalDevHostname('127.0.0.1')).toBe(true);
+    expect(isLocalDevHostname('hieutien.life')).toBe(false);
+
+    expect(
+      resolveAppCheckInitPlan({
+        isBrowser: true,
+        usingEmulators: false,
+        mode: 'development',
+        isDev: true,
+        hostname: 'localhost',
+        siteKey: 'site-key-123',
+      })
+    ).toEqual({ mode: 'skip' });
+
+    expect(
+      resolveAppCheckInitPlan({
+        isBrowser: true,
+        usingEmulators: false,
+        mode: 'development',
+        isDev: true,
+        hostname: 'localhost',
+        siteKey: 'site-key-123',
+        debugToken: 'true',
+      })
+    ).toEqual({ mode: 'debug', debugToken: true });
+
+    expect(
+      resolveAppCheckInitPlan({
+        isBrowser: true,
+        usingEmulators: false,
+        mode: 'production',
+        isDev: false,
+        hostname: 'hieutien.life',
+        siteKey: 'site-key-123',
+        debugToken: 'true',
+      })
+    ).toEqual({ mode: 'recaptcha', provider: 'enterprise', siteKey: 'site-key-123' });
   });
 });
