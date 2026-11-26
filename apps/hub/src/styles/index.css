@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Y2K Orbit VN";
+  src: url("/fonts/y2k-orbit-vn-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Y2K Orbit VN";
+  src: url("/fonts/y2k-orbit-vn-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Y2K Orbit VN";
+  src: url("/fonts/y2k-orbit-vn-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Y2K Orbit VN";
+  src: url("/fonts/y2k-orbit-vn-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Y2K Orbit VN";
+  src: url("/fonts/y2k-orbit-vn-800.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ==========================================================================
    THEME 1 (DEFAULT): NEO-BRUTALIST RETRO ARCADE
    ========================================================================== */
@@ -94,9 +130,9 @@
    THEME 2: Y2K RETRO FUTURISTIC (docs/design-system/y2k_retro.md)
    ========================================================================== */
 [data-theme="y2k-retro"] {
-  --font-display: "Orbitron", "Space Grotesk", ui-sans-serif, sans-serif;
+  --font-display: "Y2K Orbit VN", "Space Grotesk", ui-sans-serif, sans-serif;
   --font-body: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-numeric: "Orbitron", "Space Mono", ui-monospace, monospace;
+  --font-numeric: "Y2K Orbit VN", "Space Mono", ui-monospace, monospace;
 
   --bg-canvas: #0d1538;
   --bg-canvas-pattern:
