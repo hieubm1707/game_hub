@@ -5,6 +5,7 @@ import {
   type GameRecord,
   type SupportedLocale,
 } from '@game-hub/contract';
+import { LEGAL_MESSAGES } from './legalMessages';
 
 export type { SupportedLocale };
 
@@ -134,6 +135,7 @@ const MESSAGES = {
     'legal.notFoundTitle': 'Page Not Found',
     'legal.notFoundDesc':
       'The page or game you are looking for may have been moved, renamed, or is no longer available.',
+    ...LEGAL_MESSAGES.en,
   },
   vi: {
     // Topbar & Header & Footer
@@ -246,6 +248,7 @@ const MESSAGES = {
     'legal.notFoundTitle': 'Không tìm thấy trang',
     'legal.notFoundDesc':
       'Trang hoặc trò chơi bạn đang tìm có thể đã được di chuyển, đổi tên hoặc không còn tồn tại.',
+    ...LEGAL_MESSAGES.vi,
   },
   ja: {
     // Topbar & Header & Footer
@@ -358,6 +361,7 @@ const MESSAGES = {
     'legal.notFoundTitle': 'ページが見つかりません',
     'legal.notFoundDesc':
       'お探しのページまたはゲームは移動・名称変更されたか、現在利用できません。',
+    ...LEGAL_MESSAGES.ja,
   },
 } as const;
 

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Gamepad2, Globe, Search, Sparkles } from 'lucide-react';
-import { SUPPORTED_LOCALES, useI18n, type SupportedLocale } from '../app/I18nContext';
+import { Gamepad2, Search, Sparkles } from 'lucide-react';
+import { useI18n } from '../app/I18nContext';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function PublicLayout() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const { locale, setLocale, t } = useI18n();
+  const { t } = useI18n();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,21 +71,7 @@ export function PublicLayout() {
             >
               {t('nav.games')}
             </Link>
-            <div className="relative inline-flex items-center">
-              <Globe className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 stroke-[2.5] opacity-80" />
-              <select
-                value={locale}
-                onChange={(e) => setLocale(e.target.value as SupportedLocale)}
-                aria-label={t('nav.languageAria')}
-                className="arcade-btn arcade-btn-sm arcade-btn-white cursor-pointer appearance-none pl-7 pr-3 py-2 text-xs font-bold uppercase"
-              >
-                {SUPPORTED_LOCALES.map((item) => (
-                  <option key={item.code} value={item.code}>
-                    {item.shortLabel}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <LanguageSwitcher />
           </nav>
         </div>
       </header>

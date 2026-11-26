@@ -139,13 +139,19 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(await screen.findByText('Play Now')).toBeInTheDocument();
     expect(screen.getByText('Tap tiles to solve the logic puzzle.')).toBeInTheDocument();
 
-    const langSelect = screen.getByRole('combobox', { name: /select language/i });
-    fireEvent.change(langSelect, { target: { value: 'vi' } });
+    const langTrigger = screen.getByRole('button', { name: /select language/i });
+    expect(langTrigger.querySelector('[data-flag="en"]')).not.toBeNull();
+    fireEvent.click(langTrigger);
+    const viOption = screen.getByRole('option', { name: /tiếng việt/i });
+    expect(viOption.querySelector('[data-flag="vi"]')).not.toBeNull();
+    expect(screen.getByRole('option', { name: /日本語/i }).querySelector('[data-flag="ja"]')).not.toBeNull();
+    fireEvent.click(viOption);
     expect(screen.getByText('Chơi ngay')).toBeInTheDocument();
     expect(screen.getByText('Mô tả chi tiết trò chơi giải đố logic offline.')).toBeInTheDocument();
     expect(screen.getByText('Chạm vào các ô để giải câu đố logic.')).toBeInTheDocument();
 
-    fireEvent.change(langSelect, { target: { value: 'ja' } });
+    fireEvent.click(screen.getByRole('button', { name: /chọn ngôn ngữ/i }));
+    fireEvent.click(screen.getByRole('option', { name: /日本語/i }));
     expect(screen.getByText('今すぐプレイ')).toBeInTheDocument();
     expect(screen.getByText('オフライン対応ロジックパズルの詳細説明。')).toBeInTheDocument();
     expect(screen.getByText('タイルをタップしてパズルを解きます。')).toBeInTheDocument();
@@ -359,8 +365,9 @@ describe('Game Hub Public & Admin Flows', () => {
     renderApp(['/play/iq-puzzle-fixture'], [evilGame], null);
     expect(await screen.findByText(/missing or not from a trusted origin/i)).toBeInTheDocument();
 
-    const langSelects = screen.getAllByRole('combobox', { name: /select language/i });
-    fireEvent.change(langSelects[langSelects.length - 1]!, { target: { value: 'vi' } });
+    const langTriggers = screen.getAllByRole('button', { name: /select language/i });
+    fireEvent.click(langTriggers[langTriggers.length - 1]!);
+    fireEvent.click(screen.getByRole('option', { name: /tiếng việt/i }));
     expect(
       await screen.findByText('Đường dẫn game bị thiếu hoặc không thuộc nguồn đáng tin cậy.')
     ).toBeInTheDocument();
@@ -417,5 +424,30 @@ describe('Game Hub Public & Admin Flows', () => {
     ).toBeInTheDocument();
     const unchanged = await repos.adminGames.getGameById('iq-puzzle-fixture');
     expect(unchanged?.revision).toBe(1);
+  });
+
+  it('localizes about, contact, privacy, and terms pages and uses tigerstudio2523@gmail.com', async () => {
+    renderApp(['/contact'], [], null);
+    expect(await screen.findByRole('heading', { name: 'Contact Us' })).toBeInTheDocument();
+    const emailLink = screen.getByRole('link', { name: 'tigerstudio2523@gmail.com' });
+    expect(emailLink).toHaveAttribute('href', 'mailto:tigerstudio2523@gmail.com');
+    expect(screen.queryByText('contact@hieutien.life')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /select language/i }));
+    fireEvent.click(screen.getByRole('option', { name: /tiếng việt/i }));
+    expect(await screen.findByRole('heading', { name: 'Liên hệ với chúng tôi' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('link', { name: 'Giới thiệu Game Hub' }));
+    expect(await screen.findByRole('heading', { name: 'Giới thiệu về Game Hub' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('link', { name: 'Quyền riêng tư' }));
+    expect(await screen.findByRole('heading', { name: 'Chính sách quyền riêng tư' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('link', { name: 'Điều khoản sử dụng' }));
+    expect(await screen.findByRole('heading', { name: 'Điều khoản sử dụng' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /chọn ngôn ngữ/i }));
+    fireEvent.click(screen.getByRole('option', { name: /日本語/i }));
+    expect(await screen.findByRole('heading', { name: '利用規約' })).toBeInTheDocument();
   });
 });
