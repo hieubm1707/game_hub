@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Play, Star } from 'lucide-react';
 import type { CompactCatalogGame } from '@game-hub/contract';
+import { getLocalizedGameText, useI18n } from '../app/I18nContext';
 
 export function GameCategoryBadge({ category }: { category: string }) {
   return (
@@ -27,14 +28,17 @@ export function GameThumbnail({ src, alt }: { src: string; alt: string }) {
 }
 
 export function GameCard({ game }: { game: CompactCatalogGame }) {
+  const { locale, t } = useI18n();
+  const localized = getLocalizedGameText(game, locale);
+
   return (
     <article className="hub-card group flex flex-col">
       <Link to={`/games/${game.slug}`} className="relative block">
-        <GameThumbnail src={game.thumbnail} alt={game.title} />
+        <GameThumbnail src={game.thumbnail} alt={localized.title} />
         {game.featured && (
           <span className="hub-badge-featured absolute left-2.5 top-2.5 inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
             <Star className="h-3 w-3 fill-current" />
-            Featured
+            {t('common.featured')}
           </span>
         )}
       </Link>
@@ -45,12 +49,12 @@ export function GameCard({ game }: { game: CompactCatalogGame }) {
             to={`/games/${game.slug}`}
             className="text-lg font-bold leading-tight hover:underline"
           >
-            {game.title}
+            {localized.title}
           </Link>
         </div>
 
         <p className="mt-1.5 line-clamp-2 text-sm font-medium hub-text-muted">
-          {game.shortDescription}
+          {localized.shortDescription}
         </p>
 
         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -65,13 +69,13 @@ export function GameCard({ game }: { game: CompactCatalogGame }) {
             className="arcade-btn arcade-btn-sm arcade-btn-pink flex-1 px-3 py-2 text-xs"
           >
             <Play className="h-3.5 w-3.5 fill-current" />
-            Play Now
+            {t('common.playNow')}
           </Link>
           <Link
             to={`/games/${game.slug}`}
             className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-2 text-xs"
           >
-            Details
+            {t('common.details')}
             <ArrowUpRight className="h-3.5 w-3.5 stroke-[2.5]" />
           </Link>
         </div>
@@ -82,15 +86,16 @@ export function GameCard({ game }: { game: CompactCatalogGame }) {
 
 export function GameGrid({
   games,
-  emptyText = 'No games found.',
+  emptyText,
 }: {
   games: CompactCatalogGame[];
   emptyText?: string;
 }) {
+  const { t } = useI18n();
   if (games.length === 0) {
     return (
       <div className="brutal-panel p-10 text-center font-numeric text-sm font-bold">
-        {emptyText}
+        {emptyText ?? t('common.noGamesFound')}
       </div>
     );
   }

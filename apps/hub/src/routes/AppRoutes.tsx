@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import { I18nProvider } from '../app/I18nContext';
 import { ThemeProvider } from '../app/ThemeContext';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { PublicLayout } from '../components/PublicLayout';
@@ -27,8 +28,9 @@ import {
 
 export function AppRoutes() {
   return (
-    <ThemeProvider>
-      <Routes>
+    <I18nProvider>
+      <ThemeProvider>
+        <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/games" element={<GamesListPage />} />
@@ -54,8 +56,9 @@ export function AppRoutes() {
           <Route path="content" element={<AdminContentPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
-      </Routes>
-      <ThemeSwitcher />
-    </ThemeProvider>
+        </Routes>
+        <ThemeSwitcher />
+      </ThemeProvider>
+    </I18nProvider>
   );
 }

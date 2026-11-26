@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  SUPPORTED_LOCALE_CODES,
   manifestToGameRecordDraft,
+  sanitizeTranslations,
   validateManifest,
   type GameOrientation,
   type GameRecord,
   type GameStatus,
+  type LocalizedGameText,
+  type SupportedLocale,
 } from '@game-hub/contract';
 import { useRepositories } from '../../app/RepositoryContext';
 import { useAuth } from '../authentication/AuthContext';
@@ -85,7 +89,15 @@ export function AdminGameFormPage() {
     adminGames.getGameById(id).then((existing) => {
       if (existing) {
         const { revision: rev, createdAt: _c, updatedAt: _u, ...rest } = existing;
-        setForm(rest);
+        const normalizedTranslations = sanitizeTranslations(rest.translations, {
+          excludeLocales: ['en'],
+        });
+        const { translations: _t, ...withoutTranslations } = rest;
+        setForm({
+          ...withoutTranslations,
+          howToPlay: rest.howToPlay || rest.translations?.en?.howToPlay || '',
+          ...(normalizedTranslations ? { translations: normalizedTranslations } : {}),
+        });
         setRevision(rev);
       }
     });
@@ -122,9 +134,14 @@ export function AdminGameFormPage() {
         }));
         setImportSuccess('Imported build metadata only (admin-edited copy preserved).');
       } else {
-        const { revision: _r, createdAt: _c, updatedAt: _u, ...rest } = draft;
+        const { revision: _r, createdAt: _c, updatedAt: _u, translations, ...rest } = draft;
+        const normalizedTranslations = sanitizeTranslations(translations, {
+          excludeLocales: ['en'],
+        });
         setForm((prev) => ({
           ...rest,
+          howToPlay: rest.howToPlay || translations?.en?.howToPlay || '',
+          ...(normalizedTranslations ? { translations: normalizedTranslations } : {}),
           id: isEdit ? prev.id : rest.id,
           status: isEdit ? prev.status : 'draft',
         }));
@@ -141,10 +158,25 @@ export function AdminGameFormPage() {
     setSaving(true);
     setError(null);
     try {
+      const cleanedTranslations = sanitizeTranslations(form.translations, {
+        excludeLocales: ['en'],
+      });
+      const { translations: _ignored, ...formWithoutTranslations } = form;
       if (isEdit && id) {
-        await adminGames.updateGame(id, form, revision, admin.uid);
+        await adminGames.updateGame(
+          id,
+          { ...formWithoutTranslations, translations: cleanedTranslations },
+          revision,
+          admin.uid
+        );
       } else {
-        await adminGames.createGame(form, admin.uid);
+        await adminGames.createGame(
+          {
+            ...formWithoutTranslations,
+            ...(cleanedTranslations ? { translations: cleanedTranslations } : {}),
+          },
+          admin.uid
+        );
       }
       navigate('/admin/games');
     } catch (err) {
@@ -278,6 +310,75 @@ export function AdminGameFormPage() {
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             className="arcade-input mt-1"
           />
+        </div>
+
+        <div>
+          <label className="block font-numeric text-xs font-bold uppercase">
+            How to Play (Default / EN)
+          </label>
+          <textarea
+            rows={2}
+            value={form.howToPlay ?? ''}
+            onChange={(e) => setForm({ ...form, howToPlay: e.target.value })}
+            className="arcade-input mt-1"
+          />
+        </div>
+
+        {/* Localized Translations (VI & JA) */}
+        <div className="border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] p-4 space-y-4">
+          <p className="font-numeric text-xs font-bold uppercase hub-text-highlight">
+            // Localized Copy (VI / JA — auto-filled on manifest import)
+          </p>
+          {SUPPORTED_LOCALE_CODES.filter((loc): loc is Exclude<SupportedLocale, 'en'> => loc !== 'en').map((loc) => {
+            const label = loc === 'vi' ? 'Tiếng Việt (VI)' : '日本語 (JA)';
+            const current = form.translations?.[loc] ?? {};
+            const updateLocaleField = (
+              field: keyof LocalizedGameText,
+              value: string
+            ) => {
+              setForm((prev) => {
+                const prevLocale = prev.translations?.[loc] ?? {};
+                return {
+                  ...prev,
+                  translations: {
+                    ...prev.translations,
+                    [loc]: { ...prevLocale, [field]: value },
+                  },
+                };
+              });
+            };
+            return (
+              <div key={loc} className="space-y-2.5 border-t-[length:var(--border-w)] hub-divider pt-3">
+                <p className="font-numeric text-[11px] font-bold uppercase">{label}</p>
+                <input
+                  value={current.title ?? ''}
+                  onChange={(e) => updateLocaleField('title', e.target.value)}
+                  placeholder={`Title (${loc.toUpperCase()} — optional)`}
+                  className="arcade-input"
+                />
+                <input
+                  value={current.shortDescription ?? ''}
+                  onChange={(e) => updateLocaleField('shortDescription', e.target.value)}
+                  placeholder={`Short description (${loc.toUpperCase()})`}
+                  className="arcade-input"
+                />
+                <textarea
+                  rows={2}
+                  value={current.description ?? ''}
+                  onChange={(e) => updateLocaleField('description', e.target.value)}
+                  placeholder={`Full description (${loc.toUpperCase()})`}
+                  className="arcade-input"
+                />
+                <textarea
+                  rows={2}
+                  value={current.howToPlay ?? ''}
+                  onChange={(e) => updateLocaleField('howToPlay', e.target.value)}
+                  placeholder={`How to play (${loc.toUpperCase()})`}
+                  className="arcade-input"
+                />
+              </div>
+            );
+          })}
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

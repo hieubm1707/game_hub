@@ -1496,16 +1496,24 @@
   }
 }
 
-[data-theme="y2k-retro"] main > div > section > div > h2,
-[data-theme="y2k-retro"] main > div > section > h2 {
+[data-theme="y2k-retro"] main > div > section:not(.brutal-panel):not(.brutal-panel-lg) > div > h2,
+[data-theme="y2k-retro"] main > div > section:not(.brutal-panel):not(.brutal-panel-lg) > h2 {
   color: #f0f7ff;
   text-shadow: 0 2px 12px rgba(0, 229, 255, 0.35);
 }
 
-[data-theme="cartoon-rpg"] main > div > section > div > h2,
-[data-theme="cartoon-rpg"] main > div > section > h2 {
+[data-theme="cartoon-rpg"] main > div > section:not(.brutal-panel):not(.brutal-panel-lg) > div > h2,
+[data-theme="cartoon-rpg"] main > div > section:not(.brutal-panel):not(.brutal-panel-lg) > h2 {
   color: #fff3d6;
   text-shadow: 0 2px 0 #3b1f0b;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .font-numeric {

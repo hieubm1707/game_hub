@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Compass, FileText, Gamepad2, Info, Mail, ShieldCheck } from 'lucide-react';
+import { useI18n } from '../../app/I18nContext';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 const SITE_DOMAIN = 'hieutien.life';
@@ -476,25 +477,25 @@ export function ContactPage() {
 }
 
 export function NotFoundPage() {
-  useDocumentTitle('Page Not Found');
+  const { t } = useI18n();
+  useDocumentTitle(t('legal.notFoundTitle'));
   return (
     <div className="mx-auto max-w-2xl">
       <div className="brutal-panel-lg p-8 sm:p-12 text-center space-y-5">
         <span className="hub-badge inline-flex items-center gap-1.5 px-3 py-1 font-numeric text-xs font-bold uppercase">
           <Compass className="h-3.5 w-3.5" />
-          404 • Not Found
+          {t('legal.notFoundBadge')}
         </span>
-        <h1 className="text-3xl font-bold tracking-tight">Page Not Found</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('legal.notFoundTitle')}</h1>
         <p className="text-sm leading-relaxed hub-text-muted">
-          The page or game you are looking for may have been moved, renamed, or is no longer
-          available.
+          {t('legal.notFoundDesc')}
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Link to="/" className="arcade-btn arcade-btn-pink px-5 py-2.5 text-xs">
-            Back to Home
+            {t('common.backToHome')}
           </Link>
           <Link to="/games" className="arcade-btn arcade-btn-yellow px-5 py-2.5 text-xs">
-            Browse Games
+            {t('common.browseGames')}
           </Link>
         </div>
       </div>

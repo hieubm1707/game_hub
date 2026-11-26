@@ -1,9 +1,11 @@
-import type {
-  CategoryRecord,
-  GameRecord,
-  GameReleaseRecord,
-  GameStatus,
-  PublicCatalogDocument,
+import {
+  SUPPORTED_LOCALE_CODES,
+  toCompactTranslations,
+  type CategoryRecord,
+  type GameRecord,
+  type GameReleaseRecord,
+  type GameStatus,
+  type PublicCatalogDocument,
 } from '@game-hub/contract';
 import type { HubRepositories, HubSettings } from './interfaces';
 
@@ -32,7 +34,7 @@ export function createInMemoryRepositories(initial?: {
     hubName: 'Game Hub',
     tagline: 'Free, offline-first Flutter games',
     defaultLocale: 'en',
-    supportedLocales: ['en', 'vi'],
+    supportedLocales: [...SUPPORTED_LOCALE_CODES],
     catalogCacheTtlMinutes: 60,
     updatedAt: new Date().toISOString(),
   };
@@ -43,19 +45,23 @@ export function createInMemoryRepositories(initial?: {
     updatedAt: new Date().toISOString(),
     games: [...gamesMap.values()]
       .filter((g) => g.status === 'published')
-      .map((g) => ({
-        id: g.id,
-        slug: g.slug,
-        title: g.title,
-        shortDescription: g.shortDescription,
-        thumbnail: g.thumbnail,
-        icon: g.icon,
-        categories: g.categories,
-        tags: g.tags,
-        featured: g.featured,
-        revision: g.revision,
-        updatedAt: g.updatedAt,
-      })),
+      .map((g) => {
+        const compactTranslations = toCompactTranslations(g.translations);
+        return {
+          id: g.id,
+          slug: g.slug,
+          title: g.title,
+          shortDescription: g.shortDescription,
+          ...(compactTranslations ? { translations: compactTranslations } : {}),
+          thumbnail: g.thumbnail,
+          icon: g.icon,
+          categories: g.categories,
+          tags: g.tags,
+          featured: g.featured,
+          revision: g.revision,
+          updatedAt: g.updatedAt,
+        };
+      }),
   });
 
   const adminGames: HubRepositories['adminGames'] = {
@@ -79,6 +85,9 @@ export function createInMemoryRepositories(initial?: {
         createdAt: now,
         updatedAt: now,
       };
+      if (!created.translations) {
+        delete created.translations;
+      }
       gamesMap.set(created.id, created);
       catalogVersion += 1;
       return created;
@@ -96,6 +105,9 @@ export function createInMemoryRepositories(initial?: {
         revision: existing.revision + 1,
         updatedAt: new Date().toISOString(),
       };
+      if ('translations' in patch && !patch.translations) {
+        delete updated.translations;
+      }
       gamesMap.set(id, updated);
       catalogVersion += 1;
       return updated;

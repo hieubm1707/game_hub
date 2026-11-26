@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
+import { matchesGameQuery, useI18n } from '../../app/I18nContext';
 import { GameGrid } from '../../components/GameCard';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -11,23 +12,21 @@ export function GamesListPage() {
   const initialQ = searchParams.get('q') ?? '';
   const [query, setQuery] = useState(initialQ);
   const { games, categories, loading, error } = useCatalog();
+  const { locale, t } = useI18n();
 
-  const heading = category ? `Category: ${category}` : initialQ ? `Search: "${initialQ}"` : 'All Games';
+  const heading = category
+    ? t('catalog.categoryHeading', { category })
+    : initialQ
+      ? t('catalog.searchHeading', { query: initialQ })
+      : t('common.allGames');
   useDocumentTitle(heading);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
     return games.filter((g) => {
       if (category && !g.categories.includes(category)) return false;
-      if (!q) return true;
-      return (
-        g.title.toLowerCase().includes(q) ||
-        g.shortDescription.toLowerCase().includes(q) ||
-        g.categories.some((c) => c.toLowerCase().includes(q)) ||
-        (g.tags ?? []).some((t) => t.toLowerCase().includes(q))
-      );
+      return matchesGameQuery(g, query, locale);
     });
-  }, [games, category, query]);
+  }, [games, category, query, locale]);
 
   return (
     <div className="space-y-6">
@@ -35,7 +34,7 @@ export function GamesListPage() {
       <div className="brutal-panel p-5 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
-            // GAME CATALOG
+            {t('catalog.eyebrow')}
           </p>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{heading}</h1>
         </div>
@@ -50,8 +49,8 @@ export function GamesListPage() {
               if (e.target.value) setSearchParams({ q: e.target.value });
               else setSearchParams({});
             }}
-            placeholder="Filter games locally..."
-            aria-label="Filter games locally"
+            placeholder={t('catalog.filterLocalPlaceholder')}
+            aria-label={t('catalog.filterLocalAria')}
             className="arcade-input pl-9"
           />
         </div>
@@ -66,7 +65,7 @@ export function GamesListPage() {
               !category ? 'arcade-btn-pink' : 'arcade-btn-white'
             }`}
           >
-            All ({games.length})
+            {t('common.all')} ({games.length})
           </Link>
           {categories.map((c) => (
             <Link
@@ -86,13 +85,13 @@ export function GamesListPage() {
 
       {loading ? (
         <div className="brutal-panel p-10 text-center space-y-4">
-          <p className="font-numeric text-sm font-bold uppercase">Loading games...</p>
+          <p className="font-numeric text-sm font-bold uppercase">{t('common.loadingGames')}</p>
           <div className="arcade-progress-track mx-auto max-w-md">
             <div className="arcade-loading-bar h-full w-full" />
           </div>
         </div>
       ) : (
-        <GameGrid games={filtered} emptyText="No matching games found in cached catalog." />
+        <GameGrid games={filtered} emptyText={t('catalog.emptyCached')} />
       )}
     </div>
   );

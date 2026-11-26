@@ -10,13 +10,15 @@ import {
   where,
   type Firestore,
 } from 'firebase/firestore';
-import type {
-  CategoryRecord,
-  CompactCatalogGame,
-  GameRecord,
-  GameReleaseRecord,
-  GameStatus,
-  PublicCatalogDocument,
+import {
+  SUPPORTED_LOCALE_CODES,
+  toCompactTranslations,
+  type CategoryRecord,
+  type CompactCatalogGame,
+  type GameRecord,
+  type GameReleaseRecord,
+  type GameStatus,
+  type PublicCatalogDocument,
 } from '@game-hub/contract';
 import { CatalogCacheService } from '../services/catalogCache';
 import type {
@@ -31,11 +33,13 @@ import type {
 } from './interfaces';
 
 function toCompactGame(game: GameRecord): CompactCatalogGame {
+  const compactTranslations = toCompactTranslations(game.translations);
   return {
     id: game.id,
     slug: game.slug,
     title: game.title,
     shortDescription: game.shortDescription,
+    ...(compactTranslations ? { translations: compactTranslations } : {}),
     thumbnail: game.thumbnail,
     icon: game.icon,
     categories: game.categories,
@@ -105,7 +109,7 @@ export function createFirestoreRepositories(
           hubName: 'Game Hub',
           tagline: 'Free, offline-first Flutter games',
           defaultLocale: 'en',
-          supportedLocales: ['en', 'vi'],
+          supportedLocales: [...SUPPORTED_LOCALE_CODES],
           catalogCacheTtlMinutes: 60,
           updatedAt: new Date().toISOString(),
         };
@@ -143,6 +147,9 @@ export function createFirestoreRepositories(
         createdAt: now,
         updatedAt: now,
       };
+      if (!record.translations) {
+        delete record.translations;
+      }
 
       await runTransaction(db, async (tx) => {
         const gameRef = doc(db, 'games', record.id);
@@ -232,6 +239,9 @@ export function createFirestoreRepositories(
           revision: existing.revision + 1,
           updatedAt: now,
         };
+        if ('translations' in patch && !patch.translations) {
+          delete updatedRecord.translations;
+        }
 
         tx.set(gameRef, updatedRecord);
 

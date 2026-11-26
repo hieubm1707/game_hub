@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Gamepad2, Search, Sparkles } from 'lucide-react';
+import { Gamepad2, Globe, Search, Sparkles } from 'lucide-react';
+import { SUPPORTED_LOCALES, useI18n, type SupportedLocale } from '../app/I18nContext';
 
 export function PublicLayout() {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const { locale, setLocale, t } = useI18n();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,9 +22,9 @@ export function PublicLayout() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider">
           <span className="inline-flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5 hub-topbar-accent" />
-            FREE TO PLAY • OFFLINE-FIRST
+            {t('topbar.tagline')}
           </span>
-          <span className="hidden sm:inline hub-topbar-accent">LOCAL SAVE ONLY // NO LOGIN</span>
+          <span className="hidden sm:inline hub-topbar-accent">{t('topbar.localSave')}</span>
         </div>
       </div>
 
@@ -44,8 +46,8 @@ export function PublicLayout() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search offline-first games..."
-                aria-label="Search games"
+                placeholder={t('header.searchPlaceholder')}
+                aria-label={t('header.searchAria')}
                 className="arcade-input pl-9 py-1.5"
               />
             </div>
@@ -53,7 +55,7 @@ export function PublicLayout() {
               type="submit"
               className="arcade-btn arcade-btn-sm arcade-btn-black px-3.5 py-2 text-xs"
             >
-              GO
+              {t('header.go')}
             </button>
           </form>
 
@@ -66,8 +68,23 @@ export function PublicLayout() {
                   : 'arcade-btn-yellow'
               }`}
             >
-              Games
+              {t('nav.games')}
             </Link>
+            <div className="relative inline-flex items-center">
+              <Globe className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 stroke-[2.5] opacity-80" />
+              <select
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as SupportedLocale)}
+                aria-label={t('nav.languageAria')}
+                className="arcade-btn arcade-btn-sm arcade-btn-white cursor-pointer appearance-none pl-7 pr-3 py-2 text-xs font-bold uppercase"
+              >
+                {SUPPORTED_LOCALES.map((item) => (
+                  <option key={item.code} value={item.code}>
+                    {item.shortLabel}
+                  </option>
+                ))}
+              </select>
+            </div>
           </nav>
         </div>
       </header>
@@ -81,21 +98,21 @@ export function PublicLayout() {
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="hub-brand px-2.5 py-0.5 text-xs font-bold">GAME HUB</span>
             <p className="font-numeric text-xs font-bold">
-              © {new Date().getFullYear()} Game Hub. All rights reserved.
+              {t('footer.copyright', { year: new Date().getFullYear() })}
             </p>
           </div>
           <div className="flex flex-wrap gap-2.5 text-xs">
             <Link to="/about" className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-1 text-[11px]">
-              About
+              {t('footer.about')}
             </Link>
             <Link to="/contact" className="arcade-btn arcade-btn-sm arcade-btn-lime px-3 py-1 text-[11px]">
-              Contact
+              {t('footer.contact')}
             </Link>
             <Link to="/privacy" className="arcade-btn arcade-btn-sm arcade-btn-yellow px-3 py-1 text-[11px]">
-              Privacy
+              {t('footer.privacy')}
             </Link>
             <Link to="/terms" className="arcade-btn arcade-btn-sm arcade-btn-cyan px-3 py-1 text-[11px]">
-              Terms
+              {t('footer.terms')}
             </Link>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isSafeHttpUrl, type BridgeMessage, type GameRecord } from '@game-hub/contract';
 import { ArrowLeft, Maximize2, Minimize2, Pause, Play, RefreshCw, SlidersHorizontal, Volume2, VolumeX } from 'lucide-react';
+import { getLocalizedGameText, useI18n } from '../../app/I18nContext';
 import { getAllowedGameOrigins } from '../../firebase/client';
 import { GameHubBridgeClient } from '../../services/bridgeClient';
 
@@ -31,10 +32,13 @@ export function GamePlayer({
   game: GameRecord;
   onExit: () => void;
 }) {
+  const { locale, t } = useI18n();
+  const localizedTitle = getLocalizedGameText(game, locale).title;
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const bridgeRef = useRef<GameHubBridgeClient | null>(null);
   const hideTimerRef = useRef<number | null>(null);
+  const iframeLoadedRef = useRef(false);
 
   const [sessionId] = useState(() => `sess-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -126,10 +130,11 @@ export function GamePlayer({
     return url;
   }, [game.web.artifactUrl, game.web.enabled, allowedOrigins, sessionId]);
 
+  const isInvalidUrl = !validatedUrl;
+
   useEffect(() => {
+    iframeLoadedRef.current = false;
     if (!validatedUrl) {
-      setStatus('error');
-      setErrorMsg('This game artifact URL is missing or not from a trusted origin.');
       return;
     }
 
@@ -165,12 +170,22 @@ export function GamePlayer({
     };
   }, [game.id, sessionId, validatedUrl, onExit, reloadNonce, enterFullscreen]);
 
+  useEffect(() => {
+    if (iframeLoadedRef.current && game.web.hubBridgeEnabled && validatedUrl) {
+      bridgeRef.current?.sendCommand('HUB_INIT', {
+        locale,
+        embedded: true,
+      });
+    }
+  }, [locale, game.web.hubBridgeEnabled, validatedUrl]);
+
   const handleIframeLoad = () => {
     // Support games both with and without bridge integration.
+    iframeLoadedRef.current = true;
     setStatus('ready');
     if (game.web.hubBridgeEnabled) {
       bridgeRef.current?.sendCommand('HUB_INIT', {
-        locale: 'en',
+        locale,
         embedded: true,
       });
     }
@@ -216,8 +231,8 @@ export function GamePlayer({
           type="button"
           data-testid="fullscreen-controls-reveal"
           onClick={scheduleControlsHide}
-          title="Show controls"
-          aria-label="Show controls"
+          title={t('player.showControls')}
+          aria-label={t('player.showControls')}
           className="arcade-btn arcade-btn-sm arcade-btn-black absolute right-3 top-3 z-20 p-2 opacity-80 hover:opacity-100"
         >
           <SlidersHorizontal className="h-4 w-4 stroke-[2.5]" />
@@ -247,13 +262,13 @@ export function GamePlayer({
             className="arcade-btn arcade-btn-sm arcade-btn-yellow px-3 py-1.5 text-xs"
           >
             <ArrowLeft className="h-4 w-4 stroke-[2.5]" />
-            Exit
+            {t('common.exit')}
           </button>
           <div>
-            <h1 className="text-base font-bold leading-tight">{game.title}</h1>
+            <h1 className="text-base font-bold leading-tight">{localizedTitle}</h1>
             <p className="font-numeric text-[11px] font-bold uppercase hub-text-muted">
-              v{game.currentRelease} • Web Player
-              {lastScore !== null ? ` • Score: ${lastScore}` : ''}
+              v{game.currentRelease} • {t('player.webPlayer')}
+              {lastScore !== null ? ` • ${t('player.score')}: ${lastScore}` : ''}
             </p>
           </div>
         </div>
@@ -261,7 +276,7 @@ export function GamePlayer({
         <div className="flex items-center gap-2">
           {lastScore !== null && (
             <div className="hub-topbar px-3 py-1 text-xs font-bold uppercase rounded-[var(--radius-badge)]">
-              SCORE: {lastScore}
+              {t('player.score').toUpperCase()}: {lastScore}
             </div>
           )}
 
@@ -273,7 +288,7 @@ export function GamePlayer({
                 className={`arcade-btn arcade-btn-sm p-2 ${
                   paused ? 'arcade-btn-pink' : 'arcade-btn-white'
                 }`}
-                title={paused ? 'Resume' : 'Pause'}
+                title={paused ? t('player.resume') : t('player.pause')}
               >
                 {paused ? <Play className="h-4 w-4 fill-current" /> : <Pause className="h-4 w-4 stroke-[2.5]" />}
               </button>
@@ -283,7 +298,7 @@ export function GamePlayer({
                 className={`arcade-btn arcade-btn-sm p-2 ${
                   muted ? 'arcade-btn-pink' : 'arcade-btn-white'
                 }`}
-                title={muted ? 'Unmute' : 'Mute'}
+                title={muted ? t('player.unmute') : t('player.mute')}
               >
                 {muted ? <VolumeX className="h-4 w-4 stroke-[2.5]" /> : <Volume2 className="h-4 w-4 stroke-[2.5]" />}
               </button>
@@ -293,7 +308,7 @@ export function GamePlayer({
             type="button"
             onClick={() => setReloadNonce((n) => n + 1)}
             className="arcade-btn arcade-btn-sm arcade-btn-cyan p-2"
-            title="Reload game"
+            title={t('player.reload')}
           >
             <RefreshCw className="h-4 w-4 stroke-[2.5]" />
           </button>
@@ -302,8 +317,8 @@ export function GamePlayer({
               type="button"
               onClick={toggleFullscreen}
               className="arcade-btn arcade-btn-sm arcade-btn-black p-2"
-              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+              title={isFullscreen ? t('player.exitFullscreen') : t('player.fullscreen')}
+              aria-label={isFullscreen ? t('player.exitFullscreen') : t('player.fullscreen')}
             >
               {isFullscreen ? (
                 <Minimize2 className="h-4 w-4 stroke-[2.5]" />
@@ -324,18 +339,20 @@ export function GamePlayer({
             : 'brutal-panel-lg relative mx-auto flex w-full max-w-4xl items-center justify-center p-3'
         }
       >
-        {status === 'error' ? (
+        {isInvalidUrl || status === 'error' ? (
           <div className="brutal-panel flex flex-col items-center justify-center gap-4 p-8 m-4 text-center">
             <span className="hub-alert-error px-2.5 py-0.5 font-numeric text-xs font-bold uppercase">
-              SYSTEM ERROR
+              {t('player.systemError')}
             </span>
-            <p className="font-numeric text-sm font-bold">{errorMsg}</p>
+            <p className="font-numeric text-sm font-bold">
+              {isInvalidUrl ? t('player.untrustedOrigin') : errorMsg}
+            </p>
             <button
               type="button"
               onClick={() => setReloadNonce((n) => n + 1)}
               className="arcade-btn arcade-btn-pink px-5 py-2 text-xs"
             >
-              Retry
+              {t('common.retry')}
             </button>
           </div>
         ) : (
@@ -357,7 +374,7 @@ export function GamePlayer({
                 className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-6 text-center"
               >
                 <p className="font-numeric text-sm font-bold uppercase tracking-wider text-white">
-                  Loading {game.title}...
+                  {t('player.loadingGame', { title: localizedTitle })}
                 </p>
                 <div className="arcade-progress-track w-56">
                   <div className="arcade-loading-bar h-full w-full" />
@@ -369,12 +386,12 @@ export function GamePlayer({
                 key={reloadNonce}
                 ref={iframeRef}
                 src={validatedUrl.toString()}
-                title={game.title}
+                title={localizedTitle}
                 loading="lazy"
                 onLoad={handleIframeLoad}
                 onError={() => {
                   setStatus('error');
-                  setErrorMsg('Failed to load game iframe.');
+                  setErrorMsg(t('player.iframeFailed'));
                 }}
                 sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
                 allow="fullscreen"

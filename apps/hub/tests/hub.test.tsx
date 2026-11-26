@@ -112,6 +112,44 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(screen.queryByText('Get on App Store')).not.toBeInTheDocument();
   });
 
+  it('switches UI and game metadata localization between EN, VI, and JA', async () => {
+    const localizedGame = makeFixtureGame({
+      howToPlay: 'Tap tiles to solve the logic puzzle.',
+      translations: {
+        en: {
+          shortDescription: 'Offline logic puzzle fixture.',
+          description: 'Full offline logic puzzle fixture description.',
+          howToPlay: 'Tap tiles to solve the logic puzzle.',
+        },
+        vi: {
+          shortDescription: 'Trò chơi giải đố logic offline.',
+          description: 'Mô tả chi tiết trò chơi giải đố logic offline.',
+          howToPlay: 'Chạm vào các ô để giải câu đố logic.',
+        },
+        ja: {
+          shortDescription: 'オフライン対応ロジックパズル。',
+          description: 'オフライン対応ロジックパズルの詳細説明。',
+          howToPlay: 'タイルをタップしてパズルを解きます。',
+        },
+      },
+    });
+
+    renderApp(['/games/iq-puzzle-fixture'], [localizedGame], null);
+    expect(await screen.findByText('Play Now')).toBeInTheDocument();
+    expect(screen.getByText('Tap tiles to solve the logic puzzle.')).toBeInTheDocument();
+
+    const langSelect = screen.getByRole('combobox', { name: /select language/i });
+    fireEvent.change(langSelect, { target: { value: 'vi' } });
+    expect(screen.getByText('Chơi ngay')).toBeInTheDocument();
+    expect(screen.getByText('Mô tả chi tiết trò chơi giải đố logic offline.')).toBeInTheDocument();
+    expect(screen.getByText('Chạm vào các ô để giải câu đố logic.')).toBeInTheDocument();
+
+    fireEvent.change(langSelect, { target: { value: 'ja' } });
+    expect(screen.getByText('今すぐプレイ')).toBeInTheDocument();
+    expect(screen.getByText('オフライン対応ロジックパズルの詳細説明。')).toBeInTheDocument();
+    expect(screen.getByText('タイルをタップしてパズルを解きます。')).toBeInTheDocument();
+  });
+
   it('rejects untrusted iframe artifact origins in GamePlayer', async () => {
     const evilGame = makeFixtureGame({
       web: {
@@ -244,5 +282,99 @@ describe('Game Hub Public & Admin Flows', () => {
     await waitFor(() => {
       expect(screen.getByText(/status to draft/i)).toBeInTheDocument();
     });
+  });
+
+  it('prevents stale translations.en from shadowing admin edits and projects compact translations cleanly', async () => {
+    const owner: AdminProfile = {
+      uid: 'owner-1',
+      email: 'admin@gamehub.local',
+      role: 'owner',
+      enabled: true,
+    };
+    const gameWithEnTranslation = makeFixtureGame({
+      translations: {
+        en: {
+          shortDescription: 'Stale EN summary from manifest.',
+          description: 'Stale EN description from manifest.',
+          howToPlay: 'Stale EN how to play.',
+        },
+        vi: {
+          shortDescription: 'Mô tả VI',
+          description: 'Chi tiết VI',
+        },
+      },
+    });
+
+    const { repos } = renderApp(
+      ['/admin/games/iq-puzzle-fixture/edit'],
+      [gameWithEnTranslation],
+      owner
+    );
+
+    const shortDescInput = await screen.findByDisplayValue('Offline logic puzzle fixture.');
+    fireEvent.change(shortDescInput, { target: { value: 'Updated EN summary by admin.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save Changes' }));
+
+    await waitFor(async () => {
+      const saved = await repos.adminGames.getGameById('iq-puzzle-fixture');
+      expect(saved?.shortDescription).toBe('Updated EN summary by admin.');
+      expect(saved?.translations?.en).toBeUndefined();
+      expect(saved?.translations?.vi?.shortDescription).toBe('Mô tả VI');
+    });
+
+    const catalog = await repos.catalog.getPublicCatalog();
+    expect(catalog.catalog.games[0]?.translations?.vi).toEqual({
+      shortDescription: 'Mô tả VI',
+    });
+
+    // Re-open edit form and clear remaining VI fields to ensure translations are removed on update
+    const updatedStored = await repos.adminGames.getGameById('iq-puzzle-fixture');
+    const { repos: repos2 } = renderApp(
+      ['/admin/games/iq-puzzle-fixture/edit'],
+      updatedStored ? [updatedStored] : [],
+      owner
+    );
+    const viShortInput = await screen.findByDisplayValue('Mô tả VI');
+    fireEvent.change(viShortInput, { target: { value: '' } });
+    fireEvent.change(screen.getByDisplayValue('Chi tiết VI'), { target: { value: '' } });
+    fireEvent.click(screen.getAllByRole('button', { name: 'Save Changes' }).at(-1)!);
+
+    await waitFor(async () => {
+      const cleared = await repos2.adminGames.getGameById('iq-puzzle-fixture');
+      expect(cleared?.translations).toBeUndefined();
+    });
+  });
+
+  it('safely interpolates $ tokens in translated search headings and updates GamePlayer error on locale switch', async () => {
+    renderApp(['/games?q=%24%26'], [makeFixtureGame()], null);
+    expect(await screen.findByRole('heading', { name: 'Search: "$&"' })).toBeInTheDocument();
+
+    const evilGame = makeFixtureGame({
+      web: {
+        ...makeFixtureGame().web,
+        artifactUrl: 'https://untrusted-evil.example/game/index.html',
+      },
+    });
+    renderApp(['/play/iq-puzzle-fixture'], [evilGame], null);
+    expect(await screen.findByText(/missing or not from a trusted origin/i)).toBeInTheDocument();
+
+    const langSelects = screen.getAllByRole('combobox', { name: /select language/i });
+    fireEvent.change(langSelects[langSelects.length - 1]!, { target: { value: 'vi' } });
+    expect(
+      await screen.findByText('Đường dẫn game bị thiếu hoặc không thuộc nguồn đáng tin cậy.')
+    ).toBeInTheDocument();
+  });
+
+  it('does not duplicate Recently Updated cards when the strip does not overflow', async () => {
+    const games = [
+      makeFixtureGame({ id: 'g1', slug: 'g1', title: 'Alpha Puzzle' }),
+      makeFixtureGame({ id: 'g2', slug: 'g2', title: 'Beta Puzzle' }),
+    ];
+    renderApp(['/'], games, null);
+    expect(await screen.findAllByText('Alpha Puzzle')).not.toHaveLength(0);
+    // Hero banner + ShowcaseCard + 1x Recently Updated (not duplicated for marquee)
+    expect(screen.getAllByText('Alpha Puzzle')).toHaveLength(3);
+    // ShowcaseCard + 1x Recently Updated
+    expect(screen.getAllByText('Beta Puzzle')).toHaveLength(2);
   });
 });
