@@ -25,8 +25,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Everyone has a story. An illustrated detective logic puzzle game.",
+        "description": "An illustrated detective logic puzzle game with 200 offline cases across Campaign, Daily, and Free Investigation modes. Cross-examine witness testimonies, deduce truth from lies, and deliver your verdict.",
+        "howToPlay": "Examine witness statements under the case rule (One Liar or Half Truth), track hypotheses in your notebook, and deliver your verdict to close each dossier."
+      },
+      "vi": {
+        "shortDescription": "Ai cũng có một câu chuyện. Game giải đố logic trinh thám minh họa.",
+        "description": "Trò chơi giải đố logic trinh thám minh họa với 200 vụ án offline qua các chế độ Chiến dịch, Hằng ngày và Điều tra tự do. Đối chiếu lời khai nhân chứng, phân biệt thật giả và đưa ra phán quyết.",
+        "howToPlay": "Xem xét lời khai nhân chứng theo quy tắc vụ án (Một kẻ nói dối hoặc Nửa sự thật), ghi chú giả thuyết vào sổ tay và đưa ra phán quyết để khép lại từng hồ sơ."
+      },
+      "ja": {
+        "shortDescription": "誰にでも言い分がある。イラスト仕立ての探偵ロジックパズル。",
+        "description": "キャンペーン、デイリー、フリー捜査の3モードで全200件のオフライン事件を収録したイラスト付き探偵ロジックパズル。証言を照合して嘘と真実を見抜き、評決を下しましょう。",
+        "howToPlay": "事件ルール（嘘つき1人、または半分の真実）に沿って証言を調べ、ノートで仮説を整理して評決を下し、各調書を解決へ導きます。"
+      }
+    }
   },
   "assets": {
     "icon": "https://alibi-umber.vercel.app/assets/assets/brand/app_icon_1024.png",

@@ -21,11 +21,29 @@
       "splitmind"
     ],
     "developer": "Cecily",
-    "defaultLocale": "vi",
+    "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Offline neon geometry puzzles. One line changes everything.",
+        "description": "Connect physically legal perimeter anchors within a limited cut budget to satisfy all region objectives. Includes two interactive tutorials, a solver-certified 200-level Campaign Atlas, Daily Standard and Personal challenges, Free Play, hints from the current cut state, undo/retry, VI/EN UI, original audio, and accessibility settings.",
+        "howToPlay": "Drag between two perimeter anchors to slice the shape. Stay within your cut budget and satisfy every region objective. Use Undo, Retry, or Hints anytime."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố hình học neon offline. Một đường cắt thay đổi tất cả.",
+        "description": "Nối các điểm neo hợp lệ trên chu vi trong giới hạn số nhát cắt để thỏa mãn mọi mục tiêu vùng. Bao gồm hai phần hướng dẫn tương tác, Tập bản đồ chiến dịch 200 màn đã kiểm chứng lời giải, thử thách hằng ngày Chuẩn và Cá nhân, Chơi tự do, gợi ý từ trạng thái cắt hiện tại, hoàn tác/thử lại, giao diện VI/EN, âm thanh nguyên bản và cài đặt trợ năng.",
+        "howToPlay": "Kéo nối giữa hai điểm neo trên chu vi để cắt hình. Giữ trong giới hạn số nhát cắt và hoàn thành mọi mục tiêu của từng vùng. Có thể dùng Hoàn tác, Thử lại hoặc Gợi ý bất kỳ lúc nào."
+      },
+      "ja": {
+        "shortDescription": "オフライン対応のネオン幾何学パズル。一本の線がすべてを変える。",
+        "description": "限られたカット回数内で外周の有効なアンカー同士を結び、すべての領域目標を達成しましょう。2つのインタラクティブチュートリアル、検証済み200ステージのキャンペーンアトラス、デイリー、フリープレイ、現在状態からのヒント機能を搭載。",
+        "howToPlay": "外周上の2つのアンカー間をドラッグして図形を分割します。カット上限内で全領域の条件を満たしてください。元に戻す・やり直し・ヒントはいつでも使えます。"
+      }
+    }
   },
   "assets": {
     "icon": "https://splitmind-psi.vercel.app/assets/assets/images/app_icon.png",

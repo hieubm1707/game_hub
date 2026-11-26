@@ -23,8 +23,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "A spatial logic puzzle about coordinating your three-turn afterglow.",
+        "description": "One swipe moves the hero one grid cell while a shadow echo replays your successful moves exactly three turns later. Coordinate Sun and Moon across gates, switches, and time-sensitive circuits in Campaign, Daily Challenge, and Free Play — completely offline-first.",
+        "howToPlay": "Swipe, tap direction buttons, or use arrow keys to move the Sun one cell. Your Moon echo replays your successful moves three turns later. Coordinate both onto their goals simultaneously. Blocked moves do not advance time."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố logic không gian về việc phối hợp dư ảnh sau ba lượt.",
+        "description": "Mỗi lần vuốt di chuyển nhân vật một ô lưới trong khi bóng vọng lặp lại các bước đi thành công của bạn đúng ba lượt sau đó. Phối hợp Mặt Trời và Mặt Trăng vượt qua cổng, công tắc và mạch thời gian trong Chiến dịch, Thử thách hằng ngày và Chơi tự do — hoàn toàn offline.",
+        "howToPlay": "Vuốt, chạm nút hướng hoặc dùng phím mũi tên để di chuyển Mặt Trời một ô. Bóng Mặt Trăng sẽ lặp lại các bước hợp lệ của bạn sau đúng 3 lượt. Hãy đưa cả hai về đích cùng một lúc. Nước đi bị chặn sẽ không làm trôi lượt."
+      },
+      "ja": {
+        "shortDescription": "3ターン後に追従する残響と動きを合わせる空間ロジックパズル。",
+        "description": "スワイプ1回でヒーローが1マス進み、影のエコーが成功した移動をちょうど3ターン遅れて再現します。キャンペーン、デイリーチャレンジ、フリープレイで、ゲートやスイッチ、時限回路を越えて太陽と月を連携させましょう。",
+        "howToPlay": "スワイプ、方向ボタン、または矢印キーで太陽を1マス動かします。月のエコーは成功した移動を3ターン後にそのまま再現します。両方を同時にゴールへ導いてください。壁に阻まれた移動では時間は進みません。"
+      }
+    }
   },
   "assets": {
     "icon": "https://echostep-psi.vercel.app/assets/assets/branding/echostep-icon-v2.png",

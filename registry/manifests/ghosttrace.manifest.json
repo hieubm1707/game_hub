@@ -25,8 +25,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Reconstruct a vanished signal through luminous spatial-temporal logic puzzles.",
+        "description": "A mysterious moving spark vanished from a luminous maze. Security scans captured fragments of its journey. Reconstruct its exact path from partial observations across 9 handcrafted chapters, daily challenges, and offline free-play.",
+        "howToPlay": "Trace the spark's exact path through the grid to satisfy every camera scan, direction marker, switch, and temporal constraint. Drag or tap cells to build your route, use Undo or Retry anytime, and trigger a Clue Pulse when you need a nudge."
+      },
+      "vi": {
+        "shortDescription": "Tái dựng tín hiệu đã biến mất qua các câu đố logic không-thời gian phát sáng.",
+        "description": "Một tia sáng chuyển động bí ẩn đã biến mất khỏi mê cung phát sáng, để lại những mảnh dữ liệu quét an ninh rời rạc. Hãy tái dựng chính xác đường đi của nó từ các quan sát từng phần qua 9 chương thủ công, thử thách hằng ngày và chế độ chơi tự do offline.",
+        "howToPlay": "Vẽ chính xác đường đi của tia sáng qua lưới sao cho thỏa mãn mọi lượt quét camera, mũi tên chỉ hướng, công tắc và ràng buộc thời gian. Kéo hoặc chạm vào các ô để nối tuyến đường, dùng Hoàn tác hoặc Thử lại bất kỳ lúc nào và kích hoạt Xung gợi ý khi cần trợ giúp."
+      },
+      "ja": {
+        "shortDescription": "光り輝く時空間ロジックパズルで、消えた信号の軌跡を復元しよう。",
+        "description": "光の迷宮から消えた謎のスパーク。監視スキャンが捉えた断片的な記録を手がかりに、9つのチャプター、デイリーチャレンジ、オフラインのフリープレイで正確な移動ルートを復元しましょう。",
+        "howToPlay": "すべてのカメラスキャン、方向マーカー、スイッチ、時間制約を満たすようにグリッド上のルートをたどります。セルをドラッグまたはタップして経路を描き、いつでもやり直しやヒントパルスを利用できます。"
+      }
+    }
   },
   "assets": {
     "icon": "https://ghosttrace-nine.vercel.app/assets/assets/icons/app_icon_1024.png",

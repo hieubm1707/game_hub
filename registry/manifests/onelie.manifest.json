@@ -24,13 +24,35 @@
     "developer": "Cecily",
     "defaultLocale": "en",
     "supportedLocales": [
-      "en"
-    ]
+      "en",
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Candy Noir visual constraint-deduction IQ puzzle. Arrange the witnesses and expose the single false clue.",
+        "description": "ONE LIE is an offline-first Candy Noir constraint-deduction puzzle game. Examine witness clues, deduce the unique valid ordering, and identify the single false statement across guided tutorials, six campaign chapters, a Challenge Vault, Daily Standard/Personal/Bonus challenges, and Free Play.",
+        "howToPlay": "Place each witness into the lineup slots so every true clue holds, mark the single false clue, and tap Reveal the lie to close the case. Earn hint coins by solving cases; all progress is saved locally."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố IQ suy luận ràng buộc phong cách Candy Noir. Sắp xếp nhân chứng và vạch trần manh mối dối trá duy nhất.",
+        "description": "ONE LIE là trò chơi suy luận ràng buộc ưu tiên offline mang phong cách Candy Noir. Phân tích manh mối từ các nhân chứng, suy ra thứ tự hợp lệ duy nhất và chỉ ra lời khai sai duy nhất qua phần hướng dẫn, 6 chương chiến dịch, Kho thử thách, thử thách hằng ngày và Chơi tự do.",
+        "howToPlay": "Xếp từng nhân chứng vào đúng vị trí hàng đứng để mọi manh mối thật đều đúng, đánh dấu manh mối dối trá duy nhất rồi nhấn Vạch trần lời nói dối để khép lại vụ án. Nhận xu gợi ý khi phá án; toàn bộ tiến trình được lưu cục bộ."
+      },
+      "ja": {
+        "shortDescription": "キャンディノワール調の制約推理IQパズル。証人を並べ、たった一つの嘘を暴け。",
+        "description": "ONE LIEは、オフラインファーストのキャンディノワール調・制約推理パズルゲームです。チュートリアル、6つのキャンペーン章、チャレンジ保管庫、各種デイリー、フリープレイで証人のヒントを整理し、唯一の正しい並び順と1つだけの虚偽の証言を突き止めましょう。",
+        "howToPlay": "すべての真実のヒントが成り立つように各証人を並び枠へ配置し、1つだけある嘘のヒントをマークして「嘘を暴く」をタップします。事件を解いてヒントコインを獲得でき、進行状況はすべてローカルに保存されます。"
+      }
+    }
   },
   "assets": {
     "icon": "https://onelie-dusky.vercel.app/assets/assets/branding/v2/app-icon-1024.png",
     "thumbnail": "https://onelie-dusky.vercel.app/assets/assets/branding/v2/brand-preview.png",
-    "screenshots": ["https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_01.png", "https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_02.png"]
+    "screenshots": [
+      "https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_01.png",
+      "https://onelie-dusky.vercel.app/assets/assets/branding/screenshot_02.png"
+    ]
   },
   "web": {
     "enabled": true,

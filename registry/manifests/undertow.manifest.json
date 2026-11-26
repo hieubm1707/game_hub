@@ -23,8 +23,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Move one. Move them all. Scandinavian magnetic gravity puzzle.",
+        "description": "Undertow is an offline-first magnetic gravity puzzle game. Tilt the board to slide linked marbles and blocks together across Scandinavian-inspired boards through Campaign, Daily Challenge, and Free Play modes.",
+        "howToPlay": "Swipe or press the arrow keys to tilt the board in four directions. Every movable piece slides together with gravity until blocked. Guide each marble onto its matching goal cell in as few moves as possible."
+      },
+      "vi": {
+        "shortDescription": "Đẩy một viên. Dịch chuyển tất cả. Game giải đố từ tính & trọng lực phong cách Bắc Âu.",
+        "description": "Undertow là trò chơi giải đố từ tính và trọng lực ưu tiên offline. Nghiêng bàn cờ để trượt đồng thời các viên bi và khối liên kết qua những màn chơi mang cảm hứng Bắc Âu trong các chế độ Chiến dịch, Thử thách hằng ngày và Chơi tự do.",
+        "howToPlay": "Vuốt hoặc nhấn các phím mũi tên để nghiêng bàn cờ theo bốn hướng. Mọi quân có thể di chuyển sẽ trượt cùng nhau theo trọng lực cho đến khi bị chặn. Hãy đưa từng viên bi vào ô đích tương ứng với ít nước đi nhất."
+      },
+      "ja": {
+        "shortDescription": "ひとつ動かせば、すべてが動く。北欧テイストの磁気重力パズル。",
+        "description": "Undertowは、オフラインファーストの磁気重力パズルゲームです。ボードを傾けて連動するビー玉やブロックを同時に滑らせ、北欧風の盤面でキャンペーン、デイリーチャレンジ、フリープレイに挑みましょう。",
+        "howToPlay": "スワイプまたは矢印キーでボードを4方向に傾けます。動くピースはすべて重力に従って障害物に当たるまで一緒に滑ります。できるだけ少ない手数で各ビー玉を対応するゴールへ導きましょう。"
+      }
+    }
   },
   "assets": {
     "icon": "https://undertow-ashen.vercel.app/assets/assets/brand/icon_1024.png",

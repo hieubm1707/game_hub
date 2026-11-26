@@ -22,8 +22,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Two-axis torque balancing logic puzzle on a 5x5 board.",
+        "description": "CENTERPOINT is an offline-first spatial deduction puzzle where you place weighted pieces onto legal pads to balance both horizontal and vertical moments around the center pivot.",
+        "howToPlay": "Drag or tap weights onto the blue pads. Place every weight from the tray so both horizontal and vertical moments balance to zero around the center pivot. Locked weights cannot be moved."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố logic cân bằng mô-men hai trục trên bàn cờ 5x5.",
+        "description": "CENTERPOINT là trò chơi suy luận không gian ưu tiên offline, nơi bạn đặt các quả cân lên ô hợp lệ để cân bằng cả mô-men ngang và dọc quanh điểm tựa trung tâm.",
+        "howToPlay": "Kéo hoặc chạm để đặt các quả cân lên ô màu xanh lam. Đặt hết quả cân từ khay sao cho mô-men ngang và dọc quanh tâm đều bằng 0. Quả cân bị khóa không thể di chuyển."
+      },
+      "ja": {
+        "shortDescription": "5×5ボード上で2軸のトルクを釣り合わせるロジックパズル。",
+        "description": "CENTERPOINTは、有効なパッドに重りを配置して中心支点まわりの水平・垂直両軸のモーメントを釣り合わせる、オフラインファーストの空間推理パズルです。",
+        "howToPlay": "青いパッドに重りをドラッグまたはタップで配置します。トレイ内のすべての重りを置き、中心支点まわりの水平・垂直モーメントをゼロに揃えてください。ロックされた重りは動かせません。"
+      }
+    }
   },
   "assets": {
     "icon": "https://centerpoint-seven.vercel.app/assets/assets/icon.webp",

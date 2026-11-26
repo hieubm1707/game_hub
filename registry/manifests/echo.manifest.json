@@ -25,8 +25,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "A scientific deduction puzzle about choosing experiments to find the unseen.",
+        "description": "Echo — Find the unseen. An offline-first deduction puzzle about choosing acoustic and density probes to uniquely prove a hidden specimen rather than guessing. Features 100 Campaign, 60 Daily, and 40 Free Exploration verified puzzles in English and Vietnamese.",
+        "howToPlay": "Select a probe (Density Scan or Distance Echo) and tap a row, column, or ray on the scan chamber to gather evidence within your scan budget. Compare readings against the candidate specimens, eliminate mismatches, and tap Prove & Identify once your evidence uniquely identifies the hidden shape."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố suy luận khoa học về việc chọn phép thử để tìm ra điều vô hình.",
+        "description": "Echo — Tìm kiếm điều vô hình. Trò chơi suy luận ưu tiên offline xoay quanh việc chọn đầu dò âm thanh và mật độ để chứng minh duy nhất một mẫu vật ẩn thay vì đoán mò. Bao gồm 100 màn Chiến dịch, 60 Thử thách hằng ngày và 40 màn Khám phá tự do đã kiểm chứng bằng tiếng Anh và tiếng Việt.",
+        "howToPlay": "Chọn một đầu dò (Quét mật độ hoặc Tiếng vang khoảng cách) rồi chạm vào hàng, cột hoặc tia trên buồng quét để thu thập bằng chứng trong giới hạn lượt quét. Đối chiếu kết quả với các mẫu vật ứng viên, loại trừ mẫu không khớp và nhấn Chứng minh & Nhận diện khi bằng chứng đã xác định duy nhất hình dạng ẩn."
+      },
+      "ja": {
+        "shortDescription": "実験を選び、見えない正体を突き止める科学的推理パズル。",
+        "description": "Echo — 見えないものを探せ。音響プローブと密度プローブを使い分け、当てずっぽうではなく論理的に隠された標本を特定するオフラインファーストの推理パズルです。キャンペーン100問、デイリー60問、フリー探索40問を収録。",
+        "howToPlay": "プローブ（密度スキャンまたは距離エコー）を選び、スキャン回数内でスキャン室の行・列・レイをタップして証拠を集めます。候補標本と計測値を比較して不一致を除外し、隠れた形状を一つに特定できたら「証明して特定」をタップしましょう。"
+      }
+    }
   },
   "assets": {
     "icon": "https://echo-psi-rouge-74.vercel.app/assets/assets/branding/echo_icon_1024.png",

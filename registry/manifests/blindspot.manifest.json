@@ -22,8 +22,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "An offline camera-occlusion puzzle in electric ink.",
+        "description": "BlindSpot is an offline-first spatial deduction puzzle where you place blockers and tokens to create blind spots out of security camera sightlines.",
+        "howToPlay": "Place tokens on the grid to block camera sightlines and keep every target hidden in a blind spot. Complete campaign levels and daily challenges offline."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố che tầm nhìn camera offline theo phong cách mực điện tử.",
+        "description": "BlindSpot là trò chơi suy luận không gian ưu tiên offline, nơi bạn đặt vật cản và quân chặn để tạo ra các điểm mù thoát khỏi tầm quét của camera an ninh.",
+        "howToPlay": "Đặt các quân lên lưới để chắn tia quan sát của camera và giữ mọi mục tiêu ẩn trong điểm mù. Hoàn thành các màn chiến dịch và thử thách hằng ngày hoàn toàn offline."
+      },
+      "ja": {
+        "shortDescription": "エレクトリックインク調で描く、オフライン対応の監視カメラ死角パズル。",
+        "description": "BlindSpotは、ブロッカーやトークンを配置して監視カメラの視線を遮り、死角を作り出すオフラインファーストの空間推理パズルです。",
+        "howToPlay": "グリッド上にトークンを置いてカメラの視線を遮り、すべてのターゲットを死角に隠しましょう。キャンペーンステージやデイリーチャレンジもオフラインでプレイできます。"
+      }
+    }
   },
   "assets": {
     "icon": "https://blindspot-roan.vercel.app/assets/assets/store/icon-1024.png",

@@ -24,8 +24,26 @@
     "defaultLocale": "en",
     "supportedLocales": [
       "en",
-      "vi"
-    ]
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Rotate a half of a 4×4 board by 180° to match the target pattern.",
+        "description": "A compact visual IQ puzzle where you rotate halves of a 4×4 board by 180° to match the target pattern. Starting at level 6, a 2×2 center rotation unlocks rich spatial combinations with color-and-shape accessible tiles.",
+        "howToPlay": "Tap Left, Right, Top, or Bottom controls to rotate that half of the 4×4 board by 180°. From level 6 onward, use the Center button to rotate the inner 2×2 square. Match the target pattern in as few moves as possible."
+      },
+      "vi": {
+        "shortDescription": "Xoay một nửa bàn cờ 4×4 góc 180° để khớp với mẫu mục tiêu.",
+        "description": "Trò chơi giải đố IQ trực quan gọn nhẹ, nơi bạn xoay các nửa của bảng 4×4 một góc 180° để tạo đúng mẫu mục tiêu. Từ màn 6 trở đi, thao tác xoay vùng trung tâm 2×2 mở ra nhiều tổ hợp không gian phong phú cùng các ô phân biệt theo cả màu sắc lẫn hình dạng.",
+        "howToPlay": "Chạm các nút Trái, Phải, Trên hoặc Dưới để xoay nửa bảng 4×4 tương ứng 180°. Từ màn 6 trở đi, dùng nút Giữa để xoay khối 2×2 ở tâm. Hoàn thành mẫu mục tiêu với ít bước xoay nhất có thể."
+      },
+      "ja": {
+        "shortDescription": "4×4ボードの半分を180°回転させて目標パターンを揃えるパズル。",
+        "description": "4×4ボードの半分を180°回転させて目標パターンと一致させる、コンパクトなビジュアルIQパズル。レベル6からは中央2×2の回転が解放され、色と形の両方で識別できるタイルを使った奥深い空間パズルが楽しめます。",
+        "howToPlay": "左・右・上・下のボタンをタップして4×4ボードの半分を180°回転させます。レベル6以降は中央ボタンで内側2×2マスも回転可能。できるだけ少ない手数で目標パターンを完成させましょう。"
+      }
+    }
   },
   "assets": {
     "icon": "https://halfturn.vercel.app/assets/assets/branding/app_icon.png",
