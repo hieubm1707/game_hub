@@ -149,6 +149,8 @@
 
   --progress-fill: repeating-linear-gradient(-45deg, #ff1f8f, #ff1f8f 10px, #000000 10px, #000000 14px);
   --loading-bar: repeating-linear-gradient(-45deg, #ff1f8f, #ff1f8f 12px, #ffe800 12px, #ffe800 24px);
+  --shimmer-base: rgba(0, 0, 0, 0.09);
+  --shimmer-highlight: rgba(255, 255, 255, 0.72);
   --heading-transform: uppercase;
   --heading-shadow: none;
   --monitor-border: #ffe800;
@@ -243,6 +245,8 @@
 
   --progress-fill: linear-gradient(90deg, #00e5ff 0%, #1e6bff 50%, #ff4fd8 100%);
   --loading-bar: linear-gradient(90deg, #00e5ff 0%, #1e6bff 35%, #ff4fd8 70%, #00e5ff 100%);
+  --shimmer-base: rgba(15, 25, 61, 0.11);
+  --shimmer-highlight: rgba(0, 229, 255, 0.28);
   --heading-transform: uppercase;
   --heading-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
   --monitor-border: #00e5ff;
@@ -341,6 +345,8 @@
 
   --progress-fill: repeating-linear-gradient(-45deg, #57b836, #57b836 12px, #72d44c 12px, #72d44c 24px);
   --loading-bar: repeating-linear-gradient(-45deg, #ffc82c, #ffc82c 12px, #f5821f 12px, #f5821f 24px);
+  --shimmer-base: rgba(59, 31, 11, 0.12);
+  --shimmer-highlight: rgba(255, 248, 230, 0.65);
   --heading-transform: none;
   --heading-shadow: 0 2px 0 rgba(59, 31, 11, 0.22);
   --monitor-border: #ffc82c;
@@ -750,4 +756,66 @@
   background: var(--loading-bar);
   background-size: 34px 34px;
   animation: arcade-stripe-slide 0.7s linear infinite;
+}
+
+@keyframes hub-shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.hub-hero-skeleton {
+  background: linear-gradient(135deg, #0d1538 0%, #182352 55%, #111836 100%);
+}
+
+.hub-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--shimmer-base, rgba(0, 0, 0, 0.08));
+}
+
+.hub-shimmer-hero {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+.hub-shimmer-canvas {
+  background-color: rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="neo-brutalist"] .hub-shimmer-canvas {
+  background-color: rgba(255, 255, 255, 0.65);
+  border: 2px solid rgba(0, 0, 0, 0.18);
+}
+
+.hub-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--shimmer-highlight, rgba(255, 255, 255, 0.55)) 50%,
+    transparent 100%
+  );
+  animation: hub-shimmer-sweep 1.35s ease-in-out infinite;
+}
+
+.hub-shimmer-hero::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.24) 50%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-shimmer::after {
+    animation: none;
+  }
 }

@@ -768,4 +768,52 @@ describe('Game Hub Public & Admin Flows', () => {
       'Deduce the liar across 200 detective cases.'
     );
   });
+
+  it('renders shimmer skeletons while catalog is loading on HomePage and GamesListPage', async () => {
+    const baseRepos = createInMemoryRepositories({ games: [makeFixtureGame()] });
+    let resolveCatalog!: (value: Awaited<ReturnType<typeof baseRepos.catalog.getPublicCatalog>>) => void;
+    const pendingCatalog = new Promise<Awaited<ReturnType<typeof baseRepos.catalog.getPublicCatalog>>>(
+      (resolve) => {
+        resolveCatalog = resolve;
+      }
+    );
+    const pendingRepos = {
+      ...baseRepos,
+      catalog: {
+        ...baseRepos.catalog,
+        getPublicCatalog: () => pendingCatalog,
+      },
+    };
+
+    const homeView = render(
+      <MemoryRouter initialEntries={['/']}>
+        <RepositoryProvider repositories={pendingRepos}>
+          <AuthProvider mockAdmin={null}>
+            <AppRoutes />
+          </AuthProvider>
+        </RepositoryProvider>
+      </MemoryRouter>
+    );
+    expect(screen.getByTestId('home-showcase-shimmer')).toBeInTheDocument();
+    expect(screen.queryByText('No matching published games found.')).not.toBeInTheDocument();
+    homeView.unmount();
+
+    render(
+      <MemoryRouter initialEntries={['/games']}>
+        <RepositoryProvider repositories={pendingRepos}>
+          <AuthProvider mockAdmin={null}>
+            <AppRoutes />
+          </AuthProvider>
+        </RepositoryProvider>
+      </MemoryRouter>
+    );
+    expect(screen.getByTestId('games-grid-shimmer')).toBeInTheDocument();
+
+    const actual = await baseRepos.catalog.getPublicCatalog();
+    await act(async () => {
+      resolveCatalog(actual);
+    });
+    expect(await screen.findByText('IQ Puzzle (Test Fixture)')).toBeInTheDocument();
+    expect(screen.queryByTestId('games-grid-shimmer')).not.toBeInTheDocument();
+  });
 });

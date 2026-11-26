@@ -11,6 +11,11 @@ import {
 } from 'lucide-react';
 import type { CompactCatalogGame } from '@game-hub/contract';
 import { getLocalizedGameText, matchesGameQuery, useI18n } from '../../app/I18nContext';
+import {
+  CategoryChipsSkeleton,
+  HomeHeroSkeleton,
+  ShowcaseGridSkeleton,
+} from '../../components/CatalogSkeletons';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
@@ -341,15 +346,13 @@ export function HomePage() {
               </>
             )}
           </div>
+        ) : loading ? (
+          <HomeHeroSkeleton label={t('common.loadingCatalog')} />
         ) : (
           <div className="min-h-[220px] flex flex-col items-center justify-center p-8 text-center space-y-3">
             <Gamepad2 className="h-10 w-10" />
-            <h1 className="text-2xl font-bold">
-              {loading ? t('common.loadingCatalog') : t('home.emptyHeroTitle')}
-            </h1>
-            <p className="max-w-md text-sm hub-text-muted">
-              {loading ? t('common.loadingCatalog') : t('home.emptyHeroDesc')}
-            </p>
+            <h1 className="text-2xl font-bold">{t('home.emptyHeroTitle')}</h1>
+            <p className="max-w-md text-sm hub-text-muted">{t('home.emptyHeroDesc')}</p>
           </div>
         )}
       </section>
@@ -361,46 +364,50 @@ export function HomePage() {
       {/* 2. Tabs + Inline Filter & Refresh Bar (inspired by reference) */}
       <section className="space-y-5">
         <div className="brutal-panel p-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label={t('home.filterAria')}>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeTab === 'all'}
-              onClick={() => setActiveTab('all')}
-              className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
-                activeTab === 'all' ? 'arcade-btn-pink' : 'arcade-btn-white'
-              }`}
-            >
-              {t('common.all')} ({games.length})
-            </button>
-            {featured.length > 0 && (
+          {loading ? (
+            <CategoryChipsSkeleton count={4} />
+          ) : (
+            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label={t('home.filterAria')}>
               <button
                 type="button"
                 role="tab"
-                aria-selected={activeTab === 'featured'}
-                onClick={() => setActiveTab('featured')}
+                aria-selected={activeTab === 'all'}
+                onClick={() => setActiveTab('all')}
                 className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
-                  activeTab === 'featured' ? 'arcade-btn-pink' : 'arcade-btn-white'
+                  activeTab === 'all' ? 'arcade-btn-pink' : 'arcade-btn-white'
                 }`}
               >
-                {t('common.featured')}
+                {t('common.all')} ({games.length})
               </button>
-            )}
-            {categories.map((c) => (
-              <button
-                key={c.id}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === c.id}
-                onClick={() => setActiveTab(c.id)}
-                className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
-                  activeTab === c.id ? 'arcade-btn-pink' : 'arcade-btn-white'
-                }`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </div>
+              {featured.length > 0 && (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === 'featured'}
+                  onClick={() => setActiveTab('featured')}
+                  className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
+                    activeTab === 'featured' ? 'arcade-btn-pink' : 'arcade-btn-white'
+                  }`}
+                >
+                  {t('common.featured')}
+                </button>
+              )}
+              {categories.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === c.id}
+                  onClick={() => setActiveTab(c.id)}
+                  className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
+                    activeTab === c.id ? 'arcade-btn-pink' : 'arcade-btn-white'
+                  }`}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="flex flex-1 sm:flex-initial items-center gap-2 justify-end">
             <div className="relative w-full sm:w-56">
@@ -428,12 +435,7 @@ export function HomePage() {
 
         {/* 3. 4-Column Showcase Grid */}
         {loading ? (
-          <div className="brutal-panel p-10 text-center space-y-4">
-            <p className="font-numeric text-sm font-bold uppercase">{t('common.loadingCatalog')}</p>
-            <div className="arcade-progress-track mx-auto max-w-md">
-              <div className="arcade-loading-bar h-full w-full" />
-            </div>
-          </div>
+          <ShowcaseGridSkeleton label={t('common.loadingCatalog')} count={8} />
         ) : filteredGames.length === 0 ? (
           <div className="brutal-panel p-10 text-center font-numeric text-sm font-bold">
             {t('home.noMatchingGames')}

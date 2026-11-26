@@ -2,6 +2,10 @@ import { useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { matchesGameQuery, useI18n } from '../../app/I18nContext';
+import {
+  CategoryChipsSkeleton,
+  GameCardGridSkeleton,
+} from '../../components/CatalogSkeletons';
 import { GameGrid } from '../../components/GameCard';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
@@ -57,7 +61,9 @@ export function GamesListPage() {
       </div>
 
       {/* Category Filter Chips */}
-      {categories.length > 0 && (
+      {loading ? (
+        <CategoryChipsSkeleton count={5} onCanvas />
+      ) : categories.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
           <Link
             to="/games"
@@ -84,12 +90,7 @@ export function GamesListPage() {
       {error && <div className="hub-alert-error p-4 font-numeric text-sm font-bold">{error}</div>}
 
       {loading ? (
-        <div className="brutal-panel p-10 text-center space-y-4">
-          <p className="font-numeric text-sm font-bold uppercase">{t('common.loadingGames')}</p>
-          <div className="arcade-progress-track mx-auto max-w-md">
-            <div className="arcade-loading-bar h-full w-full" />
-          </div>
-        </div>
+        <GameCardGridSkeleton label={t('common.loadingGames')} count={6} />
       ) : (
         <GameGrid games={filtered} emptyText={t('catalog.emptyCached')} />
       )}
