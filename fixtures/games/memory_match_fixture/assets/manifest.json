@@ -8,11 +8,40 @@
     "shortDescription": "Secondary Flutter test fixture validating manifest-only onboarding.",
     "description": "Explicitly labeled second test fixture demonstrating that adding a new game requires zero Game Hub code changes or redeployments.",
     "howToPlay": "Flip two cards at a time to find all matching pairs offline.",
-    "categories": ["brain", "casual"],
-    "tags": ["fixture", "memory", "offline", "cards"],
+    "categories": [
+      "brain",
+      "casual"
+    ],
+    "tags": [
+      "fixture",
+      "memory",
+      "offline",
+      "cards"
+    ],
     "developer": "Game Hub Reference Fixture",
     "defaultLocale": "en",
-    "supportedLocales": ["en", "vi"]
+    "supportedLocales": [
+      "en",
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Secondary Flutter test fixture validating manifest-only onboarding.",
+        "description": "Explicitly labeled second test fixture demonstrating that adding a new game requires zero Game Hub code changes or redeployments.",
+        "howToPlay": "Flip two cards at a time to find all matching pairs offline."
+      },
+      "vi": {
+        "shortDescription": "Game Flutter mẫu thứ hai kiểm chứng quy trình tích hợp chỉ qua manifest.",
+        "description": "Mẫu thử nghiệm thứ hai chứng minh rằng việc thêm một trò chơi mới không cần chỉnh sửa mã nguồn hay triển khai lại Game Hub.",
+        "howToPlay": "Lật hai thẻ mỗi lượt để tìm toàn bộ các cặp giống nhau khi chơi offline."
+      },
+      "ja": {
+        "shortDescription": "マニフェストのみでの登録を検証する第2のFlutterテストフィクスチャ。",
+        "description": "新しいゲームを追加する際にGame Hub側のコード変更や再デプロイが一切不要であることを実証する第2のテストフィクスチャです。",
+        "howToPlay": "1度に2枚のカードをめくり、オフラインですべてのペアを揃えましょう。"
+      }
+    }
   },
   "assets": {
     "icon": "/fixtures/memory-match-icon.svg",
@@ -26,7 +55,10 @@
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
     "orientation": "portrait",
-    "aspectRatio": { "width": 9, "height": 16 },
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
     "fullscreen": true,
     "supportsTouch": true,
     "supportsKeyboard": false,

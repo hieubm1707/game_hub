@@ -8,11 +8,40 @@
     "shortDescription": "Reference offline-first Flutter logic puzzle test fixture.",
     "description": "Explicitly labeled reference test fixture demonstrating game_platform, bundled offline puzzles, local progress, native-only ad isolation, and Game Hub bridge events.",
     "howToPlay": "Choose the right answer for each sequence or logic question. Progress is saved locally.",
-    "categories": ["puzzle", "brain"],
-    "tags": ["fixture", "iq", "offline", "logic"],
+    "categories": [
+      "puzzle",
+      "brain"
+    ],
+    "tags": [
+      "fixture",
+      "iq",
+      "offline",
+      "logic"
+    ],
     "developer": "Game Hub Reference Fixture",
     "defaultLocale": "en",
-    "supportedLocales": ["en", "vi"]
+    "supportedLocales": [
+      "en",
+      "vi",
+      "ja"
+    ],
+    "translations": {
+      "en": {
+        "shortDescription": "Reference offline-first Flutter logic puzzle test fixture.",
+        "description": "Explicitly labeled reference test fixture demonstrating game_platform, bundled offline puzzles, local progress, native-only ad isolation, and Game Hub bridge events.",
+        "howToPlay": "Choose the right answer for each sequence or logic question. Progress is saved locally."
+      },
+      "vi": {
+        "shortDescription": "Game giải đố logic Flutter mẫu hỗ trợ offline-first.",
+        "description": "Mẫu thử nghiệm tham chiếu minh họa game_platform, gói câu đố offline đóng gói sẵn, lưu tiến trình cục bộ, cô lập quảng cáo trên nền tảng gốc và sự kiện cầu nối Game Hub.",
+        "howToPlay": "Chọn đáp án đúng cho từng câu hỏi dãy số hoặc logic. Tiến trình được lưu cục bộ."
+      },
+      "ja": {
+        "shortDescription": "オフラインファースト対応Flutterロジックパズルの参照テストフィクスチャ。",
+        "description": "game_platform、同梱オフラインパズル、ローカル進行保存、ネイティブ限定広告分離、Game Hubブリッジイベントを実証するための参照テストフィクスチャです。",
+        "howToPlay": "各数列・論理問題の正しい答えを選択してください。進行状況はローカルに保存されます。"
+      }
+    }
   },
   "assets": {
     "icon": "/fixtures/iq-puzzle-icon.svg",
@@ -26,7 +55,10 @@
     "entrypoint": "index.html",
     "buildStrategy": "javascript",
     "orientation": "portrait",
-    "aspectRatio": { "width": 9, "height": 16 },
+    "aspectRatio": {
+      "width": 9,
+      "height": 16
+    },
     "fullscreen": true,
     "supportsTouch": true,
     "supportsKeyboard": true,
