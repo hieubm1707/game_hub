@@ -2,7 +2,14 @@ import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import manifestSchema from '../schemas/game-manifest.schema.json' with { type: 'json' };
 import bridgeSchema from '../schemas/bridge-message.schema.json' with { type: 'json' };
-import type { BridgeMessage, GameManifest } from './types.js';
+import {
+  SUPPORTED_LOCALE_CODES,
+  type BridgeMessage,
+  type CompactGameTranslations,
+  type GameManifest,
+  type GameTranslations,
+  type LocalizedGameText,
+} from './types.js';
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -151,7 +158,52 @@ export function validateBridgeMessage(input: unknown): ValidationResult<BridgeMe
   return { valid: true, data: input as unknown as BridgeMessage, errors: [] };
 }
 
+const ALL_TRANSLATION_FIELDS: readonly (keyof LocalizedGameText)[] = [
+  'title',
+  'shortDescription',
+  'description',
+  'howToPlay',
+];
+
+/** Strip unsupported locales and blank fields from game translations. */
+export function sanitizeTranslations(
+  translations?: GameTranslations,
+  options?: {
+    excludeLocales?: readonly string[];
+    fields?: readonly (keyof LocalizedGameText)[];
+  }
+): GameTranslations | undefined {
+  if (!translations) return undefined;
+  const excluded = new Set(options?.excludeLocales ?? []);
+  const fields = options?.fields ?? ALL_TRANSLATION_FIELDS;
+  const sanitized: GameTranslations = {};
+  for (const locale of SUPPORTED_LOCALE_CODES) {
+    if (excluded.has(locale)) continue;
+    const entry = translations[locale];
+    if (!entry) continue;
+    const picked: LocalizedGameText = {};
+    for (const field of fields) {
+      const value = entry[field]?.trim();
+      if (value) picked[field] = value;
+    }
+    if (Object.keys(picked).length > 0) {
+      sanitized[locale] = picked;
+    }
+  }
+  return Object.keys(sanitized).length > 0 ? sanitized : undefined;
+}
+
+/** Project full game translations down to compact catalog fields (title & shortDescription). */
+export function toCompactTranslations(
+  translations?: GameTranslations
+): CompactGameTranslations | undefined {
+  return sanitizeTranslations(translations, {
+    fields: ['title', 'shortDescription'],
+  }) as CompactGameTranslations | undefined;
+}
+
 export function manifestToGameRecordDraft(manifest: GameManifest, nowIso = new Date().toISOString()) {
+  const translations = sanitizeTranslations(manifest.metadata.translations);
   return {
     id: manifest.id,
     slug: manifest.slug,
@@ -159,6 +211,7 @@ export function manifestToGameRecordDraft(manifest: GameManifest, nowIso = new D
     shortDescription: manifest.metadata.shortDescription,
     description: manifest.metadata.description,
     howToPlay: manifest.metadata.howToPlay ?? '',
+    ...(translations ? { translations } : {}),
     categories: manifest.metadata.categories,
     tags: manifest.metadata.tags ?? [],
     developer: manifest.metadata.developer ?? '',

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { validateBridgeMessage, validateManifest, isSafeHttpUrl } from '../src/validator.js';
+import {
+  isSafeHttpUrl,
+  sanitizeTranslations,
+  toCompactTranslations,
+  validateBridgeMessage,
+  validateManifest,
+} from '../src/validator.js';
 
 function createValidManifest() {
   return {
@@ -159,5 +165,41 @@ describe('game_contract manifest validation', () => {
     expect(isSafeHttpUrl('https://evil-vercel.app/', allowed)).toBe(false);
     expect(isSafeHttpUrl('https://nested.sub.vercel.app/', allowed)).toBe(false);
     expect(isSafeHttpUrl('http://blindspot.vercel.app/', allowed)).toBe(false);
+  });
+
+  it('rejects unsupported translation locales and extra translation fields', () => {
+    const withBadLocale = createValidManifest();
+    (withBadLocale.metadata as Record<string, unknown>).translations = {
+      fr: { shortDescription: 'Jeu de logique.' },
+    };
+    expect(validateManifest(withBadLocale).valid).toBe(false);
+
+    const withExtraField = createValidManifest();
+    (withExtraField.metadata as Record<string, unknown>).translations = {
+      vi: { shortDescription: 'Mô tả ngắn.', unknownField: 'bad' },
+    };
+    expect(validateManifest(withExtraField).valid).toBe(false);
+  });
+
+  it('sanitizes and compacts game translations consistently', () => {
+    const cleaned = sanitizeTranslations(
+      {
+        en: { title: '  IQ Puzzle ', shortDescription: ' ', description: 'Full EN' },
+        vi: { title: 'Giải đố IQ', shortDescription: 'Mô tả VI', howToPlay: 'Chạm ô' },
+      },
+      { excludeLocales: ['en'] }
+    );
+    expect(cleaned).toEqual({
+      vi: { title: 'Giải đố IQ', shortDescription: 'Mô tả VI', howToPlay: 'Chạm ô' },
+    });
+
+    const compact = toCompactTranslations({
+      en: { title: 'IQ Puzzle', shortDescription: 'Short EN', description: 'Long EN', howToPlay: 'Play EN' },
+      ja: { shortDescription: '短い説明', description: '長い説明' },
+    });
+    expect(compact).toEqual({
+      en: { title: 'IQ Puzzle', shortDescription: 'Short EN' },
+      ja: { shortDescription: '短い説明' },
+    });
   });
 });

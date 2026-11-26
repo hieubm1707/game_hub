@@ -2,6 +2,23 @@ export type GameStatus = 'draft' | 'published' | 'disabled' | 'archived';
 
 export type GameOrientation = 'portrait' | 'landscape' | 'any';
 
+export const SUPPORTED_LOCALE_CODES = ['en', 'vi', 'ja'] as const;
+
+export type SupportedLocale = (typeof SUPPORTED_LOCALE_CODES)[number];
+
+export interface LocalizedGameText {
+  title?: string;
+  shortDescription?: string;
+  description?: string;
+  howToPlay?: string;
+}
+
+export type GameTranslations = Partial<Record<SupportedLocale, LocalizedGameText>>;
+
+export type CompactGameTranslations = Partial<
+  Record<SupportedLocale, Pick<LocalizedGameText, 'title' | 'shortDescription'>>
+>;
+
 export interface GameManifest {
   schemaVersion: '2.0.0';
   id: string;
@@ -17,6 +34,7 @@ export interface GameManifest {
     developer?: string;
     defaultLocale: string;
     supportedLocales: string[];
+    translations?: GameTranslations;
   };
   assets: {
     icon: string;
@@ -91,6 +109,7 @@ export interface CompactCatalogGame {
   slug: string;
   title: string;
   shortDescription: string;
+  translations?: CompactGameTranslations;
   thumbnail: string;
   icon: string;
   categories: string[];
@@ -114,6 +133,7 @@ export interface GameRecord {
   shortDescription: string;
   description: string;
   howToPlay?: string;
+  translations?: GameTranslations;
   categories: string[];
   tags: string[];
   developer: string;
