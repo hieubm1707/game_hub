@@ -1,5 +1,9 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import {
+  ReCaptchaEnterpriseProvider,
+  ReCaptchaV3Provider,
+  initializeAppCheck,
+} from 'firebase/app-check';
 import {
   getFirestore,
   connectFirestoreEmulator,
@@ -65,8 +69,17 @@ export function getFirebaseApp(): FirebaseApp {
   ) {
     const siteKey = (import.meta.env.VITE_FIREBASE_APP_CHECK_SITE_KEY as string | undefined)?.trim();
     if (siteKey) {
+      const providerMode = (
+        (import.meta.env.VITE_FIREBASE_APP_CHECK_PROVIDER as string | undefined) ?? 'enterprise'
+      )
+        .trim()
+        .toLowerCase();
+      const provider =
+        providerMode === 'v3'
+          ? new ReCaptchaV3Provider(siteKey)
+          : new ReCaptchaEnterpriseProvider(siteKey);
       initializeAppCheck(appInstance, {
-        provider: new ReCaptchaV3Provider(siteKey),
+        provider,
         isTokenAutoRefreshEnabled: true,
       });
       appCheckInitialized = true;
