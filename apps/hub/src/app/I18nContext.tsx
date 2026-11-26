@@ -76,7 +76,6 @@ const MESSAGES = {
     'home.emptyHeroDesc':
       'Browse and play directly in your browser with no account required, or install the native Android/iOS app for full offline play.',
     'home.browseAllGames': 'Browse All Games',
-    'home.cachedNotice': 'Showing cached catalog while checking for updates...',
     'home.filterPlaceholder': 'Filter games...',
     'home.filterAria': 'Filter games',
     'home.noMatchingGames': 'No matching published games found.',
@@ -189,7 +188,6 @@ const MESSAGES = {
     'home.emptyHeroDesc':
       'Khám phá và chơi trực tiếp trên trình duyệt không cần tài khoản, hoặc cài ứng dụng Android/iOS để chơi offline trọn vẹn.',
     'home.browseAllGames': 'Xem tất cả game',
-    'home.cachedNotice': 'Đang hiển thị danh mục đã lưu trong khi kiểm tra cập nhật...',
     'home.filterPlaceholder': 'Lọc game...',
     'home.filterAria': 'Lọc game',
     'home.noMatchingGames': 'Không tìm thấy game phù hợp.',
@@ -302,7 +300,6 @@ const MESSAGES = {
     'home.emptyHeroDesc':
       'アカウント不要でブラウザからすぐ遊べます。Android/iOSアプリをインストールすれば完全オフラインでも楽しめます。',
     'home.browseAllGames': 'すべてのゲームを見る',
-    'home.cachedNotice': '更新を確認中…キャッシュ済みのカタログを表示しています。',
     'home.filterPlaceholder': 'ゲームを絞り込む...',
     'home.filterAria': 'ゲームを絞り込む',
     'home.noMatchingGames': '条件に一致するゲームが見つかりませんでした。',

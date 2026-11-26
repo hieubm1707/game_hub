@@ -68,7 +68,7 @@ function ShowcaseCard({ game }: { game: CompactCatalogGame }) {
 export function HomePage() {
   const { locale, t } = useI18n();
   useDocumentTitle(t('home.docTitle'), t('home.docDesc'));
-  const { games, categories, loading, stale, error, refresh } = useCatalog();
+  const { games, categories, loading, error, refresh } = useCatalog();
 
   const [activeTab, setActiveTab] = useState<string>('all');
   const [filterQuery, setFilterQuery] = useState('');
@@ -356,12 +356,6 @@ export function HomePage() {
 
       {error && (
         <div className="hub-alert-error p-4 font-numeric text-sm font-bold">ERROR: {error}</div>
-      )}
-
-      {stale && !error && (
-        <div className="hub-alert-info px-4 py-2.5 font-numeric text-xs font-bold uppercase">
-          {t('home.cachedNotice')}
-        </div>
       )}
 
       {/* 2. Tabs + Inline Filter & Refresh Bar (inspired by reference) */}

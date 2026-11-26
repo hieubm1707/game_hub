@@ -738,4 +738,34 @@ describe('Game Hub Public & Admin Flows', () => {
       })
     ).toBe('y2k-retro');
   });
+
+  it('keeps English Open Graph and Twitter social share metadata synced on game detail navigation', async () => {
+    const game = makeFixtureGame({
+      slug: 'alibi',
+      title: 'Alibi',
+      shortDescription: 'Deduce the liar across 200 detective cases.',
+      thumbnail: 'https://alibi-umber.vercel.app/thumb.png',
+    });
+    renderApp(['/games/alibi'], [game], null);
+    await screen.findByRole('heading', { name: 'Alibi' });
+
+    expect(document.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe(
+      'Alibi — Game Hub'
+    );
+    expect(document.querySelector('meta[property="og:description"]')?.getAttribute('content')).toBe(
+      'Deduce the liar across 200 detective cases.'
+    );
+    expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
+      'https://alibi-umber.vercel.app/thumb.png'
+    );
+    expect(document.querySelector('meta[property="og:url"]')?.getAttribute('content')).toBe(
+      'https://hieutien.life/games/alibi'
+    );
+    expect(document.querySelector('meta[name="twitter:title"]')?.getAttribute('content')).toBe(
+      'Alibi — Game Hub'
+    );
+    expect(document.querySelector('meta[name="twitter:description"]')?.getAttribute('content')).toBe(
+      'Deduce the liar across 200 detective cases.'
+    );
+  });
 });

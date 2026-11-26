@@ -36,7 +36,18 @@ export function GameDetailPage() {
   }, [slug, catalogEntry?.revision, gameRepo]);
 
   const localized = game ? getLocalizedGameText(game, locale) : null;
-  useDocumentTitle(localized?.title ?? t('detail.docTitleFallback'), localized?.shortDescription);
+  useDocumentTitle(
+    localized?.title ?? t('detail.docTitleFallback'),
+    localized?.shortDescription,
+    game
+      ? {
+          title: `${game.title} — Game Hub`,
+          description: game.shortDescription,
+          image: game.thumbnail || game.icon,
+          path: `/games/${game.slug}`,
+        }
+      : undefined
+  );
 
   if (loading) {
     return (
