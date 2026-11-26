@@ -11,25 +11,18 @@ import {
 } from 'lucide-react';
 import type { CompactCatalogGame } from '@game-hub/contract';
 import { getLocalizedGameText, matchesGameQuery, useI18n } from '../../app/I18nContext';
-import { useTheme } from '../../app/ThemeContext';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
-function ShowcaseCard({ game, wide = false }: { game: CompactCatalogGame; wide?: boolean }) {
+function ShowcaseCard({ game }: { game: CompactCatalogGame }) {
   const { locale, t } = useI18n();
   const localized = getLocalizedGameText(game, locale);
 
   return (
-    <article
-      className={`hub-card group relative flex flex-col overflow-hidden ${
-        wide ? 'sm:col-span-2' : ''
-      }`}
-    >
+    <article className="hub-card group relative flex flex-col overflow-hidden">
       <Link
         to={`/games/${game.slug}`}
-        className={`relative block w-full overflow-hidden bg-black ${
-          wide ? 'aspect-[16/9] sm:aspect-[21/10]' : 'aspect-[4/3]'
-        }`}
+        className="relative block aspect-[4/3] w-full overflow-hidden bg-black"
       >
         <img
           src={game.thumbnail}
@@ -76,8 +69,6 @@ export function HomePage() {
   const { locale, t } = useI18n();
   useDocumentTitle(t('home.docTitle'), t('home.docDesc'));
   const { games, categories, loading, stale, error, refresh } = useCatalog();
-  const { theme } = useTheme();
-  const isBento = theme === 'dark-bento-glass';
 
   const [activeTab, setActiveTab] = useState<string>('all');
   const [filterQuery, setFilterQuery] = useState('');
@@ -455,8 +446,8 @@ export function HomePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {filteredGames.map((g, idx) => (
-              <ShowcaseCard key={g.id} game={g} wide={isBento && idx === 0 && filteredGames.length >= 3} />
+            {filteredGames.map((g) => (
+              <ShowcaseCard key={g.id} game={g} />
             ))}
           </div>
         )}

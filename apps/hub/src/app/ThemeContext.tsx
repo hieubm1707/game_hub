@@ -1,18 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-export type ThemeId =
-  | 'liquid-glass'
-  | 'liquid-glass-light'
-  | 'dark-gaming'
-  | 'dark-bento-glass'
-  | 'cinematic-editorial'
-  | 'retro-pixel'
-  | 'neo-brutalism-v2'
-  | 'neo-brutalism-v2-dark'
-  | 'neo-brutalist'
-  | 'y2k-retro'
-  | 'cartoon-rpg'
-  | 'cozy-farming';
+export type ThemeId = 'y2k-retro' | 'cartoon-rpg' | 'neo-brutalist';
 
 export interface ThemeMeta {
   id: ThemeId;
@@ -24,72 +12,9 @@ export interface ThemeMeta {
 
 export const THEMES: ThemeMeta[] = [
   {
-    id: 'liquid-glass',
-    name: 'Liquid Glass (Dark)',
-    shortName: 'Liquid Glass',
-    tagline: 'Floating optical glass nav & HUD, solid artwork cards, specular highlights',
-    swatches: ['#080B14', '#38BDF8', '#E2E8F0'],
-  },
-  {
-    id: 'liquid-glass-light',
-    name: 'Liquid Glass (Light)',
-    shortName: 'Liquid Light',
-    tagline: 'Bright frosted atmospheric canvas, floating crystal controls, dark ink',
-    swatches: ['#EEF3F9', '#FFFFFF', '#8B5CF6'],
-  },
-  {
-    id: 'dark-gaming',
-    name: 'Dark Gaming / Cyberpunk',
-    shortName: 'Dark Gaming',
-    tagline: 'Obsidian dark-first, violet & cyan neon accents, JetBrains Mono',
-    swatches: ['#090B12', '#8B5CF6', '#06B6D4'],
-  },
-  {
-    id: 'dark-bento-glass',
-    name: 'Dark Gaming + Bento + Glass',
-    shortName: 'Bento Glass',
-    tagline: 'Translucent dark glass surfaces, bento spans, controlled violet glow',
-    swatches: ['#080B14', '#8B5CF6', '#22D3EE'],
-  },
-  {
-    id: 'cinematic-editorial',
-    name: 'Cinematic Editorial Motion',
-    shortName: 'Cinematic',
-    tagline: 'AAA film-grade dark canvas, champagne gold, Bebas Neue display',
-    swatches: ['#08090D', '#C5A46D', '#E5E7EB'],
-  },
-  {
-    id: 'retro-pixel',
-    name: 'Retro Arcade + Pixel Art',
-    shortName: 'Retro Pixel',
-    tagline: 'Game Boy LCD sage, retro lime, arcade green, Press Start 2P badges',
-    swatches: ['#A0C510', '#C7D59A', '#198754'],
-  },
-  {
-    id: 'neo-brutalism-v2',
-    name: 'Retro Neo-Brutalism v2',
-    shortName: 'Retro v2',
-    tagline: 'Retro lime hero, arcade green CTAs, charcoal borders',
-    swatches: ['#A0C510', '#198754', '#202629'],
-  },
-  {
-    id: 'neo-brutalism-v2-dark',
-    name: 'Retro Neo-Brutalism v2 (Dark)',
-    shortName: 'Retro v2 Dark',
-    tagline: 'Vintage charcoal terminal, retro lime highlights',
-    swatches: ['#15191B', '#A0C510', '#198754'],
-  },
-  {
-    id: 'neo-brutalist',
-    name: 'Neo-Brutalist Arcade',
-    shortName: 'Brutalist',
-    tagline: 'Neon yellow, hot pink, hard black outlines',
-    swatches: ['#FFE800', '#FF1F8F', '#000000'],
-  },
-  {
     id: 'y2k-retro',
-    name: 'Y2K Retro Cyber',
-    shortName: 'Y2K Cyber',
+    name: 'Y2K Cypher',
+    shortName: 'Y2K Cypher',
     tagline: 'Metallic chrome, electric blue, holographic gloss',
     swatches: ['#1E6BFF', '#00E5FF', '#E4ECF7'],
   },
@@ -101,34 +26,150 @@ export const THEMES: ThemeMeta[] = [
     swatches: ['#7C4A22', '#FFC82C', '#57B836'],
   },
   {
-    id: 'cozy-farming',
-    name: 'Cozy Farming Sim',
-    shortName: 'Cozy Farm',
-    tagline: 'Warm cream paper, leaf green, soft terracotta',
-    swatches: ['#F4EBD6', '#5C9E4E', '#D97742'],
+    id: 'neo-brutalist',
+    name: 'Neo-Brutalist Arcade',
+    shortName: 'Brutalist',
+    tagline: 'Neon yellow, hot pink, hard black outlines',
+    swatches: ['#FFE800', '#FF1F8F', '#000000'],
   },
 ];
 
-const STORAGE_KEY = 'game_hub_ui_theme';
+export const DEFAULT_THEME: ThemeId = 'y2k-retro';
+export const THEME_TTL_MS = 60 * 60 * 1000;
 
-function isValidTheme(val: string | null): val is ThemeId {
-  return THEMES.some((t) => t.id === val);
+const DB_NAME = 'game_hub_theme_v1';
+const STORE_NAME = 'theme';
+const THEME_KEY = 'theme_id';
+
+interface ThemeCacheRecord {
+  theme_id: ThemeId;
+  savedAt: number;
 }
 
-function resolveInitialTheme(): ThemeId {
-  if (typeof window !== 'undefined') {
-    const params = new URLSearchParams(window.location.search);
-    const fromUrl = params.get('theme');
-    if (isValidTheme(fromUrl)) return fromUrl;
+export function isValidTheme(val: unknown): val is ThemeId {
+  return typeof val === 'string' && THEMES.some((t) => t.id === val);
+}
 
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (isValidTheme(stored)) return stored;
-    } catch {
-      // Ignore storage errors in restricted environments.
+export function pickRandomTheme(randomFn: () => number = Math.random): ThemeId {
+  try {
+    const r = randomFn();
+    if (!Number.isFinite(r) || r < 0 || r >= 1) {
+      return DEFAULT_THEME;
     }
+    const idx = Math.floor(r * THEMES.length);
+    return THEMES[idx]?.id ?? DEFAULT_THEME;
+  } catch {
+    return DEFAULT_THEME;
   }
-  return 'dark-gaming';
+}
+
+function openThemeDb(dbFactory?: IDBFactory, dbName = DB_NAME): Promise<IDBDatabase | null> {
+  const factory = dbFactory ?? (typeof indexedDB !== 'undefined' ? indexedDB : undefined);
+  if (!factory) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    try {
+      const req = factory.open(dbName, 1);
+      req.onupgradeneeded = () => {
+        if (!req.result.objectStoreNames.contains(STORE_NAME)) {
+          req.result.createObjectStore(STORE_NAME);
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+      req.onblocked = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+async function readThemeRecord(
+  dbFactory?: IDBFactory,
+  dbName = DB_NAME
+): Promise<{ ok: boolean; record: ThemeCacheRecord | null }> {
+  const db = await openThemeDb(dbFactory, dbName);
+  if (!db) return { ok: false, record: null };
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).get(THEME_KEY);
+      req.onsuccess = () => {
+        const val = req.result as ThemeCacheRecord | undefined;
+        resolve({ ok: true, record: val ?? null });
+      };
+      req.onerror = () => resolve({ ok: false, record: null });
+      tx.onabort = () => resolve({ ok: false, record: null });
+    } catch {
+      resolve({ ok: false, record: null });
+    }
+  });
+}
+
+async function writeThemeRecord(
+  record: ThemeCacheRecord,
+  dbFactory?: IDBFactory,
+  dbName = DB_NAME
+): Promise<boolean> {
+  const db = await openThemeDb(dbFactory, dbName);
+  if (!db) return false;
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).put(record, THEME_KEY);
+      tx.oncomplete = () => resolve(true);
+      tx.onerror = () => resolve(false);
+      tx.onabort = () => resolve(false);
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+/**
+ * Resolves the active theme from IndexedDB with a 1-hour TTL.
+ * Picks a random theme from THEMES on miss/expiry and falls back to DEFAULT_THEME
+ * (Y2K Cypher) if randomization or IndexedDB read/write fails.
+ */
+export async function resolveOrCreateThemeInIndexedDB(options?: {
+  nowFn?: () => number;
+  randomFn?: () => number;
+  ttlMs?: number;
+  idb?: IDBFactory;
+  dbName?: string;
+}): Promise<ThemeId> {
+  const now = (options?.nowFn ?? Date.now)();
+  const ttlMs = options?.ttlMs ?? THEME_TTL_MS;
+  const dbName = options?.dbName ?? DB_NAME;
+
+  const { ok, record } = await readThemeRecord(options?.idb, dbName);
+  if (!ok) {
+    return DEFAULT_THEME;
+  }
+
+  if (
+    record &&
+    isValidTheme(record.theme_id) &&
+    typeof record.savedAt === 'number' &&
+    now - record.savedAt < ttlMs &&
+    record.savedAt <= now + ttlMs
+  ) {
+    return record.theme_id;
+  }
+
+  const picked = pickRandomTheme(options?.randomFn);
+  const saved = await writeThemeRecord({ theme_id: picked, savedAt: now }, options?.idb, dbName);
+  return saved ? picked : DEFAULT_THEME;
+}
+
+let inFlightThemeResolution: Promise<ThemeId> | null = null;
+
+function resolveThemeOnce(): Promise<ThemeId> {
+  if (!inFlightThemeResolution) {
+    inFlightThemeResolution = resolveOrCreateThemeInIndexedDB().finally(() => {
+      inFlightThemeResolution = null;
+    });
+  }
+  return inFlightThemeResolution;
 }
 
 interface ThemeContextValue {
@@ -140,24 +181,35 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeId>(resolveInitialTheme);
+  const [theme, setThemeState] = useState<ThemeId>(DEFAULT_THEME);
+
+  useEffect(() => {
+    let active = true;
+    void resolveThemeOnce().then((resolved) => {
+      if (active) {
+        setThemeState(resolved);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.dataset.theme = theme;
-    }
-    try {
-      window.localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      // Ignore storage errors.
     }
   }, [theme]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       theme,
-      themeMeta: THEMES.find((t) => t.id === theme) ?? THEMES[0],
-      setTheme: (next) => setThemeState(next),
+      themeMeta: THEMES.find((t) => t.id === theme) ?? THEMES[0]!,
+      setTheme: (next) => {
+        const safeNext = isValidTheme(next) ? next : DEFAULT_THEME;
+        setThemeState(safeNext);
+        void writeThemeRecord({ theme_id: safeNext, savedAt: Date.now() });
+      },
     }),
     [theme]
   );
@@ -169,8 +221,8 @@ export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
     return {
-      theme: 'dark-gaming',
-      themeMeta: THEMES[0],
+      theme: DEFAULT_THEME,
+      themeMeta: THEMES[0]!,
       setTheme: () => {},
     };
   }

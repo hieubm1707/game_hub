@@ -11,6 +11,13 @@ import {
   getConfiguredStoreUrls,
   shouldShowInstallPrompt,
 } from '../src/services/installPromptPolicy';
+import {
+  DEFAULT_THEME,
+  THEME_TTL_MS,
+  THEMES,
+  pickRandomTheme,
+  resolveOrCreateThemeInIndexedDB,
+} from '../src/app/ThemeContext';
 import { isLocalDevHostname, resolveAppCheckInitPlan } from '../src/firebase/client';
 
 function makeFixtureGame(overrides: Partial<GameRecord> = {}): GameRecord {
@@ -621,5 +628,114 @@ describe('Game Hub Public & Admin Flows', () => {
       expect(saved?.translations?.vi?.shortDescription).toBe('Mô tả VI đã sửa bởi admin.');
       expect(saved?.translations?.vi?.description).toBe('Mô tả đầy đủ VI từ manifest.');
     });
+  });
+
+  it('keeps only 3 themes, hides the style switcher button, and resolves theme via IndexedDB 1h TTL with Y2K Cypher fallback', async () => {
+    expect(THEMES.map((t) => ({ id: t.id, shortName: t.shortName }))).toEqual([
+      { id: 'y2k-retro', shortName: 'Y2K Cypher' },
+      { id: 'cartoon-rpg', shortName: 'Cartoon RPG' },
+      { id: 'neo-brutalist', shortName: 'Brutalist' },
+    ]);
+    expect(DEFAULT_THEME).toBe('y2k-retro');
+
+    // Style switcher button is hidden in public UI
+    renderApp(['/'], [makeFixtureGame()], null);
+    expect(await screen.findAllByText('IQ Puzzle (Test Fixture)')).not.toHaveLength(0);
+    expect(screen.queryByLabelText('Design style switcher')).not.toBeInTheDocument();
+    expect(screen.queryByText(/STYLE:/i)).not.toBeInTheDocument();
+
+    // Mock minimal in-memory IDBFactory to test TTL and error fallbacks
+    const store = new Map<string, unknown>();
+    const makeMockIdb = (opts?: { failOpen?: boolean; failWrite?: boolean }): IDBFactory =>
+      ({
+        open: () => {
+          const req: Record<string, unknown> = {};
+          queueMicrotask(() => {
+            if (opts?.failOpen) {
+              (req.onerror as (() => void) | undefined)?.();
+              return;
+            }
+            const db = {
+              objectStoreNames: { contains: () => true },
+              createObjectStore: () => ({}),
+              transaction: () => {
+                const tx: Record<string, unknown> = {};
+                const objectStore = () => ({
+                  get: (key: string) => {
+                    const getReq: Record<string, unknown> = {};
+                    queueMicrotask(() => {
+                      getReq.result = store.get(key);
+                      (getReq.onsuccess as (() => void) | undefined)?.();
+                    });
+                    return getReq;
+                  },
+                  put: (val: unknown, key: string) => {
+                    queueMicrotask(() => {
+                      if (opts?.failWrite) {
+                        (tx.onerror as (() => void) | undefined)?.();
+                      } else {
+                        store.set(key, val);
+                        (tx.oncomplete as (() => void) | undefined)?.();
+                      }
+                    });
+                  },
+                });
+                tx.objectStore = objectStore;
+                return tx;
+              },
+            };
+            req.result = db;
+            (req.onsuccess as (() => void) | undefined)?.();
+          });
+          return req as unknown as IDBOpenDBRequest;
+        },
+      }) as unknown as IDBFactory;
+
+    const idb = makeMockIdb();
+    const baseTime = 1_000_000;
+
+    // First visit: random picks cartoon-rpg (index 1 for r = 0.45) and persists to IndexedDB
+    const first = await resolveOrCreateThemeInIndexedDB({
+      idb,
+      nowFn: () => baseTime,
+      randomFn: () => 0.45,
+    });
+    expect(first).toBe('cartoon-rpg');
+
+    // Within 1h TTL: returns persisted cartoon-rpg even if randomFn would pick brutalist
+    const withinTtl = await resolveOrCreateThemeInIndexedDB({
+      idb,
+      nowFn: () => baseTime + THEME_TTL_MS - 1000,
+      randomFn: () => 0.9,
+    });
+    expect(withinTtl).toBe('cartoon-rpg');
+
+    // After 1h TTL expires: re-randomizes and persists neo-brutalist
+    const expired = await resolveOrCreateThemeInIndexedDB({
+      idb,
+      nowFn: () => baseTime + THEME_TTL_MS,
+      randomFn: () => 0.9,
+    });
+    expect(expired).toBe('neo-brutalist');
+
+    // Invalid random output defaults to Y2K Cypher (y2k-retro)
+    expect(pickRandomTheme(() => Number.NaN)).toBe('y2k-retro');
+    expect(pickRandomTheme(() => 1.5)).toBe('y2k-retro');
+
+    // IndexedDB open error or write error defaults to Y2K Cypher (y2k-retro)
+    expect(
+      await resolveOrCreateThemeInIndexedDB({
+        idb: makeMockIdb({ failOpen: true }),
+        randomFn: () => 0.9,
+      })
+    ).toBe('y2k-retro');
+
+    store.clear();
+    expect(
+      await resolveOrCreateThemeInIndexedDB({
+        idb: makeMockIdb({ failWrite: true }),
+        randomFn: () => 0.9,
+      })
+    ).toBe('y2k-retro');
   });
 });

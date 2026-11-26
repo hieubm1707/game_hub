@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { I18nProvider } from '../app/I18nContext';
 import { ThemeProvider } from '../app/ThemeContext';
-import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { PublicLayout } from '../components/PublicLayout';
 import { HomePage } from '../features/catalog/HomePage';
 import { GamesListPage } from '../features/catalog/GamesListPage';
@@ -57,7 +56,6 @@ export function AppRoutes() {
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
         </Routes>
-        <ThemeSwitcher />
       </ThemeProvider>
     </I18nProvider>
   );
