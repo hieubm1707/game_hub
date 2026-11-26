@@ -3,7 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execSync } from 'node:child_process';
 import yaml from 'js-yaml';
-import { validateManifest, type GameManifest } from '@game-hub/contract';
+import { SUPPORTED_LOCALE_CODES, validateManifest, type GameManifest } from '@game-hub/contract';
 
 export interface RepoConfigEntry {
   id: string;
@@ -192,7 +192,24 @@ export function initManifestTemplate(repoPath: string, dryRun = false): { manife
       tags: ['offline'],
       developer: '',
       defaultLocale: 'en',
-      supportedLocales: ['en', 'vi'],
+      supportedLocales: [...SUPPORTED_LOCALE_CODES],
+      translations: {
+        en: {
+          shortDescription: 'Offline-first Flutter game.',
+          description: 'Offline-first Flutter game integrated with Game Hub.',
+          howToPlay: '',
+        },
+        vi: {
+          shortDescription: 'Trò chơi Flutter hỗ trợ chơi offline.',
+          description: 'Trò chơi Flutter hỗ trợ chơi offline tích hợp với Game Hub.',
+          howToPlay: '',
+        },
+        ja: {
+          shortDescription: 'オフライン対応のFlutterゲーム。',
+          description: 'Game Hubと連携するオフライン対応のFlutterゲーム。',
+          howToPlay: '',
+        },
+      },
     },
     assets: {
       icon: 'assets/icon.webp',
