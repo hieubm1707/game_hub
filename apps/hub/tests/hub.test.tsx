@@ -816,4 +816,21 @@ describe('Game Hub Public & Admin Flows', () => {
     expect(await screen.findByText('IQ Puzzle (Test Fixture)')).toBeInTheDocument();
     expect(screen.queryByTestId('games-grid-shimmer')).not.toBeInTheDocument();
   });
+
+  it('toggles the mobile header search form and submits a catalog search', async () => {
+    renderApp(['/about'], [makeFixtureGame()], null);
+    await screen.findByRole('heading', { name: 'About Game Hub' });
+
+    const toggle = screen.getByRole('button', { name: 'Search games' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+    const inputs = screen.getAllByRole('searchbox', { name: 'Search games' });
+    const mobileInput = inputs[inputs.length - 1]!;
+    fireEvent.change(mobileInput, { target: { value: 'puzzle' } });
+    fireEvent.submit(mobileInput.closest('form')!);
+
+    expect(await screen.findByRole('heading', { name: 'Search: "puzzle"' })).toBeInTheDocument();
+  });
 });

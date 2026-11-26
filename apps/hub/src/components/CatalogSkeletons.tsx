@@ -26,23 +26,23 @@ export function HomeHeroSkeleton({ label }: { label: string }) {
       className="relative min-h-[280px] sm:min-h-[340px] flex items-end sm:items-center hub-hero-skeleton"
     >
       <span className="sr-only">{label}</span>
-      <div className="relative z-10 w-full max-w-2xl p-6 sm:p-10 space-y-4">
+      <div className="relative z-10 w-full max-w-2xl p-5 pb-16 sm:p-10 sm:pr-28 sm:pb-10 space-y-3 sm:space-y-4">
         <div className="flex flex-wrap items-center gap-2">
           <ShimmerBlock variant="hero" className="h-6 w-28 rounded-[var(--radius-badge)]" />
           <ShimmerBlock variant="hero" className="h-6 w-24 rounded-[var(--radius-badge)]" />
         </div>
         <div className="space-y-2.5">
           <ShimmerBlock variant="hero" className="h-3.5 w-40 rounded-[var(--radius-badge)]" />
-          <ShimmerBlock variant="hero" className="h-10 sm:h-12 w-3/4 rounded-[var(--radius-input)]" />
+          <ShimmerBlock variant="hero" className="h-9 sm:h-12 w-3/4 rounded-[var(--radius-input)]" />
           <ShimmerBlock variant="hero" className="h-4 w-full max-w-lg rounded-[var(--radius-badge)]" />
           <ShimmerBlock variant="hero" className="h-4 w-2/3 max-w-md rounded-[var(--radius-badge)]" />
         </div>
         <div className="flex flex-wrap items-center gap-3 pt-1">
-          <ShimmerBlock variant="hero" className="h-10 w-36 rounded-[var(--radius-btn)]" />
-          <ShimmerBlock variant="hero" className="h-10 w-28 rounded-[var(--radius-btn)]" />
+          <ShimmerBlock variant="hero" className="h-10 w-32 sm:w-36 rounded-[var(--radius-btn)]" />
+          <ShimmerBlock variant="hero" className="h-10 w-24 sm:w-28 rounded-[var(--radius-btn)]" />
         </div>
       </div>
-      <div className="absolute bottom-4 right-5 flex items-center gap-2" aria-hidden="true">
+      <div className="absolute bottom-4 left-5 sm:left-auto sm:right-5 flex items-center gap-2" aria-hidden="true">
         <ShimmerBlock variant="hero" className="h-3 w-8 rounded-[var(--radius-badge)]" />
         <ShimmerBlock variant="hero" className="h-3 w-3 rounded-[var(--radius-badge)]" />
         <ShimmerBlock variant="hero" className="h-3 w-3 rounded-[var(--radius-badge)]" />
@@ -60,12 +60,15 @@ export function CategoryChipsSkeleton({
   onCanvas?: boolean;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2" aria-hidden="true">
+    <div
+      className="no-scrollbar flex flex-nowrap sm:flex-wrap items-center gap-2 overflow-x-auto pb-0.5"
+      aria-hidden="true"
+    >
       {Array.from({ length: count }, (_, idx) => (
         <ShimmerBlock
           key={idx}
           variant={onCanvas ? 'canvas' : 'surface'}
-          className={`h-8 rounded-[var(--radius-btn)] ${idx === 0 ? 'w-20' : 'w-24'}`}
+          className={`h-8 shrink-0 rounded-[var(--radius-btn)] ${idx === 0 ? 'w-20' : 'w-24'}`}
         />
       ))}
     </div>

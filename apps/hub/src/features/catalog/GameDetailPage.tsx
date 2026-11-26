@@ -88,7 +88,7 @@ export function GameDetailPage() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-10">
       <div>
         <Link to="/games" className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-1.5 text-xs">
           <ArrowLeft className="h-3.5 w-3.5 stroke-[2.5]" />
@@ -96,43 +96,28 @@ export function GameDetailPage() {
         </Link>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="brutal-panel-lg overflow-hidden bg-black p-0">
-            <img
-              src={game.thumbnail}
-              alt={localized.title}
-              className="aspect-video w-full object-cover"
-            />
-          </div>
-
-          <div className="brutal-panel p-6 space-y-4">
-            <h2 className="border-b-[length:var(--border-w)] hub-divider pb-2 font-numeric text-base font-bold uppercase">
-              {t('detail.aboutHeading')}
-            </h2>
-            <p className="text-sm font-medium leading-relaxed">{localized.description}</p>
-            {localized.howToPlay && (
-              <div className="border-t-[length:var(--border-w)] hub-divider pt-4 space-y-2">
-                <h3 className="font-numeric text-sm font-bold uppercase hub-text-highlight">
-                  {t('detail.howToPlayHeading')}
-                </h3>
-                <p className="text-sm font-medium leading-relaxed">{localized.howToPlay}</p>
-              </div>
-            )}
-          </div>
+      <div className="grid gap-5 sm:gap-8 lg:grid-cols-3 items-start">
+        <div className="order-1 lg:order-none lg:col-span-2 brutal-panel-lg overflow-hidden bg-black p-0">
+          <img
+            src={game.thumbnail}
+            alt={localized.title}
+            className="aspect-video w-full object-cover"
+          />
         </div>
 
-        <aside className="space-y-4">
-          <div className="brutal-panel-lg p-6 space-y-5">
+        <aside className="order-2 lg:order-none lg:col-span-1 lg:row-span-2 space-y-4">
+          <div className="brutal-panel-lg p-4 sm:p-6 space-y-4 sm:space-y-5">
             <div className="flex items-center gap-3.5">
               <img
                 src={game.icon}
                 alt={localized.title}
-                className="h-16 w-16 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
+                className="h-14 w-14 sm:h-16 sm:w-16 shrink-0 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
               />
-              <div>
-                <h1 className="text-2xl font-bold leading-tight">{localized.title}</h1>
-                <p className="mt-1 font-numeric text-xs font-bold uppercase hub-text-muted">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold leading-tight break-words">
+                  {localized.title}
+                </h1>
+                <p className="mt-1 font-numeric text-xs font-bold uppercase hub-text-muted break-words">
                   v{game.currentRelease} {game.developer ? `• ${game.developer}` : ''}
                 </p>
               </div>
@@ -187,6 +172,21 @@ export function GameDetailPage() {
             </div>
           </div>
         </aside>
+
+        <div className="order-3 lg:order-none lg:col-span-2 brutal-panel p-4 sm:p-6 space-y-4">
+          <h2 className="border-b-[length:var(--border-w)] hub-divider pb-2 font-numeric text-base font-bold uppercase">
+            {t('detail.aboutHeading')}
+          </h2>
+          <p className="text-sm font-medium leading-relaxed">{localized.description}</p>
+          {localized.howToPlay && (
+            <div className="border-t-[length:var(--border-w)] hub-divider pt-4 space-y-2">
+              <h3 className="font-numeric text-sm font-bold uppercase hub-text-highlight">
+                {t('detail.howToPlayHeading')}
+              </h3>
+              <p className="text-sm font-medium leading-relaxed">{localized.howToPlay}</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {related.length > 0 && (

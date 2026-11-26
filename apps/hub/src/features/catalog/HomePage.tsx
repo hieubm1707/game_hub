@@ -237,7 +237,7 @@ export function HomePage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* 1. Full-Width Interactive Slide Banner */}
       <section
         aria-label={t('home.heroAria')}
@@ -260,7 +260,7 @@ export function HomePage() {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-black/20" />
 
-            <div className="relative z-10 max-w-2xl p-6 sm:p-10 space-y-4">
+            <div className="relative z-10 w-full max-w-2xl p-5 pb-16 sm:p-10 sm:pr-28 sm:pb-10 space-y-3 sm:space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="hub-badge-featured inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
                   <Sparkles className="h-3 w-3" />
@@ -275,25 +275,25 @@ export function HomePage() {
                 <p className="font-numeric text-xs font-bold uppercase tracking-widest text-white/75">
                   {activeSlide.categories.slice(0, 3).join(' • ') || 'Game Hub'}
                 </p>
-                <h1 className="mt-1 text-3xl sm:text-5xl font-bold leading-tight text-white">
+                <h1 className="mt-1 text-2xl sm:text-5xl font-bold leading-tight text-white">
                   {activeSlideText.title}
                 </h1>
-                <p className="mt-2 max-w-xl text-sm sm:text-base font-medium text-white/85 line-clamp-2">
+                <p className="mt-1.5 sm:mt-2 max-w-xl text-xs sm:text-base font-medium text-white/85 line-clamp-2">
                   {activeSlideText.shortDescription}
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 pt-1">
+              <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1">
                 <Link
                   to={`/play/${activeSlide.slug}`}
-                  className="arcade-btn arcade-btn-pink px-6 py-2.5 text-sm"
+                  className="arcade-btn arcade-btn-pink px-5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm"
                 >
                   <Play className="h-4 w-4 fill-current" />
                   {t('common.playNow')}
                 </Link>
                 <Link
                   to={`/games/${activeSlide.slug}`}
-                  className="arcade-btn arcade-btn-white px-5 py-2.5 text-sm"
+                  className="arcade-btn arcade-btn-white px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm"
                 >
                   {t('common.details')}
                 </Link>
@@ -303,12 +303,12 @@ export function HomePage() {
             {/* Slide Controls */}
             {slides.length > 1 && (
               <>
-                <div className="absolute right-4 top-4 z-10 flex items-center gap-2">
+                <div className="absolute right-4 bottom-3 sm:bottom-auto sm:top-4 z-10 flex items-center gap-2">
                   <button
                     type="button"
                     onClick={goPrevSlide}
                     aria-label={t('home.prevSlide')}
-                    className="arcade-btn arcade-btn-sm arcade-btn-white p-2"
+                    className="arcade-btn arcade-btn-sm arcade-btn-white p-1.5 sm:p-2"
                   >
                     <ChevronLeft className="h-4 w-4 stroke-[2.5]" />
                   </button>
@@ -316,14 +316,14 @@ export function HomePage() {
                     type="button"
                     onClick={goNextSlide}
                     aria-label={t('home.nextSlide')}
-                    className="arcade-btn arcade-btn-sm arcade-btn-white p-2"
+                    className="arcade-btn arcade-btn-sm arcade-btn-white p-1.5 sm:p-2"
                   >
                     <ChevronRight className="h-4 w-4 stroke-[2.5]" />
                   </button>
                 </div>
 
                 <div
-                  className="absolute bottom-4 right-5 z-10 flex items-center gap-2"
+                  className="absolute bottom-4 left-5 sm:left-auto sm:right-5 z-10 flex items-center gap-2"
                   role="tablist"
                   aria-label={t('home.heroAria')}
                 >
@@ -362,18 +362,22 @@ export function HomePage() {
       )}
 
       {/* 2. Tabs + Inline Filter & Refresh Bar (inspired by reference) */}
-      <section className="space-y-5">
-        <div className="brutal-panel p-3.5 flex flex-wrap items-center justify-between gap-3">
+      <section className="space-y-4 sm:space-y-5">
+        <div className="brutal-panel p-3 sm:p-3.5 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
           {loading ? (
             <CategoryChipsSkeleton count={4} />
           ) : (
-            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label={t('home.filterAria')}>
+            <div
+              className="no-scrollbar flex flex-nowrap sm:flex-wrap items-center gap-2 overflow-x-auto pb-0.5 w-full sm:w-auto"
+              role="tablist"
+              aria-label={t('home.filterAria')}
+            >
               <button
                 type="button"
                 role="tab"
                 aria-selected={activeTab === 'all'}
                 onClick={() => setActiveTab('all')}
-                className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
+                className={`arcade-btn arcade-btn-sm shrink-0 px-3.5 py-1.5 text-xs ${
                   activeTab === 'all' ? 'arcade-btn-pink' : 'arcade-btn-white'
                 }`}
               >
@@ -385,7 +389,7 @@ export function HomePage() {
                   role="tab"
                   aria-selected={activeTab === 'featured'}
                   onClick={() => setActiveTab('featured')}
-                  className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
+                  className={`arcade-btn arcade-btn-sm shrink-0 px-3.5 py-1.5 text-xs ${
                     activeTab === 'featured' ? 'arcade-btn-pink' : 'arcade-btn-white'
                   }`}
                 >
@@ -399,7 +403,7 @@ export function HomePage() {
                   role="tab"
                   aria-selected={activeTab === c.id}
                   onClick={() => setActiveTab(c.id)}
-                  className={`arcade-btn arcade-btn-sm px-3.5 py-1.5 text-xs ${
+                  className={`arcade-btn arcade-btn-sm shrink-0 px-3.5 py-1.5 text-xs ${
                     activeTab === c.id ? 'arcade-btn-pink' : 'arcade-btn-white'
                   }`}
                 >
@@ -409,8 +413,8 @@ export function HomePage() {
             </div>
           )}
 
-          <div className="flex flex-1 sm:flex-initial items-center gap-2 justify-end">
-            <div className="relative w-full sm:w-56">
+          <div className="flex w-full sm:w-auto sm:flex-initial items-center gap-2 justify-end">
+            <div className="relative min-w-0 flex-1 sm:w-56">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 stroke-[2.5] opacity-70" />
               <input
                 type="search"
@@ -441,7 +445,7 @@ export function HomePage() {
             {t('home.noMatchingGames')}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {filteredGames.map((g) => (
               <ShowcaseCard key={g.id} game={g} />
             ))}
@@ -451,14 +455,16 @@ export function HomePage() {
 
       {/* 4. Bottom Horizontal Scroll Row ("Recently Updated / Popular Strip") */}
       {!loading && recent.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5">
-              <Gamepad2 className="h-5 w-5 hub-text-highlight stroke-[2.5]" />
-              <h2 className="text-xl font-bold tracking-tight">{t('home.recentlyUpdated')}</h2>
+        <section className="space-y-3.5 sm:space-y-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <Gamepad2 className="h-5 w-5 shrink-0 hub-text-highlight stroke-[2.5]" />
+              <h2 className="truncate text-lg sm:text-xl font-bold tracking-tight">
+                {t('home.recentlyUpdated')}
+              </h2>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <Link
                 to="/games"
                 className="arcade-btn arcade-btn-sm arcade-btn-white px-3 py-1.5 text-xs"
@@ -470,7 +476,7 @@ export function HomePage() {
                 disabled={!stripOverflows}
                 onClick={() => scrollStrip('left')}
                 aria-label={t('home.scrollLeft')}
-                className="arcade-btn arcade-btn-sm arcade-btn-white p-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="hidden sm:inline-flex arcade-btn arcade-btn-sm arcade-btn-white p-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="h-4 w-4 stroke-[2.5]" />
               </button>
@@ -479,7 +485,7 @@ export function HomePage() {
                 disabled={!stripOverflows}
                 onClick={() => scrollStrip('right')}
                 aria-label={t('home.scrollRight')}
-                className="arcade-btn arcade-btn-sm arcade-btn-white p-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="hidden sm:inline-flex arcade-btn arcade-btn-sm arcade-btn-white p-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="h-4 w-4 stroke-[2.5]" />
               </button>
@@ -492,7 +498,7 @@ export function HomePage() {
             onMouseLeave={() => setStripPaused(false)}
             onTouchStart={() => setStripPaused(true)}
             onTouchEnd={() => setStripPaused(false)}
-            className="no-scrollbar flex gap-4 overflow-x-auto pb-2"
+            className="no-scrollbar flex snap-x snap-mandatory gap-3 sm:gap-4 overflow-x-auto pb-2"
           >
             {marqueeRecent.map((g, idx) => {
               const gText = getLocalizedGameText(g, locale);
@@ -502,7 +508,7 @@ export function HomePage() {
                   to={`/games/${g.slug}`}
                   aria-hidden={idx >= recent.length ? true : undefined}
                   tabIndex={idx >= recent.length ? -1 : undefined}
-                  className="hub-card group shrink-0 w-44 sm:w-48 flex flex-col"
+                  className="hub-card group shrink-0 snap-start w-36 sm:w-48 flex flex-col"
                 >
                   <div className="aspect-square w-full overflow-hidden bg-black relative">
                     <img
@@ -525,7 +531,7 @@ export function HomePage() {
       )}
 
       {/* 5. Editorial Platform Overview (helpful for visitors & search crawlers) */}
-      <section className="brutal-panel p-6 sm:p-8 space-y-4">
+      <section className="brutal-panel p-4 sm:p-8 space-y-3 sm:space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-xl font-bold tracking-tight">
             {t('home.overviewTitle')}

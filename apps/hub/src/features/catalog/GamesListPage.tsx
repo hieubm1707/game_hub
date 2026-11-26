@@ -33,17 +33,17 @@ export function GamesListPage() {
   }, [games, category, query, locale]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header & Local Filter Bar */}
-      <div className="brutal-panel p-5 flex flex-wrap items-center justify-between gap-4">
-        <div>
+      <div className="brutal-panel p-4 sm:p-5 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="min-w-0">
           <p className="font-numeric text-[11px] font-bold uppercase tracking-widest hub-text-highlight">
             {t('catalog.eyebrow')}
           </p>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{heading}</h1>
+          <h1 className="text-xl sm:text-3xl font-bold tracking-tight break-words">{heading}</h1>
         </div>
 
-        <div className="relative w-full max-w-xs">
+        <div className="relative w-full sm:max-w-xs">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 stroke-[2.5] opacity-75" />
           <input
             type="search"
@@ -64,10 +64,10 @@ export function GamesListPage() {
       {loading ? (
         <CategoryChipsSkeleton count={5} onCanvas />
       ) : categories.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="no-scrollbar flex flex-nowrap sm:flex-wrap items-center gap-2 overflow-x-auto pb-1">
           <Link
             to="/games"
-            className={`arcade-btn arcade-btn-sm px-3 py-1.5 text-xs ${
+            className={`arcade-btn arcade-btn-sm shrink-0 px-3 py-1.5 text-xs ${
               !category ? 'arcade-btn-pink' : 'arcade-btn-white'
             }`}
           >
@@ -77,7 +77,7 @@ export function GamesListPage() {
             <Link
               key={c.id}
               to={`/categories/${encodeURIComponent(c.id)}`}
-              className={`arcade-btn arcade-btn-sm px-3 py-1.5 text-xs ${
+              className={`arcade-btn arcade-btn-sm shrink-0 px-3 py-1.5 text-xs ${
                 category === c.id ? 'arcade-btn-pink' : 'arcade-btn-white'
               }`}
             >

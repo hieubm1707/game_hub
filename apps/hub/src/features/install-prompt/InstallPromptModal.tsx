@@ -30,10 +30,10 @@ export function InstallPromptModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="install-prompt-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-3 sm:p-4"
     >
       <div className="relative w-full max-w-md brutal-panel-lg overflow-hidden">
-        <div className="hub-topbar flex items-center justify-between px-5 py-3">
+        <div className="hub-topbar flex items-center justify-between px-4 sm:px-5 py-3">
           <span className="text-xs font-bold uppercase tracking-wider">
             {t('install.topbar')}
           </span>
@@ -47,18 +47,20 @@ export function InstallPromptModal({
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className="flex items-center gap-3.5">
             <img
               src={game.icon}
               alt={localized.title}
-              className="h-14 w-14 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
+              className="h-14 w-14 shrink-0 border-[length:var(--border-w)] hub-divider rounded-[var(--radius-input)] bg-white object-cover brutal-shadow-sm"
             />
-            <div>
-              <h2 id="install-prompt-title" className="text-xl font-bold">
+            <div className="min-w-0">
+              <h2 id="install-prompt-title" className="text-lg sm:text-xl font-bold break-words">
                 {t('install.title')}
               </h2>
-              <p className="font-numeric text-xs font-bold uppercase hub-text-muted">{localized.title}</p>
+              <p className="font-numeric text-xs font-bold uppercase hub-text-muted truncate">
+                {localized.title}
+              </p>
             </div>
           </div>
 

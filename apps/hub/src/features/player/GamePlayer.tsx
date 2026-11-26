@@ -245,7 +245,7 @@ export function GamePlayer({
         data-controls-visible={String(!isFullscreen || controlsVisible)}
         onMouseEnter={isFullscreen ? clearHideTimer : undefined}
         onMouseLeave={isFullscreen ? scheduleControlsHide : undefined}
-        className={`brutal-panel flex flex-wrap items-center justify-between gap-3 px-4 py-3 ${
+        className={`brutal-panel flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 ${
           isFullscreen
             ? `absolute inset-x-3 top-3 z-30 transition-all duration-300 ${
                 controlsVisible
@@ -255,25 +255,25 @@ export function GamePlayer({
             : ''
         }`}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
           <button
             type="button"
             onClick={handleExitClick}
-            className="arcade-btn arcade-btn-sm arcade-btn-yellow px-3 py-1.5 text-xs"
+            className="arcade-btn arcade-btn-sm arcade-btn-yellow shrink-0 px-2.5 sm:px-3 py-1.5 text-xs"
           >
             <ArrowLeft className="h-4 w-4 stroke-[2.5]" />
             {t('common.exit')}
           </button>
-          <div>
-            <h1 className="text-base font-bold leading-tight">{localizedTitle}</h1>
-            <p className="font-numeric text-[11px] font-bold uppercase hub-text-muted">
+          <div className="min-w-0">
+            <h1 className="truncate text-sm sm:text-base font-bold leading-tight">{localizedTitle}</h1>
+            <p className="truncate font-numeric text-[10px] sm:text-[11px] font-bold uppercase hub-text-muted">
               v{game.currentRelease} • {t('player.webPlayer')}
               {lastScore !== null ? ` • ${t('player.score')}: ${lastScore}` : ''}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {lastScore !== null && (
             <div className="hub-topbar px-3 py-1 text-xs font-bold uppercase rounded-[var(--radius-badge)]">
               {t('player.score').toUpperCase()}: {lastScore}

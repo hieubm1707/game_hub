@@ -58,7 +58,7 @@ export function PrivacyPage() {
         </Link>
       </div>
 
-      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+      <article className="brutal-panel-lg p-4 sm:p-10 space-y-6">
         <header className="space-y-3">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="hub-badge inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs uppercase">
@@ -67,7 +67,7 @@ export function PrivacyPage() {
             </span>
             <span className="font-numeric text-xs font-bold hub-text-muted">{lastUpdated}</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('privacy.title')}</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">{t('privacy.title')}</h1>
           <p className="text-sm leading-relaxed hub-text-muted">{t('privacy.intro')}</p>
         </header>
 
@@ -190,7 +190,7 @@ export function TermsPage() {
         </Link>
       </div>
 
-      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+      <article className="brutal-panel-lg p-4 sm:p-10 space-y-6">
         <header className="space-y-3">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="hub-badge-featured inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-bold uppercase">
@@ -199,7 +199,7 @@ export function TermsPage() {
             </span>
             <span className="font-numeric text-xs font-bold hub-text-muted">{lastUpdated}</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('terms.title')}</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">{t('terms.title')}</h1>
           <p className="text-sm leading-relaxed hub-text-muted">
             {renderTranslatedNodes(t('terms.intro'), {
               privacyLink: (
@@ -270,13 +270,13 @@ export function AboutPage() {
         </Link>
       </div>
 
-      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+      <article className="brutal-panel-lg p-4 sm:p-10 space-y-6">
         <header className="space-y-3">
           <span className="hub-badge inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs uppercase">
             <Info className="h-3.5 w-3.5" />
             {t('about.badge')}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('about.title')}</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">{t('about.title')}</h1>
           <p className="text-sm leading-relaxed hub-text-muted">
             {renderTranslatedNodes(t('about.intro'), {
               siteDomain: <strong>{SITE_DOMAIN}</strong>,
@@ -340,13 +340,13 @@ export function ContactPage() {
         </Link>
       </div>
 
-      <article className="brutal-panel-lg p-6 sm:p-10 space-y-6">
+      <article className="brutal-panel-lg p-4 sm:p-10 space-y-6">
         <header className="space-y-3">
           <span className="hub-badge-featured inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-bold uppercase">
             <Mail className="h-3.5 w-3.5" />
             {t('contact.badge')}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('contact.title')}</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">{t('contact.title')}</h1>
           <p className="text-sm leading-relaxed hub-text-muted">
             {renderTranslatedNodes(t('contact.intro'), {
               siteDomain: <strong>{SITE_DOMAIN}</strong>,
@@ -360,7 +360,7 @@ export function ContactPage() {
               emailLink: (
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="font-numeric font-bold underline hub-text-highlight"
+                  className="font-numeric font-bold underline hub-text-highlight break-all"
                 >
                   {CONTACT_EMAIL}
                 </a>

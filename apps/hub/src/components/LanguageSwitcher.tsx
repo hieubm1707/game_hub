@@ -98,7 +98,7 @@ export function LanguageSwitcher() {
         aria-label={t('nav.languageAria')}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="arcade-btn arcade-btn-sm arcade-btn-white px-2.5 py-2 text-xs font-bold uppercase"
+        className="arcade-btn arcade-btn-sm arcade-btn-white whitespace-nowrap px-2 py-1.5 sm:px-2.5 sm:py-2 text-xs font-bold uppercase"
       >
         <LocaleFlag code={activeLocale.code} />
         <span>{activeLocale.shortLabel}</span>
@@ -111,7 +111,7 @@ export function LanguageSwitcher() {
         <div
           role="listbox"
           aria-label={t('nav.languageAria')}
-          className="brutal-panel absolute right-0 mt-2 z-50 min-w-[172px] p-1.5 space-y-1"
+          className="brutal-panel absolute right-0 mt-2 z-50 min-w-[168px] max-w-[calc(100vw-24px)] p-1.5 space-y-1"
         >
           {SUPPORTED_LOCALES.map((item) => {
             const isSelected = item.code === locale;
