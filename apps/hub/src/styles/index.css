@@ -35,6 +35,41 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "Cartoon Fredo VN";
+  src: url("/fonts/cartoon-fredo-vn-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cartoon Fredo VN";
+  src: url("/fonts/cartoon-fredo-vn-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cartoon Fredo VN";
+  src: url("/fonts/cartoon-fredo-vn-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cartoon Fredo VN";
+  src: url("/fonts/cartoon-fredo-vn-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Pixel Retro VN";
+  src: url("/fonts/pixel-retro-vn-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ==========================================================================
    THEME 1 (DEFAULT): NEO-BRUTALIST RETRO ARCADE
@@ -224,9 +259,9 @@
    THEME 3: CARTOON FANTASY RPG (docs/design-system/cartoon-game-ui.md)
    ========================================================================== */
 [data-theme="cartoon-rpg"] {
-  --font-display: "Fredoka", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Fredoka", ui-sans-serif, system-ui, sans-serif;
-  --font-numeric: "Fredoka", ui-sans-serif, sans-serif;
+  --font-display: "Cartoon Fredo VN", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Cartoon Fredo VN", ui-sans-serif, system-ui, sans-serif;
+  --font-numeric: "Cartoon Fredo VN", ui-sans-serif, sans-serif;
 
   --bg-canvas: #7c4a22;
   --bg-canvas-pattern:
@@ -956,7 +991,7 @@
 [data-theme="retro-pixel"] {
   --font-display: "Roboto Slab", ui-serif, Georgia, serif;
   --font-body: "Space Mono", "IBM Plex Mono", ui-monospace, monospace;
-  --font-numeric: "Press Start 2P", "Space Mono", ui-monospace, monospace;
+  --font-numeric: "Pixel Retro VN", "Space Mono", ui-monospace, monospace;
 
   --bg-canvas: #ffffff;
   --bg-canvas-pattern:
@@ -1043,7 +1078,7 @@
 
 [data-theme="retro-pixel"] .hub-brand,
 [data-theme="retro-pixel"] .hub-badge-featured {
-  font-family: "Press Start 2P", ui-monospace, monospace;
+  font-family: "Pixel Retro VN", ui-monospace, monospace;
   font-size: 0.7rem;
 }
 
